@@ -1,0 +1,360 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7B9CAA5D16E2459D00F376BC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA5C16E2459D00F376BC /* UIKit.framework */; };
+		7B9CAA5F16E2459D00F376BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA5E16E2459D00F376BC /* Foundation.framework */; };
+		7B9CAA6116E2459D00F376BC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA6016E2459D00F376BC /* CoreGraphics.framework */; };
+		7B9CAA6716E2459D00F376BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6516E2459D00F376BC /* InfoPlist.strings */; };
+		7B9CAA6916E2459D00F376BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6816E2459D00F376BC /* main.m */; };
+		7B9CAA6D16E2459D00F376BC /* MCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6C16E2459D00F376BC /* MCAppDelegate.m */; };
+		7B9CAA6F16E2459D00F376BC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6E16E2459D00F376BC /* Default.png */; };
+		7B9CAA7116E2459D00F376BC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7016E2459D00F376BC /* Default@2x.png */; };
+		7B9CAA7316E2459D00F376BC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */; };
+		7B9CAA8216E245F900F376BC /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7A16E245F900F376BC /* check.png */; };
+		7B9CAA8316E245F900F376BC /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7B16E245F900F376BC /* check@2x.png */; };
+		7B9CAA8416E245F900F376BC /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7C16E245F900F376BC /* clock.png */; };
+		7B9CAA8516E245F900F376BC /* clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7D16E245F900F376BC /* clock@2x.png */; };
+		7B9CAA8616E245F900F376BC /* cross.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7E16E245F900F376BC /* cross.png */; };
+		7B9CAA8716E245F900F376BC /* cross@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7F16E245F900F376BC /* cross@2x.png */; };
+		7B9CAA8816E245F900F376BC /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8016E245F900F376BC /* list.png */; };
+		7B9CAA8916E245F900F376BC /* list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8116E245F900F376BC /* list@2x.png */; };
+		7B9CAA8F16E2465500F376BC /* MCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8E16E2465500F376BC /* MCTableViewController.m */; };
+		7B9CAA9316E2469900F376BC /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7B9CAA5916E2459D00F376BC /* MCSwipe Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MCSwipe Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B9CAA5C16E2459D00F376BC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		7B9CAA5E16E2459D00F376BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7B9CAA6016E2459D00F376BC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		7B9CAA6416E2459D00F376BC /* MCSwipe Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MCSwipe Demo-Info.plist"; sourceTree = "<group>"; };
+		7B9CAA6616E2459D00F376BC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7B9CAA6816E2459D00F376BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7B9CAA6A16E2459D00F376BC /* MCSwipe Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCSwipe Demo-Prefix.pch"; sourceTree = "<group>"; };
+		7B9CAA6B16E2459D00F376BC /* MCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAppDelegate.h; sourceTree = "<group>"; };
+		7B9CAA6C16E2459D00F376BC /* MCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAppDelegate.m; sourceTree = "<group>"; };
+		7B9CAA6E16E2459D00F376BC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		7B9CAA7016E2459D00F376BC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		7B9CAA7A16E245F900F376BC /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
+		7B9CAA7B16E245F900F376BC /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
+		7B9CAA7C16E245F900F376BC /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
+		7B9CAA7D16E245F900F376BC /* clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock@2x.png"; sourceTree = "<group>"; };
+		7B9CAA7E16E245F900F376BC /* cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross.png; sourceTree = "<group>"; };
+		7B9CAA7F16E245F900F376BC /* cross@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cross@2x.png"; sourceTree = "<group>"; };
+		7B9CAA8016E245F900F376BC /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		7B9CAA8116E245F900F376BC /* list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list@2x.png"; sourceTree = "<group>"; };
+		7B9CAA8D16E2465500F376BC /* MCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCTableViewController.h; sourceTree = "<group>"; };
+		7B9CAA8E16E2465500F376BC /* MCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCTableViewController.m; sourceTree = "<group>"; };
+		7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
+		7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7B9CAA5616E2459D00F376BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B9CAA5D16E2459D00F376BC /* UIKit.framework in Frameworks */,
+				7B9CAA5F16E2459D00F376BC /* Foundation.framework in Frameworks */,
+				7B9CAA6116E2459D00F376BC /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B9CAA5016E2459D00F376BC = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA8C16E2461D00F376BC /* Vendor */,
+				7B9CAA6216E2459D00F376BC /* MCSwipe Demo */,
+				7B9CAA5B16E2459D00F376BC /* Frameworks */,
+				7B9CAA5A16E2459D00F376BC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7B9CAA5A16E2459D00F376BC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA5916E2459D00F376BC /* MCSwipe Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7B9CAA5B16E2459D00F376BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA5C16E2459D00F376BC /* UIKit.framework */,
+				7B9CAA5E16E2459D00F376BC /* Foundation.framework */,
+				7B9CAA6016E2459D00F376BC /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7B9CAA6216E2459D00F376BC /* MCSwipe Demo */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA6B16E2459D00F376BC /* MCAppDelegate.h */,
+				7B9CAA6C16E2459D00F376BC /* MCAppDelegate.m */,
+				7B9CAA8D16E2465500F376BC /* MCTableViewController.h */,
+				7B9CAA8E16E2465500F376BC /* MCTableViewController.m */,
+				7B9CAA7916E245F900F376BC /* Images */,
+				7B9CAA6316E2459D00F376BC /* Supporting Files */,
+			);
+			path = "MCSwipe Demo";
+			sourceTree = "<group>";
+		};
+		7B9CAA6316E2459D00F376BC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA6416E2459D00F376BC /* MCSwipe Demo-Info.plist */,
+				7B9CAA6516E2459D00F376BC /* InfoPlist.strings */,
+				7B9CAA6816E2459D00F376BC /* main.m */,
+				7B9CAA6A16E2459D00F376BC /* MCSwipe Demo-Prefix.pch */,
+				7B9CAA6E16E2459D00F376BC /* Default.png */,
+				7B9CAA7016E2459D00F376BC /* Default@2x.png */,
+				7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7B9CAA7916E245F900F376BC /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA7A16E245F900F376BC /* check.png */,
+				7B9CAA7B16E245F900F376BC /* check@2x.png */,
+				7B9CAA7C16E245F900F376BC /* clock.png */,
+				7B9CAA7D16E245F900F376BC /* clock@2x.png */,
+				7B9CAA7E16E245F900F376BC /* cross.png */,
+				7B9CAA7F16E245F900F376BC /* cross@2x.png */,
+				7B9CAA8016E245F900F376BC /* list.png */,
+				7B9CAA8116E245F900F376BC /* list@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		7B9CAA8C16E2461D00F376BC /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA9016E2469900F376BC /* MCSwipeTableViewCell */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
+		7B9CAA9016E2469900F376BC /* MCSwipeTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */,
+				7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */,
+			);
+			name = MCSwipeTableViewCell;
+			path = ../MCSwipeTableViewCell;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7B9CAA5816E2459D00F376BC /* MCSwipe Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B9CAA7616E2459D00F376BC /* Build configuration list for PBXNativeTarget "MCSwipe Demo" */;
+			buildPhases = (
+				7B9CAA5516E2459D00F376BC /* Sources */,
+				7B9CAA5616E2459D00F376BC /* Frameworks */,
+				7B9CAA5716E2459D00F376BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MCSwipe Demo";
+			productName = "MCSwipe Demo";
+			productReference = 7B9CAA5916E2459D00F376BC /* MCSwipe Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7B9CAA5116E2459D00F376BC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = MC;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Mad Castle";
+			};
+			buildConfigurationList = 7B9CAA5416E2459D00F376BC /* Build configuration list for PBXProject "MCSwipe Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7B9CAA5016E2459D00F376BC;
+			productRefGroup = 7B9CAA5A16E2459D00F376BC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7B9CAA5816E2459D00F376BC /* MCSwipe Demo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7B9CAA5716E2459D00F376BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B9CAA6716E2459D00F376BC /* InfoPlist.strings in Resources */,
+				7B9CAA6F16E2459D00F376BC /* Default.png in Resources */,
+				7B9CAA7116E2459D00F376BC /* Default@2x.png in Resources */,
+				7B9CAA7316E2459D00F376BC /* Default-568h@2x.png in Resources */,
+				7B9CAA8216E245F900F376BC /* check.png in Resources */,
+				7B9CAA8316E245F900F376BC /* check@2x.png in Resources */,
+				7B9CAA8416E245F900F376BC /* clock.png in Resources */,
+				7B9CAA8516E245F900F376BC /* clock@2x.png in Resources */,
+				7B9CAA8616E245F900F376BC /* cross.png in Resources */,
+				7B9CAA8716E245F900F376BC /* cross@2x.png in Resources */,
+				7B9CAA8816E245F900F376BC /* list.png in Resources */,
+				7B9CAA8916E245F900F376BC /* list@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7B9CAA5516E2459D00F376BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B9CAA6916E2459D00F376BC /* main.m in Sources */,
+				7B9CAA6D16E2459D00F376BC /* MCAppDelegate.m in Sources */,
+				7B9CAA8F16E2465500F376BC /* MCTableViewController.m in Sources */,
+				7B9CAA9316E2469900F376BC /* MCSwipeTableViewCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7B9CAA6516E2459D00F376BC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7B9CAA6616E2459D00F376BC /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7B9CAA7416E2459D00F376BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B9CAA7516E2459D00F376BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7B9CAA7716E2459D00F376BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MCSwipe Demo/MCSwipe Demo-Prefix.pch";
+				INFOPLIST_FILE = "MCSwipe Demo/MCSwipe Demo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7B9CAA7816E2459D00F376BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MCSwipe Demo/MCSwipe Demo-Prefix.pch";
+				INFOPLIST_FILE = "MCSwipe Demo/MCSwipe Demo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7B9CAA5416E2459D00F376BC /* Build configuration list for PBXProject "MCSwipe Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B9CAA7416E2459D00F376BC /* Debug */,
+				7B9CAA7516E2459D00F376BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B9CAA7616E2459D00F376BC /* Build configuration list for PBXNativeTarget "MCSwipe Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B9CAA7716E2459D00F376BC /* Debug */,
+				7B9CAA7816E2459D00F376BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7B9CAA5116E2459D00F376BC /* Project object */;
+}
