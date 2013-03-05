@@ -1,7 +1,7 @@
 MCSwipeTableViewCell
 --------------------
 
-<p align="center"><img src="http://f.cl.ly/items/0F090c1A2z191B1N0F35/mcswipe-front.png"/></p>
+<p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-front.png"/></p>
 
 An Effort to show how one would implement a TableViewCell like the one we can see in the very well executed [Mailbox](http://www.mailboxapp.com/) iOS app. 
 
@@ -9,12 +9,12 @@ An Effort to show how one would implement a TableViewCell like the one we can se
 ###Exit Mode
 The exit mode (`MCSwipeTableViewCellModeExit`) is the original behavior we can see in the **Mailbox**app. Swiping the cell should make it disappear.
 
-![](http://f.cl.ly/items/341Y0F2I1d1V1T0J0K0m/mcswipe-exit.gif)
+<p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-exit.gif"/></p>
 
 ###Switch Mode
 The switch mode (`MCSwipeTableViewCellModeSwitch`) is a new behavior I'm introducing. The cell will bounce back after selecting a state, this allows you to keep the cell. Very useful to switch an option quickly.
 
-![](http://f.cl.ly/items/1H0d0O3h1g3O0f0e3k0C/mcswipe-switch.gif)
+<p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-switch.gif"/></p>
 
 ##Usage
 
