@@ -47,6 +47,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property(nonatomic, strong) UIColor *secondColor;
 @property(nonatomic, strong) UIColor *thirdColor;
 @property(nonatomic, strong) UIColor *fourthColor;
+@property(nonatomic, strong) UIColor *defaultColor;
 
 @property(nonatomic, assign) MCSwipeTableViewCellMode mode;
 
@@ -61,6 +62,18 @@ secondStateIconName:(NSString *)secondIconName
      fourthIconName:(NSString *)fourthIconName
         fourthColor:(UIColor *)fourthColor;
 
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString *)reuseIdentifier
+ firstStateIconName:(NSString *)firstIconName
+         firstColor:(UIColor *)firstColor
+secondStateIconName:(NSString *)secondIconName
+        secondColor:(UIColor *)secondColor
+      thirdIconName:(NSString *)thirdIconName
+         thirdColor:(UIColor *)thirdColor
+     fourthIconName:(NSString *)fourthIconName
+        fourthColor:(UIColor *)fourthColor
+       defaultColor:(UIColor *)defaultColor;
+
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
           secondStateIconName:(NSString *)secondIconName
@@ -69,5 +82,15 @@ secondStateIconName:(NSString *)secondIconName
                    thirdColor:(UIColor *)thirdColor
                fourthIconName:(NSString *)fourthIconName
                   fourthColor:(UIColor *)fourthColor;
+
+- (void)setFirstStateIconName:(NSString *)firstIconName
+                   firstColor:(UIColor *)firstColor
+          secondStateIconName:(NSString *)secondIconName
+                  secondColor:(UIColor *)secondColor
+                thirdIconName:(NSString *)thirdIconName
+                   thirdColor:(UIColor *)thirdColor
+               fourthIconName:(NSString *)fourthIconName
+                  fourthColor:(UIColor *)fourthColor
+                 defaultColor:(UIColor *)defaultColor;
 
 @end
