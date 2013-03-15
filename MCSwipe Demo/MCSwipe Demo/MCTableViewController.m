@@ -69,7 +69,8 @@
                   thirdIconName:@"clock.png"
                      thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
                  fourthIconName:@"list.png"
-                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+     defaultColor:[UIColor orangeColor]];
 
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];

@@ -109,17 +109,19 @@ secondStateIconName:(NSString *)secondIconName
          thirdColor:(UIColor *)thirdColor
      fourthIconName:(NSString *)fourthIconName
         fourthColor:(UIColor *)fourthColor {
-    return [self initWithStyle:style
-               reuseIdentifier:reuseIdentifier
-            firstStateIconName:firstIconName
-                    firstColor:firstColor
-           secondStateIconName:secondIconName
-                   secondColor:secondColor
-                 thirdIconName:thirdIconName
-                    thirdColor:thirdColor
-                fourthIconName:fourthIconName
-                   fourthColor:fourthColor
-                  defaultColor:[UIColor clearColor]];
+    self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
+    if (self) {
+        [self setFirstStateIconName:firstIconName
+                         firstColor:firstColor
+                secondStateIconName:secondIconName
+                        secondColor:secondColor
+                      thirdIconName:thirdIconName
+                         thirdColor:thirdColor
+                     fourthIconName:fourthIconName
+                        fourthColor:fourthColor];
+    }
+    return self;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style
@@ -167,6 +169,15 @@ secondStateIconName:(NSString *)secondIconName
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
     [self addGestureRecognizer:_panGestureRecognizer];
     [_panGestureRecognizer setDelegate:self];
+}
+
+#pragma mark - Accessor
+- (UIColor *)defaultColor
+{
+    if (!_defaultColor) {
+        _defaultColor = [UIColor clearColor];
+    }
+    return _defaultColor;
 }
 
 #pragma mark - Handle Gestures
@@ -515,16 +526,17 @@ secondStateIconName:(NSString *)secondIconName
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
-    [self setFirstStateIconName:firstIconName
-                     firstColor:firstColor
-            secondStateIconName:secondIconName
-                    secondColor:secondColor
-                  thirdIconName:thirdIconName
-                     thirdColor:thirdColor
-                 fourthIconName:fourthIconName
-                    fourthColor:fourthColor
-                   defaultColor:[UIColor clearColor]];
+                  fourthColor:(UIColor *)fourthColor
+{
+    [self setFirstIconName:firstIconName];
+    [self setSecondIconName:secondIconName];
+    [self setThirdIconName:thirdIconName];
+    [self setFourthIconName:fourthIconName];
+    
+    [self setFirstColor:firstColor];
+    [self setSecondColor:secondColor];
+    [self setThirdColor:thirdColor];
+    [self setFourthColor:fourthColor];
 }
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
@@ -537,15 +549,15 @@ secondStateIconName:(NSString *)secondIconName
                   fourthColor:(UIColor *)fourthColor
                  defaultColor:(UIColor *)defaultColor
 {
-    [self setFirstIconName:firstIconName];
-    [self setSecondIconName:secondIconName];
-    [self setThirdIconName:thirdIconName];
-    [self setFourthIconName:fourthIconName];
-    
-    [self setFirstColor:firstColor];
-    [self setSecondColor:secondColor];
-    [self setThirdColor:thirdColor];
-    [self setFourthColor:fourthColor];
+    [self setFirstStateIconName:(NSString *)firstIconName
+                     firstColor:(UIColor *)firstColor
+            secondStateIconName:(NSString *)secondIconName
+                    secondColor:(UIColor *)secondColor
+                  thirdIconName:(NSString *)thirdIconName
+                     thirdColor:(UIColor *)thirdColor
+                 fourthIconName:(NSString *)fourthIconName
+                    fourthColor:(UIColor *)fourthColor];
+
     
     [self setDefaultColor:defaultColor];
 }
