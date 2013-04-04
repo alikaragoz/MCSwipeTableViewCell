@@ -32,6 +32,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @optional
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode;
 
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell swipedForState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode;
+
 @end
 
 @interface MCSwipeTableViewCell : UITableViewCell
