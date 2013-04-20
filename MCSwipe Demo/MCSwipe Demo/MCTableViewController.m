@@ -77,12 +77,12 @@
     if (indexPath.row % 2) {
         [cell.textLabel setText:@"Switch Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch"];
-        [cell setMode:MCSwipeTableViewCellModeSwitch];
+        // [cell setMode:MCSwipeTableViewCellModeSwitch];
     }
     else {
         [cell.textLabel setText:@"Exit Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
-        [cell setMode:MCSwipeTableViewCellModeExit];
+        // [cell setMode:MCSwipeTableViewCellModeExit];
     }
 
     return cell;
@@ -104,10 +104,16 @@
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode {
     NSLog(@"IndexPath : %@ - MCSwipeTableViewCellState : %d - MCSwipeTableViewCellMode : %d", [self.tableView indexPathForCell:cell], state, mode);
 
+    cell.mode = MCSwipeTableViewCellModeSwitch;
     if (mode == MCSwipeTableViewCellModeExit) {
         _nbItems--;
         [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell swipedForState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode {
+    if(state == MCSwipeTableViewCellState2)
+        cell.mode = MCSwipeTableViewCellModeExit;
 }
 
 #pragma mark - 
