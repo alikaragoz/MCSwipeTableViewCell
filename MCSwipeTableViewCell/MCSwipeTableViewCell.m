@@ -516,7 +516,7 @@ secondStateIconName:(NSString *)secondIconName
     
     if (state != MCSwipeTableViewCellStateNone) {
         if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:swipedForState:withMode:)]) {
-            [_delegate swipeTableViewCell:self swipedForState:state withMode:_mode];
+            [_delegate swipeTableViewCell:self swipedForState:state withMode:[self modeForState:state]];
         }
     }
 }
