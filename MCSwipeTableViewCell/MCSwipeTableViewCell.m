@@ -178,7 +178,6 @@ secondStateIconName:(NSString *)secondIconName
     if ([gestureRecognizer class] == [UIPanGestureRecognizer class]) {
         UIPanGestureRecognizer *g = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint point = [g velocityInView:self];
-        //NSLog(@"%f,%f",point.x,point.y);
         if (fabsf(point.x) > fabsf(point.y) ) {
             return YES;
         }
