@@ -53,7 +53,8 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 - (void)bounceToOrigin;
 
 // Delegate
-- (void)notifyDelegate;
+- (void)notifyDelegateSwiped;
+- (void)notifyDelegateDone;
 
 @property(nonatomic, assign) MCSwipeTableViewCellDirection direction;
 @property(nonatomic, assign) CGFloat currentPercentage;
@@ -126,7 +127,10 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)initializer {
-    _mode = MCSwipeTableViewCellModeSwitch;
+    _firstMode = MCSwipeTableViewCellModeSwitch;
+    _secondMode = MCSwipeTableViewCellModeSwitch;
+    _thirdMode = MCSwipeTableViewCellModeSwitch;
+    _fourthMode = MCSwipeTableViewCellModeSwitch;
 
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -165,7 +169,8 @@ secondStateIconName:(NSString *)secondIconName
         _currentPercentage = percentage;
         MCSwipeTableViewCellState cellState= [self stateWithPercentage:percentage];
 
-        if (_mode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
+        [self notifyDelegateSwiped];
+        if ([self modeForState:cellState] == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
             [self moveWithDuration:animationDuration andDirection:_direction];
         else
             [self bounceToOrigin];
@@ -332,6 +337,33 @@ secondStateIconName:(NSString *)secondIconName
     return isValid;
 }
 
+- (MCSwipeTableViewCellMode)modeForState:(MCSwipeTableViewCellState)state {
+    MCSwipeTableViewCellMode mode = MCSwipeTableViewCellModeSwitch;
+    
+    switch (state) {
+        case MCSwipeTableViewCellState1:
+            mode = _firstMode;
+            break;
+            
+        case MCSwipeTableViewCellState2:
+            mode = _secondMode;
+            break;
+            
+        case MCSwipeTableViewCellState3:
+            mode = _thirdMode;
+            break;
+            
+        case MCSwipeTableViewCellState4:
+            mode = _fourthMode;
+            break;
+
+        default:
+            break;
+    }
+    
+    return mode;
+}
+
 #pragma mark - Movement
 
 - (void)animateWithOffset:(CGFloat)offset {
@@ -435,7 +467,7 @@ secondStateIconName:(NSString *)secondIconName
                          [self slideImageWithPercentage:percentage imageName:_currentImageName isDragging:NO];
                      }
                      completion:^(BOOL finished) {
-                         [self notifyDelegate];
+                         [self notifyDelegateDone];
                      }];
 }
 
@@ -462,20 +494,30 @@ secondStateIconName:(NSString *)secondIconName
                                               frame.origin.x = 0;
                                               [self.contentView setFrame:frame];
                                           }
-                                          completion:^(BOOL finished2) {
-                                              [self notifyDelegate];
+                                          completion:^(BOOL finished) {
+                                              [self notifyDelegateDone];
                                           }];
                      }];
 }
 
 #pragma mark - Delegate Notification
 
-- (void)notifyDelegate {
+- (void)notifyDelegateDone {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
 
     if (state != MCSwipeTableViewCellStateNone) {
         if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:didTriggerState:withMode:)]) {
-            [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
+            [_delegate swipeTableViewCell:self didTriggerState:state withMode:[self modeForState:state]];
+        }
+    }
+}
+
+- (void)notifyDelegateSwiped {
+    MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
+    
+    if (state != MCSwipeTableViewCellStateNone) {
+        if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:swipedForState:withMode:)]) {
+            [_delegate swipeTableViewCell:self swipedForState:state withMode:[self modeForState:state]];
         }
     }
 }

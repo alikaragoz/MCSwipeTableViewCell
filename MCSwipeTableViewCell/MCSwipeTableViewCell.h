@@ -32,6 +32,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @optional
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode;
 
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell swipedForState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode;
+
 @end
 
 @interface MCSwipeTableViewCell : UITableViewCell
@@ -48,7 +50,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property(nonatomic, strong) UIColor *thirdColor;
 @property(nonatomic, strong) UIColor *fourthColor;
 
-@property(nonatomic, assign) MCSwipeTableViewCellMode mode;
+@property(nonatomic, assign) MCSwipeTableViewCellMode firstMode;
+@property(nonatomic, assign) MCSwipeTableViewCellMode secondMode;
+@property(nonatomic, assign) MCSwipeTableViewCellMode thirdMode;
+@property(nonatomic, assign) MCSwipeTableViewCellMode fourthMode;
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
