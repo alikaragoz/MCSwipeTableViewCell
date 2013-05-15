@@ -191,7 +191,7 @@ secondStateIconName:(NSString *)secondIconName
     CGFloat offset = percentage * width;
 
     if (offset < -width) offset = -width;
-    else if (offset > width) offset = 1.0;
+    else if (offset > width) offset = width;
 
     return offset;
 }
