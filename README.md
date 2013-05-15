@@ -102,6 +102,8 @@ For instance if you only want to have two states out of four:
 			 fourthIconName:nil
 				fourthColor:nil];
 ```
+##Consideration
+This library is not compatible with auto-layout so you will need to disable auto-layout in your xib properties.
 
 ##Requirements
 - iOS >= 5.0
