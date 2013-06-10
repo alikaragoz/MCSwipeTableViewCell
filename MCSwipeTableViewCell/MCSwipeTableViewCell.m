@@ -110,7 +110,7 @@ secondStateIconName:(NSString *)secondIconName
      fourthIconName:(NSString *)fourthIconName
         fourthColor:(UIColor *)fourthColor {
     self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
-
+    
     if (self) {
         [self setFirstStateIconName:firstIconName
                          firstColor:firstColor
@@ -121,8 +121,37 @@ secondStateIconName:(NSString *)secondIconName
                      fourthIconName:fourthIconName
                         fourthColor:fourthColor];
     }
-
     return self;
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString *)reuseIdentifier
+ firstStateIconName:(NSString *)firstIconName
+         firstColor:(UIColor *)firstColor
+secondStateIconName:(NSString *)secondIconName
+        secondColor:(UIColor *)secondColor
+      thirdIconName:(NSString *)thirdIconName
+         thirdColor:(UIColor *)thirdColor
+     fourthIconName:(NSString *)fourthIconName
+        fourthColor:(UIColor *)fourthColor
+       defaultColor:(UIColor *)defaultColor
+{
+    self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
+    if (self) {
+        [self setFirstStateIconName:firstIconName
+                         firstColor:firstColor
+                secondStateIconName:secondIconName
+                        secondColor:secondColor
+                      thirdIconName:thirdIconName
+                         thirdColor:thirdColor
+                     fourthIconName:fourthIconName
+                        fourthColor:fourthColor
+                       defaultColor:defaultColor];
+    }
+    
+    return self;
+
 }
 
 - (void)initializer {
@@ -160,6 +189,15 @@ secondStateIconName:(NSString *)secondIconName
 
     // Before reuse we need to reset it's state
     _shouldDrag = YES;
+}
+
+#pragma mark - Accessor
+- (UIColor *)defaultColor
+{
+    if (!_defaultColor) {
+        _defaultColor = [UIColor clearColor];
+    }
+    return _defaultColor;
 }
 
 #pragma mark - Handle Gestures
@@ -292,7 +330,7 @@ secondStateIconName:(NSString *)secondIconName
     else if (percentage <= -kMCStop2)
         color = _fourthColor;
     else
-        color = [UIColor clearColor];
+        color = _defaultColor;
 
     return color;
 }
@@ -514,16 +552,40 @@ secondStateIconName:(NSString *)secondIconName
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
+                  fourthColor:(UIColor *)fourthColor
+{
     [self setFirstIconName:firstIconName];
     [self setSecondIconName:secondIconName];
     [self setThirdIconName:thirdIconName];
     [self setFourthIconName:fourthIconName];
-
+    
     [self setFirstColor:firstColor];
     [self setSecondColor:secondColor];
     [self setThirdColor:thirdColor];
     [self setFourthColor:fourthColor];
+}
+
+- (void)setFirstStateIconName:(NSString *)firstIconName
+                   firstColor:(UIColor *)firstColor
+          secondStateIconName:(NSString *)secondIconName
+                  secondColor:(UIColor *)secondColor
+                thirdIconName:(NSString *)thirdIconName
+                   thirdColor:(UIColor *)thirdColor
+               fourthIconName:(NSString *)fourthIconName
+                  fourthColor:(UIColor *)fourthColor
+                 defaultColor:(UIColor *)defaultColor
+{
+    [self setFirstStateIconName:(NSString *)firstIconName
+                     firstColor:(UIColor *)firstColor
+            secondStateIconName:(NSString *)secondIconName
+                    secondColor:(UIColor *)secondColor
+                  thirdIconName:(NSString *)thirdIconName
+                     thirdColor:(UIColor *)thirdColor
+                 fourthIconName:(NSString *)fourthIconName
+                    fourthColor:(UIColor *)fourthColor];
+
+    
+    [self setDefaultColor:defaultColor];
 }
 
 @end
