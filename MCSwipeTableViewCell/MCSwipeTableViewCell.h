@@ -49,6 +49,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property(nonatomic, strong) UIColor *fourthColor;
 
 @property(nonatomic, assign) MCSwipeTableViewCellMode mode;
+@property(nonatomic, assign) BOOL isDragging;
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
