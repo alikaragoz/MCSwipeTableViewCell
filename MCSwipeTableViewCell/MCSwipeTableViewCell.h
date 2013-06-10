@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 
 @property(nonatomic, assign) MCSwipeTableViewCellMode mode;
 @property(nonatomic, assign) BOOL isDragging;
+@property(nonatomic, assign) BOOL shouldDrag;
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier

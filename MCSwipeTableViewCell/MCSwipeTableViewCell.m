@@ -142,6 +142,9 @@ secondStateIconName:(NSString *)secondIconName
     [_panGestureRecognizer setDelegate:self];
     
     _isDragging = NO;
+    
+    // By default the cells are draggable
+    _shouldDrag = YES;
 }
 
 #pragma mark - Prepare reuse
@@ -154,11 +157,18 @@ secondStateIconName:(NSString *)secondIconName
     
     // clearing the dragging flag
     _isDragging = NO;
+
+    // Before reuse we need to reset it's state
+    _shouldDrag = YES;
 }
 
 #pragma mark - Handle Gestures
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
+    
+    // The user do not want you to be dragged!
+    if (!_shouldDrag) return;
+    
     UIGestureRecognizerState state = [gesture state];
     CGPoint translation = [gesture translationInView:self];
     CGPoint velocity = [gesture velocityInView:self];
