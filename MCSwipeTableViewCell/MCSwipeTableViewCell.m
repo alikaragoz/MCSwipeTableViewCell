@@ -142,6 +142,15 @@ secondStateIconName:(NSString *)secondIconName
     [_panGestureRecognizer setDelegate:self];
 }
 
+#pragma mark - Prepare reuse
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    // Clearing before presenting back the cell to the user
+    [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
+}
+
 #pragma mark - Handle Gestures
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
