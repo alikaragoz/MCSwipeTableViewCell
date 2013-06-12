@@ -132,6 +132,7 @@ secondStateIconName:(NSString *)secondIconName
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
     [self insertSubview:_colorIndicatorView atIndex:0];
+    self.backgroundColor = [UIColor clearColor];
 
     _slidingImageView = [[UIImageView alloc] init];
     [_slidingImageView setContentMode:UIViewContentModeCenter];
