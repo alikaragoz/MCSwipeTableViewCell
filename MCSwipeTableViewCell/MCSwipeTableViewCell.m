@@ -103,6 +103,12 @@ secondStateIconName:(NSString *)secondIconName
     
     // By default the icons are not animating
     _animatesIcons = NO;
+    
+    // Set state modes
+    _modeForState1 = MCSwipeTableViewCellModeNone;
+    _modeForState2 = MCSwipeTableViewCellModeNone;
+    _modeForState3 = MCSwipeTableViewCellModeNone;
+    _modeForState4 = MCSwipeTableViewCellModeNone;
 }
 
 #pragma mark - Setter
@@ -166,9 +172,26 @@ secondStateIconName:(NSString *)secondIconName
         
         _currentImageName = [self imageNameWithPercentage:percentage];
         _currentPercentage = percentage;
-        MCSwipeTableViewCellState cellState= [self stateWithPercentage:percentage];
-
-        if (_mode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
+        
+        // Current state
+        MCSwipeTableViewCellState cellState = [self stateWithPercentage:percentage];
+        
+        // Current mode
+        MCSwipeTableViewCellMode cellMode;
+        
+        if (cellState == MCSwipeTableViewCellState1 && self.modeForState1 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState1;
+        } else if (cellState == MCSwipeTableViewCellState2 && self.modeForState2 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState2;
+        } else if (cellState == MCSwipeTableViewCellState3 && self.modeForState3 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState3;
+        } else if (cellState == MCSwipeTableViewCellState4 && self.modeForState4 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState4;
+        } else {
+            cellMode = self.mode;
+        }
+        
+        if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
             [self moveWithDuration:animationDuration andDirection:_direction];
         else
             [self bounceToOrigin];

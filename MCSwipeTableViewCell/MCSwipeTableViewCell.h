@@ -25,7 +25,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection){
 };
 
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
-    MCSwipeTableViewCellModeExit = 0,
+    MCSwipeTableViewCellModeNone = 0,
+    MCSwipeTableViewCellModeExit,
     MCSwipeTableViewCellModeSwitch
 };
 
@@ -50,7 +51,16 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property (nonatomic, strong) UIColor *thirdColor;
 @property (nonatomic, strong) UIColor *fourthColor;
 
+// This is the general mode for all states
+// If a specific mode for a state isn't defined, this mode will be taken in action
 @property (nonatomic, assign) MCSwipeTableViewCellMode mode;
+
+// Individual mode for states
+@property (nonatomic, assign) MCSwipeTableViewCellMode modeForState1;
+@property (nonatomic, assign) MCSwipeTableViewCellMode modeForState2;
+@property (nonatomic, assign) MCSwipeTableViewCellMode modeForState3;
+@property (nonatomic, assign) MCSwipeTableViewCellMode modeForState4;
+
 @property (nonatomic, assign) BOOL isDragging;
 @property (nonatomic, assign) BOOL shouldDrag;
 @property (nonatomic, assign) BOOL animatesIcons;
