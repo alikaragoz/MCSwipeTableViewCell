@@ -8,7 +8,7 @@
 
 #import "MCSwipeTableViewCell.h"
 
-static CGFloat const kMCStop1 = 0.20; // Percentage limit to trigger the first action
+static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
 static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
@@ -86,7 +86,7 @@ secondStateIconName:(NSString *)secondIconName
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
-    [self insertSubview:_colorIndicatorView belowSubview:self.contentView];
+    [self insertSubview:_colorIndicatorView atIndex:0];
 
     _slidingImageView = [[UIImageView alloc] init];
     [_slidingImageView setContentMode:UIViewContentModeCenter];
@@ -100,6 +100,9 @@ secondStateIconName:(NSString *)secondIconName
     
     // By default the cells are draggable
     _shouldDrag = YES;
+    
+    // By default the icons are not animating
+    _animatesIcons = NO;
 }
 
 #pragma mark - Setter
@@ -212,9 +215,9 @@ secondStateIconName:(NSString *)secondIconName
     return (kMCDurationHightLimit + kMCDurationLowLimit) - fabs(((horizontalVelocity / width) * animationDurationDiff));
 }
 - (MCSwipeTableViewCellDirection)directionWithPercentage:(CGFloat)percentage {
-    if (percentage < -kMCStop1)
+    if (percentage < 0)
         return MCSwipeTableViewCellDirectionLeft;
-    else if (percentage > kMCStop1)
+    else if (percentage > 0)
         return MCSwipeTableViewCellDirectionRight;
     else
         return MCSwipeTableViewCellDirectionCenter;
@@ -333,7 +336,8 @@ secondStateIconName:(NSString *)secondIconName
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
     }
-    [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
+    
+    [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.animatesIcons];
 
     // Color
     UIColor *color = [self colorWithPercentage:percentage];
@@ -368,10 +372,10 @@ secondStateIconName:(NSString *)secondIconName
     }
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         else {
             return;
