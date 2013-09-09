@@ -51,6 +51,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property (nonatomic, strong) UIColor *thirdColor;
 @property (nonatomic, strong) UIColor *fourthColor;
 
+// Color for background, when any state hasn't triggered yet
+@property (nonatomic, strong) UIColor *defaultColor;
+
 // This is the general mode for all states
 // If a specific mode for a state isn't defined, this mode will be taken in action
 @property (nonatomic, assign) MCSwipeTableViewCellMode mode;

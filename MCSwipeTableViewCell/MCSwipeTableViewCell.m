@@ -85,7 +85,7 @@ secondStateIconName:(NSString *)secondIconName
 
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
+    [_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
     [self insertSubview:_colorIndicatorView atIndex:0];
 
     _slidingImageView = [[UIImageView alloc] init];
@@ -284,7 +284,7 @@ secondStateIconName:(NSString *)secondIconName
     else if (percentage <= -kMCStop2)
         color = _fourthColor;
     else
-        color = [UIColor clearColor];
+        color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
 
     return color;
 }
