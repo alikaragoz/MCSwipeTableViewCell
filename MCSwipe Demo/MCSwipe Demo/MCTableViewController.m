@@ -20,7 +20,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        _nbItems = 2;
+        _nbItems = 4;
     }
     return self;
 }
@@ -72,19 +72,42 @@
                     fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
 
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+    
+    // Setting the default inactive state color to the tableView background color
+    [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
+    
+    //
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 
-    if (indexPath.row % 2) {
+    if (indexPath.row % 4 == 0) {
         [cell.textLabel setText:@"Switch Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch"];
-        [cell setMode:MCSwipeTableViewCellModeSwitch];
+        cell.mode = MCSwipeTableViewCellModeSwitch;
     }
-    else {
+    
+    else if (indexPath.row % 4 == 1) {
         [cell.textLabel setText:@"Exit Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
-        [cell setMode:MCSwipeTableViewCellModeExit];
+        cell.mode = MCSwipeTableViewCellModeExit;
+    }
+    
+    else if (indexPath.row % 4 == 2) {
+        [cell.textLabel setText:@"Mixed Mode Cell"];
+        [cell.detailTextLabel setText:@"Swipe to switch or delete"];
+        cell.modeForState1 = MCSwipeTableViewCellModeSwitch;
+        cell.modeForState2 = MCSwipeTableViewCellModeExit;
+        cell.modeForState3 = MCSwipeTableViewCellModeSwitch;
+        cell.modeForState4 = MCSwipeTableViewCellModeExit;
+        cell.shouldAnimatesIcons = YES;
     }
 
+    else if (indexPath.row % 4 == 3) {
+        [cell.textLabel setText:@"Unanimated Icons"];
+        [cell.detailTextLabel setText:@"Swipe"];
+        cell.mode = MCSwipeTableViewCellModeSwitch;
+        cell.shouldAnimatesIcons = NO;
+    }
+    
     return cell;
 }
 
@@ -103,7 +126,7 @@
 
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode {
     NSLog(@"IndexPath : %@ - MCSwipeTableViewCellState : %d - MCSwipeTableViewCellMode : %d", [self.tableView indexPathForCell:cell], state, mode);
-
+    
     if (mode == MCSwipeTableViewCellModeExit) {
         _nbItems--;
         [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationFade];

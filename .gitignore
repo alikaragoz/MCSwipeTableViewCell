@@ -16,3 +16,8 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+
+xcuserdata/
+project.xcworkspace/
+
+xcshareddata/
