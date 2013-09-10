@@ -102,7 +102,7 @@ For instance if you only want to have two states out of four:
 			 fourthIconName:nil
 				fourthColor:nil];
 ```
-Also you can set modes per state. Non-set states will use the default mode set by -setMode: method.
+Also you can set modes per state. Non-set states will use the default mode set by `-setMode:` method.
 
 ```objc
 [cell setModeForState1:MCSwipeTableViewCellModeSwitch];
