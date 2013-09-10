@@ -8,7 +8,7 @@
 
 #import "MCSwipeTableViewCell.h"
 
-static CGFloat const kMCStop1 = 0.20; // Percentage limit to trigger the first action
+static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
 static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
@@ -18,87 +18,42 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
-// Init
-- (void)initializer;
+@property (nonatomic, assign) MCSwipeTableViewCellDirection direction;
+@property (nonatomic, assign) CGFloat currentPercentage;
 
-// Handle Gestures
-- (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture;
-
-// Utils
-- (CGFloat)offsetWithPercentage:(CGFloat)percentage relativeToWidth:(CGFloat)width;
-
-- (CGFloat)percentageWithOffset:(CGFloat)offset relativeToWidth:(CGFloat)width;
-
-- (NSTimeInterval)animationDurationWithVelocity:(CGPoint)velocity;
-
-- (MCSwipeTableViewCellDirection)directionWithPercentage:(CGFloat)percentage;
-
-- (NSString *)imageNameWithPercentage:(CGFloat)percentage;
-
-- (UIColor *)colorWithPercentage:(CGFloat)percentage;
-
-- (MCSwipeTableViewCellState)stateWithPercentage:(CGFloat)percentage;
-
-- (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage;
-
-- (BOOL)validateState:(MCSwipeTableViewCellState)state;
-
-// Movement
-- (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging;
-
-- (void)animateWithOffset:(CGFloat)offset;
-
-- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction;
-
-- (void)bounceToOrigin;
-
-// Delegate
-- (void)notifyDelegate;
-
-@property(nonatomic, assign) MCSwipeTableViewCellDirection direction;
-@property(nonatomic, assign) CGFloat currentPercentage;
-
-@property(nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-@property(nonatomic, strong) UIImageView *slidingImageView;
-@property(nonatomic, strong) NSString *currentImageName;
-@property(nonatomic, strong) UIView *colorIndicatorView;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, strong) UIImageView *slidingImageView;
+@property (nonatomic, strong) NSString *currentImageName;
+@property (nonatomic, strong) UIView *colorIndicatorView;
 
 @end
 
 @implementation MCSwipeTableViewCell
 
 #pragma mark - Initialization
-
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-
     if (self) {
         [self initializer];
     }
     return self;
 }
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
-
     if (self) {
         [self initializer];
     }
     return self;
 }
-
 - (id)init {
     self = [super init];
-
     if (self) {
         [self initializer];
     }
-
     return self;
 }
 
-#pragma mark Custom Initializer
-
+#pragma mark - Custom Initializer
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName
@@ -109,8 +64,8 @@ secondStateIconName:(NSString *)secondIconName
          thirdColor:(UIColor *)thirdColor
      fourthIconName:(NSString *)fourthIconName
         fourthColor:(UIColor *)fourthColor {
+    
     self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
-
     if (self) {
         [self setFirstStateIconName:firstIconName
                          firstColor:firstColor
@@ -121,17 +76,17 @@ secondStateIconName:(NSString *)secondIconName
                      fourthIconName:fourthIconName
                         fourthColor:fourthColor];
     }
-
     return self;
 }
 
 - (void)initializer {
+    
     _mode = MCSwipeTableViewCellModeSwitch;
 
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
-    [self insertSubview:_colorIndicatorView belowSubview:self.contentView];
+    [_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
+    [self insertSubview:_colorIndicatorView atIndex:0];
 
     _slidingImageView = [[UIImageView alloc] init];
     [_slidingImageView setContentMode:UIViewContentModeCenter];
@@ -145,10 +100,39 @@ secondStateIconName:(NSString *)secondIconName
     
     // By default the cells are draggable
     _shouldDrag = YES;
+    
+    // By default the icons are not animating
+    _animatesIcons = NO;
+    
+    // Set state modes
+    _modeForState1 = MCSwipeTableViewCellModeNone;
+    _modeForState2 = MCSwipeTableViewCellModeNone;
+    _modeForState3 = MCSwipeTableViewCellModeNone;
+    _modeForState4 = MCSwipeTableViewCellModeNone;
+}
+
+#pragma mark - Setter
+- (void)setFirstStateIconName:(NSString *)firstIconName
+                   firstColor:(UIColor *)firstColor
+          secondStateIconName:(NSString *)secondIconName
+                  secondColor:(UIColor *)secondColor
+                thirdIconName:(NSString *)thirdIconName
+                   thirdColor:(UIColor *)thirdColor
+               fourthIconName:(NSString *)fourthIconName
+                  fourthColor:(UIColor *)fourthColor {
+    
+    [self setFirstIconName:firstIconName];
+    [self setSecondIconName:secondIconName];
+    [self setThirdIconName:thirdIconName];
+    [self setFourthIconName:fourthIconName];
+    
+    [self setFirstColor:firstColor];
+    [self setSecondColor:secondColor];
+    [self setThirdColor:thirdColor];
+    [self setFourthColor:fourthColor];
 }
 
 #pragma mark - Prepare reuse
-
 - (void)prepareForReuse {
     [super prepareForReuse];
     
@@ -163,7 +147,6 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - Handle Gestures
-
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     
     // The user do not want you to be dragged!
@@ -189,9 +172,26 @@ secondStateIconName:(NSString *)secondIconName
         
         _currentImageName = [self imageNameWithPercentage:percentage];
         _currentPercentage = percentage;
-        MCSwipeTableViewCellState cellState= [self stateWithPercentage:percentage];
-
-        if (_mode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
+        
+        // Current state
+        MCSwipeTableViewCellState cellState = [self stateWithPercentage:percentage];
+        
+        // Current mode
+        MCSwipeTableViewCellMode cellMode;
+        
+        if (cellState == MCSwipeTableViewCellState1 && self.modeForState1 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState1;
+        } else if (cellState == MCSwipeTableViewCellState2 && self.modeForState2 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState2;
+        } else if (cellState == MCSwipeTableViewCellState3 && self.modeForState3 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState3;
+        } else if (cellState == MCSwipeTableViewCellState4 && self.modeForState4 != MCSwipeTableViewCellModeNone) {
+            cellMode = self.modeForState4;
+        } else {
+            cellMode = self.mode;
+        }
+        
+        if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
             [self moveWithDuration:animationDuration andDirection:_direction];
         else
             [self bounceToOrigin];
@@ -199,7 +199,6 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - UIGestureRecognizerDelegate
-
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if ([gestureRecognizer class] == [UIPanGestureRecognizer class]) {
         UIPanGestureRecognizer *g = (UIPanGestureRecognizer *)gestureRecognizer;
@@ -212,7 +211,6 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - Utils
-
 - (CGFloat)offsetWithPercentage:(CGFloat)percentage relativeToWidth:(CGFloat)width {
     CGFloat offset = percentage * width;
 
@@ -221,7 +219,6 @@ secondStateIconName:(NSString *)secondIconName
 
     return offset;
 }
-
 - (CGFloat)percentageWithOffset:(CGFloat)offset relativeToWidth:(CGFloat)width {
     CGFloat percentage = offset / width;
 
@@ -230,7 +227,6 @@ secondStateIconName:(NSString *)secondIconName
 
     return percentage;
 }
-
 - (NSTimeInterval)animationDurationWithVelocity:(CGPoint)velocity {
     CGFloat width = CGRectGetWidth(self.bounds);
     NSTimeInterval animationDurationDiff = kMCDurationHightLimit - kMCDurationLowLimit;
@@ -241,16 +237,14 @@ secondStateIconName:(NSString *)secondIconName
 
     return (kMCDurationHightLimit + kMCDurationLowLimit) - fabs(((horizontalVelocity / width) * animationDurationDiff));
 }
-
 - (MCSwipeTableViewCellDirection)directionWithPercentage:(CGFloat)percentage {
-    if (percentage < -kMCStop1)
+    if (percentage < 0)
         return MCSwipeTableViewCellDirectionLeft;
-    else if (percentage > kMCStop1)
+    else if (percentage > 0)
         return MCSwipeTableViewCellDirectionRight;
     else
         return MCSwipeTableViewCellDirectionCenter;
 }
-
 - (NSString *)imageNameWithPercentage:(CGFloat)percentage {
     NSString *imageName;
 
@@ -266,7 +260,6 @@ secondStateIconName:(NSString *)secondIconName
 
     return imageName;
 }
-
 - (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
 
@@ -278,7 +271,6 @@ secondStateIconName:(NSString *)secondIconName
 
     return alpha;
 }
-
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
     UIColor *color;
 
@@ -292,11 +284,10 @@ secondStateIconName:(NSString *)secondIconName
     else if (percentage <= -kMCStop2)
         color = _fourthColor;
     else
-        color = [UIColor clearColor];
+        color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
 
     return color;
 }
-
 - (MCSwipeTableViewCellState)stateWithPercentage:(CGFloat)percentage {
     MCSwipeTableViewCellState state;
 
@@ -316,7 +307,6 @@ secondStateIconName:(NSString *)secondIconName
 
     return state;
 }
-
 - (BOOL)validateState:(MCSwipeTableViewCellState)state {
     BOOL isValid = YES;
 
@@ -358,7 +348,6 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - Movement
-
 - (void)animateWithOffset:(CGFloat)offset {
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
 
@@ -370,7 +359,8 @@ secondStateIconName:(NSString *)secondIconName
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
     }
-    [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
+    
+    [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.animatesIcons];
 
     // Color
     UIColor *color = [self colorWithPercentage:percentage];
@@ -378,8 +368,6 @@ secondStateIconName:(NSString *)secondIconName
         [_colorIndicatorView setBackgroundColor:color];
     }
 }
-
-
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
     UIImage *slidingImage = [UIImage imageNamed:imageName];
     CGSize slidingImageSize = slidingImage.size;
@@ -407,10 +395,10 @@ secondStateIconName:(NSString *)secondIconName
     }
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         else {
             return;
@@ -426,8 +414,6 @@ secondStateIconName:(NSString *)secondIconName
     slidingImageRect = CGRectIntegral(slidingImageRect);
     [_slidingImageView setFrame:slidingImageRect];
 }
-
-
 - (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
     CGFloat origin;
 
@@ -463,7 +449,6 @@ secondStateIconName:(NSString *)secondIconName
                          [self notifyDelegate];
                      }];
 }
-
 - (void)bounceToOrigin {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
 
@@ -494,7 +479,6 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - Delegate Notification
-
 - (void)notifyDelegate {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
 
@@ -503,27 +487,6 @@ secondStateIconName:(NSString *)secondIconName
             [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
         }
     }
-}
-
-#pragma mark - Setter
-
-- (void)setFirstStateIconName:(NSString *)firstIconName
-                   firstColor:(UIColor *)firstColor
-          secondStateIconName:(NSString *)secondIconName
-                  secondColor:(UIColor *)secondColor
-                thirdIconName:(NSString *)thirdIconName
-                   thirdColor:(UIColor *)thirdColor
-               fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
-    [self setFirstIconName:firstIconName];
-    [self setSecondIconName:secondIconName];
-    [self setThirdIconName:thirdIconName];
-    [self setFourthIconName:fourthIconName];
-
-    [self setFirstColor:firstColor];
-    [self setSecondColor:secondColor];
-    [self setThirdColor:thirdColor];
-    [self setFourthColor:fourthColor];
 }
 
 @end
