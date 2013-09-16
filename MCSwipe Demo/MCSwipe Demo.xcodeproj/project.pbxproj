@@ -26,6 +26,8 @@
 		7B9CAA8916E245F900F376BC /* list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8116E245F900F376BC /* list@2x.png */; };
 		7B9CAA8F16E2465500F376BC /* MCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8E16E2465500F376BC /* MCTableViewController.m */; };
 		7B9CAA9316E2469900F376BC /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */; };
+		7BAFD96A17E7BB7800C148BF /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BAFD96817E7BB7800C148BF /* Icon.png */; };
+		7BAFD96B17E7BB7800C148BF /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BAFD96917E7BB7800C148BF /* Icon@2x.png */; };
 		7C23B01617DB87F100771FA0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA5E16E2459D00F376BC /* Foundation.framework */; };
 		7C23B03817DB884A00771FA0 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */; };
 		7C23B03917DB885D00771FA0 /* MCSwipeTableViewCell.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */; };
@@ -45,7 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7B9CAA5916E2459D00F376BC /* MCSwipe Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MCSwipe Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B9CAA5916E2459D00F376BC /* Swipe Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swipe Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B9CAA5C16E2459D00F376BC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7B9CAA5E16E2459D00F376BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7B9CAA6016E2459D00F376BC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -70,6 +72,8 @@
 		7B9CAA8E16E2465500F376BC /* MCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCTableViewController.m; sourceTree = "<group>"; };
 		7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
 		7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
+		7BAFD96817E7BB7800C148BF /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		7BAFD96917E7BB7800C148BF /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		7C23B01517DB87F100771FA0 /* libMCSwipeTableViewCell.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMCSwipeTableViewCell.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C23B01917DB87F100771FA0 /* MCSwipeTableViewCell-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCSwipeTableViewCell-Prefix.pch"; sourceTree = "<group>"; };
 		7C23B02317DB87F100771FA0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -111,7 +115,7 @@
 		7B9CAA5A16E2459D00F376BC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7B9CAA5916E2459D00F376BC /* MCSwipe Demo.app */,
+				7B9CAA5916E2459D00F376BC /* Swipe Demo.app */,
 				7C23B01517DB87F100771FA0 /* libMCSwipeTableViewCell.a */,
 			);
 			name = Products;
@@ -151,6 +155,8 @@
 				7B9CAA6E16E2459D00F376BC /* Default.png */,
 				7B9CAA7016E2459D00F376BC /* Default@2x.png */,
 				7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */,
+				7BAFD96817E7BB7800C148BF /* Icon.png */,
+				7BAFD96917E7BB7800C148BF /* Icon@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -221,7 +227,7 @@
 			);
 			name = "MCSwipe Demo";
 			productName = "MCSwipe Demo";
-			productReference = 7B9CAA5916E2459D00F376BC /* MCSwipe Demo.app */;
+			productReference = 7B9CAA5916E2459D00F376BC /* Swipe Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7C23B01417DB87F100771FA0 /* MCSwipeTableViewCell */ = {
@@ -281,7 +287,9 @@
 				7B9CAA8216E245F900F376BC /* check.png in Resources */,
 				7B9CAA8316E245F900F376BC /* check@2x.png in Resources */,
 				7B9CAA8416E245F900F376BC /* clock.png in Resources */,
+				7BAFD96A17E7BB7800C148BF /* Icon.png in Resources */,
 				7B9CAA8516E245F900F376BC /* clock@2x.png in Resources */,
+				7BAFD96B17E7BB7800C148BF /* Icon@2x.png in Resources */,
 				7B9CAA8616E245F900F376BC /* cross.png in Resources */,
 				7B9CAA8716E245F900F376BC /* cross@2x.png in Resources */,
 				7B9CAA8816E245F900F376BC /* list.png in Resources */,
@@ -389,7 +397,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MCSwipe Demo/MCSwipe Demo-Prefix.pch";
 				INFOPLIST_FILE = "MCSwipe Demo/MCSwipe Demo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "Swipe Demo";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -400,7 +409,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MCSwipe Demo/MCSwipe Demo-Prefix.pch";
 				INFOPLIST_FILE = "MCSwipe Demo/MCSwipe Demo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "Swipe Demo";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
