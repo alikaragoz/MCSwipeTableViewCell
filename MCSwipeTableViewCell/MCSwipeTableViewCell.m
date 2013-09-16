@@ -364,9 +364,8 @@ secondStateIconName:(NSString *)secondIconName
     if (imageName != nil) {
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
+        [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     }
-    
-    [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     
     // Color
     UIColor *color = [self colorWithPercentage:percentage];
