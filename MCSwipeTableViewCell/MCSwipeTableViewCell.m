@@ -113,6 +113,13 @@ secondStateIconName:(NSString *)secondIconName
     _modeForState4 = MCSwipeTableViewCellModeNone;
 }
 
+-(void)layoutSubviews {
+  if (_isDragging || _shouldDrag) {
+    return;
+  }
+  [super layoutSubviews];
+}
+
 #pragma mark - Setter
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
