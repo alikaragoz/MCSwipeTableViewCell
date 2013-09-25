@@ -496,8 +496,8 @@ secondStateIconName:(NSString *)secondIconName
                          [_slidingImageView setAlpha:0.0];
                          [self slideImageWithPercentage:0 imageName:_currentImageName isDragging:NO];
                          
-                         // Clearing the indicator view
-                         [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
+                         // Setting back the color to the default
+                         _colorIndicatorView.backgroundColor = self.defaultColor;
                      }
                      completion:^(BOOL finished1) {
                          
@@ -508,6 +508,9 @@ secondStateIconName:(NSString *)secondIconName
                                               CGRect frame = self.contentView.frame;
                                               frame.origin.x = 0;
                                               [self.contentView setFrame:frame];
+                                              
+                                              // Clearing the indicator view
+                                              _colorIndicatorView.backgroundColor = [UIColor clearColor];
                                           }
                                           completion:^(BOOL finished2) {
                                               [self notifyDelegate];
