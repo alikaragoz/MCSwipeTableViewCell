@@ -82,7 +82,7 @@ MCSwipeTableViewCell has a delegate to retrieve the cell/state/mode of the trigg
 In `MCSwipeTableViewCellModeExit` mode you may want to delete the cell with a nice fading animation, the following lines will give you an idea how to execute it:
 
 ```objc
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didEndSwipingSwipingWithState:(MCSwipeTableViewCellState)state mode:(MCSwipeTableViewCellMode)mode
 {    
     if (mode == MCSwipeTableViewCellModeExit)
     {
