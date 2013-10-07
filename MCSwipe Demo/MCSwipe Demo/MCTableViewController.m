@@ -20,7 +20,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        _nbItems = 4;
+        _nbItems = 6;
     }
     return self;
 }
@@ -79,19 +79,19 @@
     //
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 
-    if (indexPath.row % 4 == 0) {
+    if (indexPath.row % 6 == 0) {
         [cell.textLabel setText:@"Switch Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch"];
         cell.mode = MCSwipeTableViewCellModeSwitch;
     }
     
-    else if (indexPath.row % 4 == 1) {
+    else if (indexPath.row % 6 == 1) {
         [cell.textLabel setText:@"Exit Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
         cell.mode = MCSwipeTableViewCellModeExit;
     }
     
-    else if (indexPath.row % 4 == 2) {
+    else if (indexPath.row % 6 == 2) {
         [cell.textLabel setText:@"Mixed Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch or delete"];
         cell.modeForState1 = MCSwipeTableViewCellModeSwitch;
@@ -101,11 +101,37 @@
         cell.shouldAnimatesIcons = YES;
     }
 
-    else if (indexPath.row % 4 == 3) {
+    else if (indexPath.row % 6 == 3) {
         [cell.textLabel setText:@"Unanimated Icons"];
         [cell.detailTextLabel setText:@"Swipe"];
         cell.mode = MCSwipeTableViewCellModeSwitch;
         cell.shouldAnimatesIcons = NO;
+    }
+    else if (indexPath.row % 6 == 4) {
+        [cell.textLabel setText:@"Disabled right swipe"];
+        [cell.detailTextLabel setText:@"Swipe"];
+        [cell setFirstStateIconName:nil
+                         firstColor:nil
+                secondStateIconName:nil
+                        secondColor:nil
+                      thirdIconName:@"clock.png"
+                         thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                     fourthIconName:@"list.png"
+                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+
+        
+    }
+    else if (indexPath.row % 6 == 5) {
+        [cell.textLabel setText:@"Disabled left swipe"];
+        [cell.detailTextLabel setText:@"Swipe"];
+        [cell setFirstStateIconName:@"check.png"
+                         firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                secondStateIconName:@"cross.png"
+                        secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                      thirdIconName:nil
+                         thirdColor:nil
+                     fourthIconName:nil
+                        fourthColor:nil];
     }
     
     return cell;
