@@ -401,50 +401,52 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
-    UIImage *slidingImage = [UIImage imageNamed:imageName];
-    CGSize slidingImageSize = slidingImage.size;
-    CGRect slidingImageRect;
-    
-    CGPoint position = CGPointZero;
-    
-    position.y = CGRectGetHeight(self.bounds) / 2.0;
-    
-    if (isDragging) {
-        if (percentage >= 0 && percentage < kMCStop1) {
-            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
+    if (imageName != nil) {
+        UIImage *slidingImage = [UIImage imageNamed:imageName];
+        CGSize slidingImageSize = slidingImage.size;
+        CGRect slidingImageRect;
         
-        else if (percentage >= kMCStop1) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else if (percentage < 0 && percentage >= -kMCStop1) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
+        CGPoint position = CGPointZero;
         
-        else if (percentage < -kMCStop1) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-    }
-    else {
-        if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        position.y = CGRectGetHeight(self.bounds) / 2.0;
+        
+        if (isDragging) {
+            if (percentage >= 0 && percentage < kMCStop1) {
+                position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            }
+            
+            else if (percentage >= kMCStop1) {
+                position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            }
+            else if (percentage < 0 && percentage >= -kMCStop1) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            }
+            
+            else if (percentage < -kMCStop1) {
+                position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            }
         }
         else {
-            return;
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            }
+            else if (_direction == MCSwipeTableViewCellDirectionLeft) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            }
+            else {
+                return;
+            }
         }
+        
+        
+        slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
+                                      position.y - slidingImageSize.height / 2.0,
+                                      slidingImageSize.width,
+                                      slidingImageSize.height);
+        
+        slidingImageRect = CGRectIntegral(slidingImageRect);
+        [_slidingImageView setFrame:slidingImageRect];
     }
-    
-    
-    slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
-                                  position.y - slidingImageSize.height / 2.0,
-                                  slidingImageSize.width,
-                                  slidingImageSize.height);
-    
-    slidingImageRect = CGRectIntegral(slidingImageRect);
-    [_slidingImageView setFrame:slidingImageRect];
 }
 
 - (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
