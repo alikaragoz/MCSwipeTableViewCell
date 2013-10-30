@@ -401,6 +401,8 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
+    if (!imageName) return;
+
     UIImage *slidingImage = [UIImage imageNamed:imageName];
     CGSize slidingImageSize = slidingImage.size;
     CGRect slidingImageRect;
