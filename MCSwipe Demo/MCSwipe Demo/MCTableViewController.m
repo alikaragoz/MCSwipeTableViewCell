@@ -27,11 +27,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     self.title = @"Swipe Table View";
     self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(reload:)];
-
+    
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
     [backgroundView setBackgroundColor:[UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0]];
     [self.tableView setBackgroundView:backgroundView];
@@ -54,13 +54,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-
+    
     MCSwipeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
+    
     if (!cell) {
         cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-
+    
     [cell setDelegate:self];
     [cell setFirstStateIconName:@"check.png"
                      firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
@@ -70,7 +70,7 @@
                      thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
                  fourthIconName:@"list.png"
                     fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
-
+    
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     
     // Setting the default inactive state color to the tableView background color
@@ -78,7 +78,7 @@
     
     //
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
-
+    
     if (indexPath.row % 4 == 0) {
         [cell.textLabel setText:@"Switch Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch"];
@@ -100,7 +100,7 @@
         cell.modeForState4 = MCSwipeTableViewCellModeExit;
         cell.shouldAnimatesIcons = YES;
     }
-
+    
     else if (indexPath.row % 4 == 3) {
         [cell.textLabel setText:@"Unanimated Icons"];
         [cell.detailTextLabel setText:@"Swipe"];
@@ -135,10 +135,10 @@
 }
 
 /*
-// When the user is dragging, this method is called and return the dragged percentage from the border
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipWithPercentage:(CGFloat)percentage {
-    NSLog(@"Did swipe with percentage : %f", percentage);
-}
+ // When the user is dragging, this method is called and return the dragged percentage from the border
+ - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipWithPercentage:(CGFloat)percentage {
+ NSLog(@"Did swipe with percentage : %f", percentage);
+ }
  */
 
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didEndSwipingSwipingWithState:(MCSwipeTableViewCellState)state mode:(MCSwipeTableViewCellMode)mode {
@@ -150,7 +150,7 @@
     }
 }
 
-#pragma mark - 
+#pragma mark -
 
 - (void)reload:(id)sender {
     _nbItems++;
