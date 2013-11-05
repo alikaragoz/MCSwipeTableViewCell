@@ -13,8 +13,8 @@ static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second 
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
 static NSTimeInterval const kMCBounceDuration2 = 0.1; // Duration of the second part of the bounce animation
-static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when swipping the cell because we try to simulate velocity
-static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swipping the cell because we try to simulate velocity
+static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
+static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swiping the cell because we try to simulate velocity
 
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
@@ -159,7 +159,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     
-    // The user do not want you to be dragged!
+    // The user does not want you to be dragged!
     if (!_shouldDrag) return;
     
     UIGestureRecognizerState state = [gesture state];
@@ -550,6 +550,12 @@ secondStateIconName:(NSString *)secondIconName
         }
     }
     
+    // We notify the delegate that we just ended dragging
+    if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
+        [_delegate swipeTableViewCellDidEndSwiping:self];
+    }
+    
+    // This is only called if a state has been triggered
     if (state != MCSwipeTableViewCellStateNone) {
         if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didEndSwipingSwipingWithState:mode:)]) {
             [_delegate swipeTableViewCell:self didEndSwipingSwipingWithState:state mode:mode];

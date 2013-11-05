@@ -129,6 +129,11 @@
     NSLog(@"Did start swiping the cell!");
 }
 
+// When the user ends swiping the cell this method is called
+- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell {
+    NSLog(@"Did end swiping the cell!");
+}
+
 /*
 // When the user is dragging, this method is called and return the dragged percentage from the border
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipWithPercentage:(CGFloat)percentage {
