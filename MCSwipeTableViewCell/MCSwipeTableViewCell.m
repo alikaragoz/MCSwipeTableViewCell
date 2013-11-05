@@ -222,7 +222,12 @@ secondStateIconName:(NSString *)secondIconName
         CGPoint point = [g velocityInView:self];
         
         if (fabsf(point.x) > fabsf(point.y) ) {
-            
+            if (point.x < 0 && !_thirdColor && !_thirdIconName && !_fourthColor && !_fourthIconName){
+                return NO;
+            }
+            if (point.x > 0 && !_firstColor && !_firstIconName && !_secondColor && !_secondIconName){
+                return NO;
+            }
             // We notify the delegate that we just started dragging
             if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidStartSwiping:)]) {
                 [_delegate swipeTableViewCellDidStartSwiping:self];
