@@ -401,6 +401,8 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
+    if (!imageName) return;
+
     UIImage *slidingImage = [UIImage imageNamed:imageName];
     CGSize slidingImageSize = slidingImage.size;
     CGRect slidingImageRect;
@@ -410,31 +412,31 @@ secondStateIconName:(NSString *)secondIconName
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
     if (isDragging) {
-        if (percentage >= 0 && percentage < kMCStop1) {
-            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage >= kMCStop1) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else if (percentage < 0 && percentage >= -kMCStop1) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage < -kMCStop1) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
+      if (percentage >= 0 && percentage < kMCStop1) {
+        position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+      }
+      
+      else if (percentage >= kMCStop1) {
+        position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+      }
+      else if (percentage < 0 && percentage >= -kMCStop1) {
+        position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+      }
+      
+      else if (percentage < -kMCStop1) {
+        position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+      }
     }
     else {
-        if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        else {
-            return;
-        }
+      if (_direction == MCSwipeTableViewCellDirectionRight) {
+        position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+      }
+      else if (_direction == MCSwipeTableViewCellDirectionLeft) {
+        position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+      }
+      else {
+        return;
+      }
     }
     
     
@@ -449,7 +451,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
     CGFloat origin;
-    
+  
     if (direction == MCSwipeTableViewCellDirectionLeft)
         origin = -CGRectGetWidth(self.bounds);
     else
