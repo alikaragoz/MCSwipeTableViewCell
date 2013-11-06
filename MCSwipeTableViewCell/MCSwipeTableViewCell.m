@@ -106,6 +106,10 @@ secondStateIconName:(NSString *)secondIconName
     // By default the icons are animating
     _shouldAnimatesIcons = YES;
     
+    // The defaut triggers match the icons location
+    _firstTrigger = kMCStop1;
+    _secondTrigger = kMCStop2;
+    
     // Set state modes
     _modeForState1 = MCSwipeTableViewCellModeNone;
     _modeForState2 = MCSwipeTableViewCellModeNone;
@@ -290,13 +294,13 @@ secondStateIconName:(NSString *)secondIconName
     NSString *imageName;
     
     // Image
-    if (percentage >= 0 && percentage < kMCStop2)
+    if (percentage >= 0 && percentage < _secondTrigger)
         imageName = _firstIconName;
-    else if (percentage >= kMCStop2)
+    else if (percentage >= _secondTrigger)
         imageName = _secondIconName;
-    else if (percentage < 0 && percentage > -kMCStop2)
+    else if (percentage < 0 && percentage > -_secondTrigger)
         imageName = _thirdIconName;
-    else if (percentage <= -kMCStop2)
+    else if (percentage <= -_secondTrigger)
         imageName = _fourthIconName;
     
     return imageName;
@@ -304,10 +308,10 @@ secondStateIconName:(NSString *)secondIconName
 - (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
-    if (percentage >= 0 && percentage < kMCStop1)
-        alpha = percentage / kMCStop1;
-    else if (percentage < 0 && percentage > -kMCStop1)
-        alpha = fabsf(percentage / kMCStop1);
+    if (percentage >= 0 && percentage < _firstTrigger)
+        alpha = percentage / _firstTrigger;
+    else if (percentage < 0 && percentage > -_firstTrigger)
+        alpha = fabsf(percentage / _firstTrigger);
     else alpha = 1.0;
     
     return alpha;
@@ -317,13 +321,13 @@ secondStateIconName:(NSString *)secondIconName
     UIColor *color;
     
     // Background Color
-    if (percentage >= kMCStop1 && percentage < kMCStop2)
+    if (percentage >= _firstTrigger && percentage < _secondTrigger)
         color = _firstColor;
-    else if (percentage >= kMCStop2)
+    else if (percentage >= _secondTrigger)
         color = _secondColor;
-    else if (percentage < -kMCStop1 && percentage > -kMCStop2)
+    else if (percentage < -_firstTrigger && percentage > -_secondTrigger)
         color = _thirdColor;
-    else if (percentage <= -kMCStop2)
+    else if (percentage <= -_secondTrigger)
         color = _fourthColor;
     else
         color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
@@ -336,16 +340,16 @@ secondStateIconName:(NSString *)secondIconName
     
     state = MCSwipeTableViewCellStateNone;
     
-    if (percentage >= kMCStop1 && [self validateState:MCSwipeTableViewCellState1])
+    if (percentage >= _firstTrigger && [self validateState:MCSwipeTableViewCellState1])
         state = MCSwipeTableViewCellState1;
     
-    if (percentage >= kMCStop2 && [self validateState:MCSwipeTableViewCellState2])
+    if (percentage >= _secondTrigger && [self validateState:MCSwipeTableViewCellState2])
         state = MCSwipeTableViewCellState2;
     
-    if (percentage <= -kMCStop1 && [self validateState:MCSwipeTableViewCellState3])
+    if (percentage <= -_firstTrigger && [self validateState:MCSwipeTableViewCellState3])
         state = MCSwipeTableViewCellState3;
     
-    if (percentage <= -kMCStop2 && [self validateState:MCSwipeTableViewCellState4])
+    if (percentage <= -_secondTrigger && [self validateState:MCSwipeTableViewCellState4])
         state = MCSwipeTableViewCellState4;
     
     return state;
