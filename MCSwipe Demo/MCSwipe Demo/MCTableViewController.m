@@ -9,6 +9,8 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
+static NSUInteger const kMCNumItems = 8;
+
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate>
 
 @property(nonatomic, assign) NSUInteger nbItems;
@@ -20,7 +22,7 @@
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        _nbItems = 6;
+        _nbItems = kMCNumItems;
     }
     return self;
 }
@@ -79,19 +81,19 @@
     //
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 
-    if (indexPath.row % 6 == 0) {
+    if (indexPath.row % kMCNumItems == 0) {
         [cell.textLabel setText:@"Switch Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch"];
         cell.mode = MCSwipeTableViewCellModeSwitch;
     }
     
-    else if (indexPath.row % 6 == 1) {
+    else if (indexPath.row % kMCNumItems == 1) {
         [cell.textLabel setText:@"Exit Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
         cell.mode = MCSwipeTableViewCellModeExit;
     }
     
-    else if (indexPath.row % 6 == 2) {
+    else if (indexPath.row % kMCNumItems == 2) {
         [cell.textLabel setText:@"Mixed Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch or delete"];
         cell.modeForState1 = MCSwipeTableViewCellModeSwitch;
@@ -101,14 +103,14 @@
         cell.shouldAnimatesIcons = YES;
     }
     
-    else if (indexPath.row % 6 == 3) {
+    else if (indexPath.row % kMCNumItems == 3) {
         [cell.textLabel setText:@"Unanimated Icons"];
         [cell.detailTextLabel setText:@"Swipe"];
         cell.mode = MCSwipeTableViewCellModeSwitch;
         cell.shouldAnimatesIcons = NO;
     }
     
-    else if (indexPath.row % 6 == 4) {
+    else if (indexPath.row % kMCNumItems == 4) {
         [cell.textLabel setText:@"Disabled right swipe"];
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:nil
@@ -123,7 +125,7 @@
         
     }
     
-    else if (indexPath.row % 6 == 5) {
+    else if (indexPath.row % kMCNumItems == 5) {
         [cell.textLabel setText:@"Disabled left swipe"];
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:@"check.png"
@@ -134,6 +136,21 @@
                          thirdColor:nil
                      fourthIconName:nil
                         fourthColor:nil];
+    }
+    
+    else if (indexPath.row % kMCNumItems == 6) {
+        [cell.textLabel setText:@"Small triggers"];
+        [cell.detailTextLabel setText:@"Using 10% and 50%"];
+        cell.firstTrigger = 0.1;
+        cell.secondTrigger = 0.5;
+    }
+    
+    else if (indexPath.row % kMCNumItems == 7) {
+        [cell.textLabel setText:@"Small triggers"];
+        [cell.detailTextLabel setText:@"and unanimated icons"];
+        cell.firstTrigger = 0.1;
+        cell.secondTrigger = 0.5;
+        cell.shouldAnimatesIcons = NO;
     }
     
     return cell;
