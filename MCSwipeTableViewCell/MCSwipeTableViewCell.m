@@ -23,6 +23,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, strong) UIImageView *slidingImageView;
+@property (nonatomic, strong) UILabel *slidingTextLabel;
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
@@ -55,6 +56,35 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 }
 
 #pragma mark - Custom Initializer
+
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString *)reuseIdentifier
+         firstColor:(UIColor *)firstColor
+          firstText:(NSString *)firstText
+        secondColor:(UIColor *)secondColor
+         secondText:(NSString *)secondText
+         thirdColor:(UIColor *)thirdColor
+          thirdText:(NSString *)thirdText
+        fourthColor:(UIColor *)fourthColor
+         fourthText:(NSString *)fourthText {
+    
+    self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setFirstStateIconName:nil
+                         firstColor:firstColor
+                          firstText:firstText
+                secondStateIconName:nil
+                        secondColor:secondColor
+                          secondText:secondText
+                      thirdIconName:nil
+                         thirdColor:thirdColor
+                          thirdText:thirdText
+                     fourthIconName:nil
+                        fourthColor:fourthColor
+                         fourthText:fourthText];
+    }
+    return self;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
@@ -94,6 +124,14 @@ secondStateIconName:(NSString *)secondIconName
     [_slidingImageView setContentMode:UIViewContentModeCenter];
     [_colorIndicatorView addSubview:_slidingImageView];
     
+    _slidingTextLabel = [[UILabel alloc] init];
+    [_slidingTextLabel setBackgroundColor:[UIColor clearColor]];
+    [_slidingTextLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20]];
+    [_slidingTextLabel setTextColor:[UIColor whiteColor]];
+    [_slidingTextLabel setTextAlignment:NSTextAlignmentCenter];
+    [_slidingTextLabel setNumberOfLines:3];
+    [_colorIndicatorView addSubview:_slidingTextLabel];
+    
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
     [self addGestureRecognizer:_panGestureRecognizer];
     [_panGestureRecognizer setDelegate:self];
@@ -121,13 +159,16 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
+                    firstText:(NSString *)firstText
           secondStateIconName:(NSString *)secondIconName
                   secondColor:(UIColor *)secondColor
+                    secondText:(NSString *)secondText
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
+                    thirdText:(NSString *)thirdText
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
-    
+                  fourthColor:(UIColor *)fourthColor
+                    fourthText:(NSString *)fourthText {
     [self setFirstIconName:firstIconName];
     [self setSecondIconName:secondIconName];
     [self setThirdIconName:thirdIconName];
@@ -137,6 +178,34 @@ secondStateIconName:(NSString *)secondIconName
     [self setSecondColor:secondColor];
     [self setThirdColor:thirdColor];
     [self setFourthColor:fourthColor];
+    
+    [self setFirstText:firstText];
+    [self setSecondText:secondText];
+    [self setThirdText:thirdText];
+    [self setFourthText:fourthText];
+}
+
+- (void)setFirstStateIconName:(NSString *)firstIconName
+                   firstColor:(UIColor *)firstColor
+          secondStateIconName:(NSString *)secondIconName
+                  secondColor:(UIColor *)secondColor
+                thirdIconName:(NSString *)thirdIconName
+                   thirdColor:(UIColor *)thirdColor
+               fourthIconName:(NSString *)fourthIconName
+                  fourthColor:(UIColor *)fourthColor {
+    
+    [self setFirstStateIconName:firstIconName
+                     firstColor:firstColor
+                      firstText:nil
+            secondStateIconName:secondIconName
+                    secondColor:secondColor
+                     secondText:nil
+                  thirdIconName:thirdIconName
+                     thirdColor:thirdColor
+                      thirdText:nil
+                 fourthIconName:fourthIconName
+                    fourthColor:fourthColor
+                     fourthText:nil];
 }
 
 #pragma mark - Prepare reuse
@@ -290,6 +359,21 @@ secondStateIconName:(NSString *)secondIconName
         return MCSwipeTableViewCellDirectionCenter;
 }
 
+- (NSString *)textWithPercentage:(CGFloat)percentage {
+    NSString *text;
+    
+    // Text
+    if (percentage >= 0 && percentage < _secondTrigger)
+        text = _firstText;
+    else if (percentage >= _secondTrigger)
+        text = _secondText;
+    else if (percentage < 0 && percentage > -_secondTrigger)
+        text = _thirdText;
+    else if (percentage <= -_secondTrigger)
+        text = _fourthText;
+    
+    return text;
+}
 - (NSString *)imageNameWithPercentage:(CGFloat)percentage {
     NSString *imageName;
     
@@ -364,22 +448,22 @@ secondStateIconName:(NSString *)secondIconName
         } break;
             
         case MCSwipeTableViewCellState1: {
-            if (!_firstColor && !_firstIconName)
+            if (!_firstColor && !_firstIconName && !_firstText)
                 isValid = NO;
         } break;
             
         case MCSwipeTableViewCellState2: {
-            if (!_secondColor && !_secondIconName)
+            if (!_secondColor && !_secondIconName && !_secondText)
                 isValid = NO;
         } break;
             
         case MCSwipeTableViewCellState3: {
-            if (!_thirdColor && !_thirdIconName)
+            if (!_thirdColor && !_thirdIconName && !_thirdText)
                 isValid = NO;
         } break;
             
         case MCSwipeTableViewCellState4: {
-            if (!_fourthColor && !_fourthIconName)
+            if (!_fourthColor && !_fourthIconName && !_fourthText)
                 isValid = NO;
         } break;
             
@@ -405,11 +489,72 @@ secondStateIconName:(NSString *)secondIconName
         [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     }
     
+    // Text
+    NSString *text = [self textWithPercentage:percentage];
+    if (text != nil) {
+        [_slidingTextLabel setText:text];
+        [self slideTextWithPercentage:percentage text:text isDragging:self.shouldAnimatesIcons];
+    }
+
     // Color
     UIColor *color = [self colorWithPercentage:percentage];
     if (color != nil) {
         [_colorIndicatorView setBackgroundColor:color];
     }
+}
+
+- (void)slideTextWithPercentage:(CGFloat)percentage text:(NSString *)text isDragging:(BOOL)isDragging {
+    if (!text) return;
+    
+    CGRect rect = [_slidingTextLabel textRectForBounds:self.bounds limitedToNumberOfLines:3];
+    
+    CGSize slidingTextSize = CGSizeMake(CGRectGetWidth(rect)+8.0f, CGRectGetHeight(rect));  // todoRG text.size;
+    CGRect slidingTextRect;
+    
+    CGPoint position = CGPointZero;
+    
+    position.y = CGRectGetHeight(self.bounds) / 2.0;
+    
+    if (isDragging) {
+        if (percentage >= 0 && percentage < kMCStop1) {
+            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        }
+        
+        else if (percentage >= kMCStop1) {
+            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        }
+        
+        else if (percentage < 0 && percentage >= -kMCStop1) {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        }
+        
+        else if (percentage < -kMCStop1) {
+            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        }
+    }
+    
+    else {
+        if (_direction == MCSwipeTableViewCellDirectionRight) {
+            position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        }
+        
+        else if (_direction == MCSwipeTableViewCellDirectionLeft) {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        }
+        
+        else {
+            return;
+        }
+    }
+    
+    
+    slidingTextRect = CGRectMake(position.x - slidingTextSize.width / 2.0,
+                                  position.y - slidingTextSize.height / 2.0,
+                                  slidingTextSize.width,
+                                  slidingTextSize.height);
+    
+    slidingTextRect = CGRectIntegral(slidingTextRect);
+    [_slidingTextLabel setFrame:slidingTextRect];
 }
 
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
@@ -486,6 +631,12 @@ secondStateIconName:(NSString *)secondIconName
     // Image
     if (_currentImageName != nil) {
         [_slidingImageView setImage:[UIImage imageNamed:_currentImageName]];
+    }
+    
+    // Text
+    NSString *text = [self textWithPercentage:_currentPercentage];
+    if (text != nil) {
+        [_slidingTextLabel setText:text];
     }
     
     [UIView animateWithDuration:duration delay:0.0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
