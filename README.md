@@ -93,6 +93,23 @@ In `MCSwipeTableViewCellModeExit` mode you may want to delete the cell with a ni
 ```
 There is also an example in the demo project, I recommend to take a look at it.
 
+###Changing the trigger percentage
+If the default trigger limits do not fit to your needs you can change them with the `firstTrigger` *(default: 25%)* and `secondTrigger` *(Default: 75%)* properties.
+
+```objc
+cell.firstTrigger = 0.1;
+cell.secondTrigger = 0.5;
+```
+
+###Reseting cell position
+It is possible to put the cell back to it's position when using the `MCSwipeTableViewCellModeExit` mode with the `-swipeToOriginWithCompletion:` method: 
+
+```objc
+[cell swipeToOriginWithCompletion:^{
+    NSLog(@"Cell swiped back!");
+}];
+```
+
 ###Customization
 You may want to change the number of states, have a color without the icon or the opposite. All those combinations are possible.
 
