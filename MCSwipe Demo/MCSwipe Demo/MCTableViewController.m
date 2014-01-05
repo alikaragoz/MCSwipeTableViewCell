@@ -9,11 +9,12 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 8;
+static NSUInteger const kMCNumItems = 9;
 
-@interface MCTableViewController () <MCSwipeTableViewCellDelegate>
+@interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
-@property(nonatomic, assign) NSUInteger nbItems;
+@property (nonatomic, assign) NSUInteger nbItems;
+@property (nonatomic, strong) MCSwipeTableViewCell *cell;
 
 @end
 
@@ -70,6 +71,7 @@ static NSUInteger const kMCNumItems = 8;
                     fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
     
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+    cell.separatorInset = UIEdgeInsetsZero;
     
     // Setting the default inactive state color to the tableView background color
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
@@ -149,6 +151,22 @@ static NSUInteger const kMCNumItems = 8;
         cell.shouldAnimatesIcons = NO;
     }
     
+    else if (indexPath.row % kMCNumItems == 8) {
+        [cell.textLabel setText:@"Exit Mode Cell + Confirmation"];
+        [cell.detailTextLabel setText:@"Swipe to delete"];
+        cell.mode = MCSwipeTableViewCellModeExit;
+        
+        [cell setFirstStateIconName:@"cross.png"
+                         firstColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                secondStateIconName:nil
+                        secondColor:nil
+                      thirdIconName:nil
+                         thirdColor:nil
+                     fourthIconName:nil
+                        fourthColor:nil];
+        
+    }
+    
     return cell;
 }
 
@@ -183,9 +201,18 @@ static NSUInteger const kMCNumItems = 8;
  */
 
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didEndSwipingSwipingWithState:(MCSwipeTableViewCellState)state mode:(MCSwipeTableViewCellMode)mode {
-    NSLog(@"Did end swipping with IndexPath : %@ - MCSwipeTableViewCellState : %d - MCSwipeTableViewCellMode : %d", [self.tableView indexPathForCell:cell], state, mode);
     
-    if (mode == MCSwipeTableViewCellModeExit) {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    NSLog(@"Did end swipping with IndexPath : %@ - MCSwipeTableViewCellState : %d - MCSwipeTableViewCellMode : %d", indexPath, state, mode);
+    
+    if (indexPath.row % kMCNumItems == 8) {
+        _cell = cell;
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete?" message:@"Are you sure your want to delete the cell?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [alertView show];
+    }
+    
+    else if (mode == MCSwipeTableViewCellModeExit) {
         _nbItems--;
         [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -196,6 +223,25 @@ static NSUInteger const kMCNumItems = 8;
 - (void)reload:(id)sender {
     _nbItems++;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    // No
+    if (buttonIndex == 0) {
+        [_cell swipeToOriginWithCompletion:^{
+            NSLog(@"Swipped back");
+        }];
+        _cell = nil;
+    }
+    
+    // Yes
+    else {
+        _nbItems--;
+        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:_cell]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 @end
