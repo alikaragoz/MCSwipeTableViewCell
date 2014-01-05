@@ -57,6 +57,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, copy) NSString *thirdIconName;
 @property (nonatomic, copy) NSString *fourthIconName;
 
+// If the icon name is nil, the control attempts to load the UIImage
+@property (nonatomic, copy) UIImage *firstIcon;
+@property (nonatomic, copy) UIImage *secondIcon;
+@property (nonatomic, copy) UIImage *thirdIcon;
+@property (nonatomic, copy) UIImage *fourthIcon;
+
 @property (nonatomic, strong) UIColor *firstColor;
 @property (nonatomic, strong) UIColor *secondColor;
 @property (nonatomic, strong) UIColor *thirdColor;
@@ -94,6 +100,17 @@ secondStateIconName:(NSString *)secondIconName
      fourthIconName:(NSString *)fourthIconName
         fourthColor:(UIColor *)fourthColor;
 
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString *)reuseIdentifier
+	 firstStateIcon:(UIImage *)firstIcon
+         firstColor:(UIColor *)firstColor
+	secondStateIcon:(UIImage *)secondIcon
+        secondColor:(UIColor *)secondColor
+		  thirdIcon:(UIImage *)thirdIcon
+         thirdColor:(UIColor *)thirdColor
+		 fourthIcon:(UIImage *)fourthIcon
+        fourthColor:(UIColor *)fourthColor;
+
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
           secondStateIconName:(NSString *)secondIconName
@@ -102,6 +119,15 @@ secondStateIconName:(NSString *)secondIconName
                    thirdColor:(UIColor *)thirdColor
                fourthIconName:(NSString *)fourthIconName
                   fourthColor:(UIColor *)fourthColor;
+
+- (void)setFirstStateIcon:(UIImage *)firstIcon
+			   firstColor:(UIColor *)firstColor
+          secondStateIcon:(UIImage *)secondIcon
+			  secondColor:(UIColor *)secondColor
+                thirdIcon:(UIImage *)thirdIcon
+			   thirdColor:(UIColor *)thirdColor
+               fourthIcon:(UIImage *)fourthIcon
+			  fourthColor:(UIColor *)fourthColor;
 
 
 // Manually swipe to origin

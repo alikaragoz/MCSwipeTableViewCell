@@ -24,6 +24,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, strong) UIImageView *slidingImageView;
 @property (nonatomic, strong) NSString *currentImageName;
+@property (nonatomic, strong) UIImage *currentImage;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
 @end
@@ -77,6 +78,31 @@ secondStateIconName:(NSString *)secondIconName
                          thirdColor:thirdColor
                      fourthIconName:fourthIconName
                         fourthColor:fourthColor];
+    }
+    return self;
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString *)reuseIdentifier
+	 firstStateIcon:(UIImage *)firstIcon
+         firstColor:(UIColor *)firstColor
+	secondStateIcon:(UIImage *)secondIcon
+        secondColor:(UIColor *)secondColor
+		  thirdIcon:(UIImage *)thirdIcon
+         thirdColor:(UIColor *)thirdColor
+		 fourthIcon:(UIImage *)fourthIcon
+        fourthColor:(UIColor *)fourthColor {
+    
+    self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setFirstStateIcon:firstIcon
+					 firstColor:firstColor
+                secondStateIcon:secondIcon
+					secondColor:secondColor
+                      thirdIcon:thirdIcon
+					 thirdColor:thirdColor
+                     fourthIcon:fourthIcon
+					fourthColor:fourthColor];
     }
     return self;
 }
@@ -139,6 +165,26 @@ secondStateIconName:(NSString *)secondIconName
     [self setFourthColor:fourthColor];
 }
 
+- (void)setFirstStateIcon:(UIImage *)firstIcon
+			   firstColor:(UIColor *)firstColor
+          secondStateIcon:(UIImage *)secondIcon
+			  secondColor:(UIColor *)secondColor
+                thirdIcon:(UIImage *)thirdIcon
+			   thirdColor:(UIColor *)thirdColor
+               fourthIcon:(UIImage *)fourthIcon
+			  fourthColor:(UIColor *)fourthColor {
+    
+    [self setFirstIcon:firstIcon];
+    [self setSecondIcon:secondIcon];
+    [self setThirdIcon:thirdIcon];
+    [self setFourthIcon:fourthIcon];
+    
+    [self setFirstColor:firstColor];
+    [self setSecondColor:secondColor];
+    [self setThirdColor:thirdColor];
+    [self setFourthColor:fourthColor];
+}
+
 #pragma mark - Prepare reuse
 - (void)prepareForReuse {
     [super prepareForReuse];
@@ -191,6 +237,12 @@ secondStateIconName:(NSString *)secondIconName
         _isDragging = NO;
         
         _currentImageName = [self imageNameWithPercentage:percentage];
+		if (_currentImageName != nil) {
+			_currentImage = [UIImage imageNamed:_currentImageName];
+		} else {
+			_currentImage = [self imageWithPercentage:percentage];
+		}
+		
         _currentPercentage = percentage;
         
         // Current state
@@ -305,6 +357,23 @@ secondStateIconName:(NSString *)secondIconName
     
     return imageName;
 }
+
+- (UIImage *)imageWithPercentage:(CGFloat)percentage {
+    UIImage *image;
+    
+    // Image
+    if (percentage >= 0 && percentage < _secondTrigger)
+        image = _firstIcon;
+    else if (percentage >= _secondTrigger)
+        image = _secondIcon;
+    else if (percentage < 0 && percentage > -_secondTrigger)
+        image = _thirdIcon;
+    else if (percentage <= -_secondTrigger)
+        image = _fourthIcon;
+    
+    return image;
+}
+
 - (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
@@ -403,7 +472,14 @@ secondStateIconName:(NSString *)secondIconName
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
         [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
-    }
+    } else {
+		UIImage *image = [self imageWithPercentage:percentage];
+		if (image != nil) {
+			[_slidingImageView setImage:image];
+			[_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
+			[self slideImageWithPercentage:percentage image:image isDragging:self.shouldAnimatesIcons];
+		}
+	}
     
     // Color
     UIColor *color = [self colorWithPercentage:percentage];
@@ -412,10 +488,16 @@ secondStateIconName:(NSString *)secondIconName
     }
 }
 
-- (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
-    if (!imageName) return;
+- (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging
+{
+	if (!imageName) return;
+	[self slideImageWithPercentage:percentage image:[UIImage imageNamed:imageName] isDragging:isDragging];
+}
+
+- (void)slideImageWithPercentage:(CGFloat)percentage image:(UIImage *)image isDragging:(BOOL)isDragging {
     
-    UIImage *slidingImage = [UIImage imageNamed:imageName];
+    
+    UIImage *slidingImage = image;
     CGSize slidingImageSize = slidingImage.size;
     CGRect slidingImageRect;
     
@@ -460,7 +542,7 @@ secondStateIconName:(NSString *)secondIconName
                                   position.y - slidingImageSize.height / 2.0,
                                   slidingImageSize.width,
                                   slidingImageSize.height);
-    
+    NSLog(@"%@", NSStringFromCGRect(slidingImageRect));
     slidingImageRect = CGRectIntegral(slidingImageRect);
     [_slidingImageView setFrame:slidingImageRect];
 }
@@ -484,14 +566,14 @@ secondStateIconName:(NSString *)secondIconName
     }
     
     // Image
-    if (_currentImageName != nil) {
-        [_slidingImageView setImage:[UIImage imageNamed:_currentImageName]];
+    if (_currentImage != nil) {
+        [_slidingImageView setImage:_currentImage];
     }
     
     [UIView animateWithDuration:duration delay:0.0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
         [self.contentView setFrame:rect];
         [_slidingImageView setAlpha:0];
-        [self slideImageWithPercentage:percentage imageName:_currentImageName isDragging:self.shouldAnimatesIcons];
+        [self slideImageWithPercentage:percentage image:_currentImage isDragging:self.shouldAnimatesIcons];
     } completion:^(BOOL finished) {
         [self notifyDelegate];
     }];
@@ -506,7 +588,7 @@ secondStateIconName:(NSString *)secondIconName
         frame.origin.x = -bounceDistance;
         [self.contentView setFrame:frame];
         [_slidingImageView setAlpha:0.0];
-        [self slideImageWithPercentage:0 imageName:_currentImageName isDragging:NO];
+        [self slideImageWithPercentage:0 image:_currentImage isDragging:NO];
         
         // Setting back the color to the default
         _colorIndicatorView.backgroundColor = self.defaultColor;
