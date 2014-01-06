@@ -30,6 +30,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeSwitch
 };
 
+typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode);
+
 @protocol MCSwipeTableViewCellDelegate <NSObject>
 
 @optional
@@ -52,15 +54,25 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 
 @property (nonatomic, assign) id <MCSwipeTableViewCellDelegate> delegate;
 
-@property (nonatomic, copy) NSString *firstIconName;
-@property (nonatomic, copy) NSString *secondIconName;
-@property (nonatomic, copy) NSString *thirdIconName;
-@property (nonatomic, copy) NSString *fourthIconName;
+@property (nonatomic, copy) NSString *firstIconName __attribute__ ((deprecated));
+@property (nonatomic, copy) NSString *secondIconName __attribute__ ((deprecated));
+@property (nonatomic, copy) NSString *thirdIconName __attribute__ ((deprecated));
+@property (nonatomic, copy) NSString *fourthIconName __attribute__ ((deprecated));
 
 @property (nonatomic, strong) UIColor *firstColor;
 @property (nonatomic, strong) UIColor *secondColor;
 @property (nonatomic, strong) UIColor *thirdColor;
 @property (nonatomic, strong) UIColor *fourthColor;
+
+@property (nonatomic, strong) UIImage *image1;
+@property (nonatomic, strong) UIImage *image2;
+@property (nonatomic, strong) UIImage *image3;
+@property (nonatomic, strong) UIImage *image4;
+
+@property (nonatomic, copy) MCSwipeCompletionBlock completionBlock1;
+@property (nonatomic, copy) MCSwipeCompletionBlock completionBlock2;
+@property (nonatomic, copy) MCSwipeCompletionBlock completionBlock3;
+@property (nonatomic, copy) MCSwipeCompletionBlock completionBlock4;
 
 // Percentage of when the first and second action are activated, respectively
 @property (nonatomic, assign) CGFloat firstTrigger;
@@ -83,6 +95,17 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, assign) BOOL shouldDrag;
 @property (nonatomic, assign) BOOL shouldAnimatesIcons;
 
+- (void)setSwipeGestureWithImage:(UIImage *)image
+                           color:(UIColor *)color
+                            mode:(MCSwipeTableViewCellMode)mode
+                           state:(MCSwipeTableViewCellState)state
+                 completionBlock:(MCSwipeCompletionBlock)completionBlock;
+
+// Manually swipe to origin
+- (void)swipeToOriginWithCompletion:(void(^)(void))completion;
+
+#pragma mark - Deprecated
+
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName
@@ -92,7 +115,7 @@ secondStateIconName:(NSString *)secondIconName
       thirdIconName:(NSString *)thirdIconName
          thirdColor:(UIColor *)thirdColor
      fourthIconName:(NSString *)fourthIconName
-        fourthColor:(UIColor *)fourthColor;
+        fourthColor:(UIColor *)fourthColor __attribute__ ((deprecated));
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
@@ -101,9 +124,6 @@ secondStateIconName:(NSString *)secondIconName
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor;
+                  fourthColor:(UIColor *)fourthColor __attribute__ ((deprecated));
 
-
-// Manually swipe to origin
-- (void)swipeToOriginWithCompletion:(void(^)(void))completion;
 @end
