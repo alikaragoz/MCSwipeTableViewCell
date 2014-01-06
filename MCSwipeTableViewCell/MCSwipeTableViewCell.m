@@ -557,13 +557,6 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
         [_delegate swipeTableViewCellDidEndSwiping:self];
     }
     
-    // This is only called if a state has been triggered
-    if (state != MCSwipeTableViewCellStateNone) {
-        if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didEndSwipingSwipingWithState:mode:)]) {
-            [_delegate swipeTableViewCell:self didEndSwipingSwipingWithState:state mode:mode];
-        }
-    }
-    
     if (completionBlock) {
         completionBlock(self, state, mode);
     }
