@@ -11,10 +11,14 @@
 static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
 static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
+static CGFloat const kMCDamping = 0.6; // Damping of the spring animation
+static CGFloat const kMCVelocity = 0.9; // Velocity of the spring animation
+static CGFloat const kMCAnimationDuration = 0.4; // Duration of the animation
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
 static NSTimeInterval const kMCBounceDuration2 = 0.1; // Duration of the second part of the bounce animation
 static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
 static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swiping the cell because we try to simulate velocity
+
 
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
@@ -83,6 +87,11 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
     
+    // Spring animation
+    _damping = kMCDamping;
+    _velocity = kMCVelocity;
+    _animationDuration = kMCAnimationDuration;
+    
     // Set state modes
     _modeForState1 = _modeForState2 = _modeForState3 = _modeForState4 = MCSwipeTableViewCellModeNone;
 }
@@ -144,7 +153,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     _isDragging = NO;
     _shouldDrag = YES;
     _shouldAnimatesIcons = YES;
-
+    
     _modeForState1 = MCSwipeTableViewCellModeNone;
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
@@ -298,7 +307,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 }
 
 - (UIImage *)imageWithPercentage:(CGFloat)percentage {
-
+    
     UIImage *image;
     
     if (percentage >= 0 && _modeForState1) {
@@ -491,20 +500,10 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
     
-    [UIView animateWithDuration:kMCBounceDuration1 delay:0 options:(UIViewAnimationOptionCurveEaseOut) animations:^{
+    if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
         
-        CGRect frame = self.contentView.frame;
-        frame.origin.x = -bounceDistance;
-        [self.contentView setFrame:frame];
-        [_slidingImageView setAlpha:0.0];
-        [self slideImageWithPercentage:0 image:_currentImage isDragging:NO];
-        
-        // Setting back the color to the default
-        _colorIndicatorView.backgroundColor = self.defaultColor;
-        
-    } completion:^(BOOL finished1) {
-        
-        [UIView animateWithDuration:kMCBounceDuration2 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            
             CGRect frame = self.contentView.frame;
             frame.origin.x = 0;
             [self.contentView setFrame:frame];
@@ -512,12 +511,42 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
             // Clearing the indicator view
             _colorIndicatorView.backgroundColor = [UIColor clearColor];
             
-        } completion:^(BOOL finished2) {
+        } completion:^(BOOL finished) {
             if (completion) {
                 completion();
             }
         }];
-    }];
+    }
+    
+    else {
+        [UIView animateWithDuration:kMCBounceDuration1 delay:0 options:(UIViewAnimationOptionCurveEaseOut) animations:^{
+            
+            CGRect frame = self.contentView.frame;
+            frame.origin.x = -bounceDistance;
+            [self.contentView setFrame:frame];
+            [_slidingImageView setAlpha:0.0];
+            [self slideImageWithPercentage:0 image:_currentImage isDragging:NO];
+            
+            // Setting back the color to the default
+            _colorIndicatorView.backgroundColor = self.defaultColor;
+            
+        } completion:^(BOOL finished1) {
+            
+            [UIView animateWithDuration:kMCBounceDuration2 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+                CGRect frame = self.contentView.frame;
+                frame.origin.x = 0;
+                [self.contentView setFrame:frame];
+                
+                // Clearing the indicator view
+                _colorIndicatorView.backgroundColor = [UIColor clearColor];
+                
+            } completion:^(BOOL finished2) {
+                if (completion) {
+                    completion();
+                }
+            }];
+        }];
+    }
 }
 
 #pragma mark - Delegate Notification

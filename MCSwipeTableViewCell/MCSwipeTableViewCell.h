@@ -70,6 +70,15 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 @property (nonatomic, assign) CGFloat firstTrigger;
 @property (nonatomic, assign) CGFloat secondTrigger;
 
+// Damping of the spring animation (iOS 7 only)
+@property (nonatomic, assign) CGFloat damping;
+
+// Velocity of the spring animation (iOS 7 only)
+@property (nonatomic, assign) CGFloat velocity;
+
+// Duration of the animation.
+@property (nonatomic, assign) NSTimeInterval animationDuration;
+
 // Color for background, when any state hasn't triggered yet
 @property (nonatomic, strong) UIColor *defaultColor;
 
