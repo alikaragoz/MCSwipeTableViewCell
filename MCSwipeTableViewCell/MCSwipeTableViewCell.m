@@ -39,6 +39,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     }
     return self;
 }
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -46,6 +47,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     }
     return self;
 }
+
 - (id)init {
     self = [super init];
     if (self) {
@@ -54,36 +56,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     return self;
 }
 
-#pragma mark - Custom Initializer
-
-- (id)initWithStyle:(UITableViewCellStyle)style
-    reuseIdentifier:(NSString *)reuseIdentifier
- firstStateIconName:(NSString *)firstIconName
-         firstColor:(UIColor *)firstColor
-secondStateIconName:(NSString *)secondIconName
-        secondColor:(UIColor *)secondColor
-      thirdIconName:(NSString *)thirdIconName
-         thirdColor:(UIColor *)thirdColor
-     fourthIconName:(NSString *)fourthIconName
-        fourthColor:(UIColor *)fourthColor {
-    
-    self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        [self setFirstStateIconName:firstIconName
-                         firstColor:firstColor
-                secondStateIconName:secondIconName
-                        secondColor:secondColor
-                      thirdIconName:thirdIconName
-                         thirdColor:thirdColor
-                     fourthIconName:fourthIconName
-                        fourthColor:fourthColor];
-    }
-    return self;
-}
-
 - (void)initializer {
-    
-    _mode = MCSwipeTableViewCellModeNone;
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -109,42 +82,6 @@ secondStateIconName:(NSString *)secondIconName
     // The defaut triggers match the icons location
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
-    
-    // Set state modes
-    _modeForState1 = MCSwipeTableViewCellModeNone;
-    _modeForState2 = MCSwipeTableViewCellModeNone;
-    _modeForState3 = MCSwipeTableViewCellModeNone;
-    _modeForState4 = MCSwipeTableViewCellModeNone;
-}
-
-#pragma mark - Setter
-
-- (void)setFirstStateIconName:(NSString *)firstIconName
-                   firstColor:(UIColor *)firstColor
-          secondStateIconName:(NSString *)secondIconName
-                  secondColor:(UIColor *)secondColor
-                thirdIconName:(NSString *)thirdIconName
-                   thirdColor:(UIColor *)thirdColor
-               fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
-    
-    [self setFirstIconName:firstIconName];
-    [self setSecondIconName:secondIconName];
-    [self setThirdIconName:thirdIconName];
-    [self setFourthIconName:fourthIconName];
-    
-    [self setFirstColor:firstColor];
-    [self setSecondColor:secondColor];
-    [self setThirdColor:thirdColor];
-    [self setFourthColor:fourthColor];
-}
-
-- (void)setMode:(MCSwipeTableViewCellMode)mode {
-    if (mode == _mode) {
-        return;
-    }
-    
-    _mode = mode;
     
     // Set state modes
     _modeForState1 = _modeForState2 = _modeForState3 = _modeForState4 = MCSwipeTableViewCellModeNone;
@@ -207,18 +144,11 @@ secondStateIconName:(NSString *)secondIconName
     _isDragging = NO;
     _shouldDrag = YES;
     _shouldAnimatesIcons = YES;
-    
-    _mode = MCSwipeTableViewCellModeNone;
 
     _modeForState1 = MCSwipeTableViewCellModeNone;
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
-    
-    _firstIconName = nil;
-    _secondIconName = nil;
-    _thirdIconName = nil;
-    _fourthIconName = nil;
     
     _firstColor = nil;
     _secondColor = nil;
@@ -266,21 +196,21 @@ secondStateIconName:(NSString *)secondIconName
         _currentPercentage = percentage;
         
         MCSwipeTableViewCellState cellState = [self stateWithPercentage:percentage];
-        MCSwipeTableViewCellMode cellMode;
+        MCSwipeTableViewCellMode cellMode = MCSwipeTableViewCellModeNone;
         
-        if (cellState == MCSwipeTableViewCellState1 && self.modeForState1 != MCSwipeTableViewCellModeNone) {
+        if (cellState == MCSwipeTableViewCellState1 && _modeForState1) {
             cellMode = self.modeForState1;
         }
         
-        if (cellState == MCSwipeTableViewCellState2 && self.modeForState2 != MCSwipeTableViewCellModeNone) {
+        else if (cellState == MCSwipeTableViewCellState2 && _modeForState2) {
             cellMode = self.modeForState2;
         }
         
-        if (cellState == MCSwipeTableViewCellState3 && self.modeForState3 != MCSwipeTableViewCellModeNone) {
+        else if (cellState == MCSwipeTableViewCellState3 && _modeForState3) {
             cellMode = self.modeForState3;
         }
         
-        if (cellState == MCSwipeTableViewCellState4 && self.modeForState4 != MCSwipeTableViewCellModeNone) {
+        else if (cellState == MCSwipeTableViewCellState4 && _modeForState4) {
             cellMode = self.modeForState4;
         }
         
@@ -289,7 +219,6 @@ secondStateIconName:(NSString *)secondIconName
         }
         
         else {
-            
             __weak MCSwipeTableViewCell *weakSelf = self;
             [self swipeToOriginWithCompletion:^{
                 __strong MCSwipeTableViewCell *strongSelf = weakSelf;
@@ -308,12 +237,14 @@ secondStateIconName:(NSString *)secondIconName
         CGPoint point = [g velocityInView:self];
         
         if (fabsf(point.x) > fabsf(point.y) ) {
-            if (point.x < 0 && !_thirdColor && !_thirdIconName && !_fourthColor && !_fourthIconName){
+            if (point.x < 0 && !_modeForState3 && !_modeForState4) {
                 return NO;
             }
-            if (point.x > 0 && !_firstColor && !_firstIconName && !_secondColor && !_secondIconName){
+            
+            if (point.x > 0 && !_modeForState1 && !_modeForState2) {
                 return NO;
             }
+            
             // We notify the delegate that we just started dragging
             if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidStartSwiping:)]) {
                 [_delegate swipeTableViewCellDidStartSwiping:self];
@@ -369,33 +300,24 @@ secondStateIconName:(NSString *)secondIconName
 - (UIImage *)imageWithPercentage:(CGFloat)percentage {
 
     UIImage *image;
-    NSString *imageName;
     
-    if (percentage >= 0 && _modeForState1 != MCSwipeTableViewCellModeNone) {
+    if (percentage >= 0 && _modeForState1) {
         image = _image1;
-        imageName = _firstIconName;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2 != MCSwipeTableViewCellModeNone) {
+    if (percentage >= _secondTrigger && _modeForState2) {
         image = _image2;
-        imageName = _secondIconName;
     }
     
-    if (percentage < 0  && _modeForState3 != MCSwipeTableViewCellModeNone) {
+    if (percentage < 0  && _modeForState3) {
         image = _image3;
-        imageName = _thirdIconName;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4 != MCSwipeTableViewCellModeNone) {
+    if (percentage <= -_secondTrigger && _modeForState4) {
         image = _image4;
-        imageName = _fourthIconName;
     }
     
-    if (image) {
-        return image;
-    } else {
-        return [UIImage imageNamed:imageName];
-    }
+    return image;
 }
 
 - (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
@@ -417,19 +339,19 @@ secondStateIconName:(NSString *)secondIconName
     
     color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     
-    if (percentage > _firstTrigger && _modeForState1 != MCSwipeTableViewCellModeNone) {
+    if (percentage > _firstTrigger && _modeForState1) {
         color = _firstColor;
     }
     
-    if (percentage > _secondTrigger && _modeForState2 != MCSwipeTableViewCellModeNone) {
+    if (percentage > _secondTrigger && _modeForState2) {
         color = _secondColor;
     }
     
-    if (percentage < -_firstTrigger && _modeForState3 != MCSwipeTableViewCellModeNone) {
+    if (percentage < -_firstTrigger && _modeForState3) {
         color = _thirdColor;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4 != MCSwipeTableViewCellModeNone) {
+    if (percentage <= -_secondTrigger && _modeForState4) {
         color = _fourthColor;
     }
     
@@ -441,19 +363,19 @@ secondStateIconName:(NSString *)secondIconName
     
     state = MCSwipeTableViewCellStateNone;
     
-    if (percentage >= _firstTrigger && _modeForState1 != MCSwipeTableViewCellModeNone) {
+    if (percentage >= _firstTrigger && _modeForState1) {
         state = MCSwipeTableViewCellState1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2 != MCSwipeTableViewCellModeNone) {
+    if (percentage >= _secondTrigger && _modeForState2) {
         state = MCSwipeTableViewCellState2;
     }
     
-    if (percentage <= -_firstTrigger && _modeForState3 != MCSwipeTableViewCellModeNone) {
+    if (percentage <= -_firstTrigger && _modeForState3) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4 != MCSwipeTableViewCellModeNone) {
+    if (percentage <= -_secondTrigger && _modeForState4) {
         state = MCSwipeTableViewCellState4;
     }
     
@@ -602,7 +524,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)notifyDelegate {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
-    MCSwipeTableViewCellMode mode = self.mode;
+    MCSwipeTableViewCellMode mode = MCSwipeTableViewCellModeNone;
     MCSwipeCompletionBlock completionBlock;
     
     switch (state) {

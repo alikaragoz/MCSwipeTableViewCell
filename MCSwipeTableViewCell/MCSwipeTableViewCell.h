@@ -54,11 +54,6 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 
 @property (nonatomic, assign) id <MCSwipeTableViewCellDelegate> delegate;
 
-@property (nonatomic, copy) NSString *firstIconName __attribute__ ((deprecated));
-@property (nonatomic, copy) NSString *secondIconName __attribute__ ((deprecated));
-@property (nonatomic, copy) NSString *thirdIconName __attribute__ ((deprecated));
-@property (nonatomic, copy) NSString *fourthIconName __attribute__ ((deprecated));
-
 @property (nonatomic, strong) UIColor *firstColor;
 @property (nonatomic, strong) UIColor *secondColor;
 @property (nonatomic, strong) UIColor *thirdColor;
@@ -81,10 +76,6 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 // Color for background, when any state hasn't triggered yet
 @property (nonatomic, strong) UIColor *defaultColor;
 
-// This is the general mode for all states
-// If a specific mode for a state isn't defined, this mode will be taken in action
-@property (nonatomic, assign) MCSwipeTableViewCellMode mode;
-
 // Individual mode for states
 @property (nonatomic, assign) MCSwipeTableViewCellMode modeForState1;
 @property (nonatomic, assign) MCSwipeTableViewCellMode modeForState2;
@@ -103,27 +94,5 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 
 // Manually swipe to origin
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion;
-
-#pragma mark - Deprecated
-
-- (id)initWithStyle:(UITableViewCellStyle)style
-    reuseIdentifier:(NSString *)reuseIdentifier
- firstStateIconName:(NSString *)firstIconName
-         firstColor:(UIColor *)firstColor
-secondStateIconName:(NSString *)secondIconName
-        secondColor:(UIColor *)secondColor
-      thirdIconName:(NSString *)thirdIconName
-         thirdColor:(UIColor *)thirdColor
-     fourthIconName:(NSString *)fourthIconName
-        fourthColor:(UIColor *)fourthColor __attribute__ ((deprecated));
-
-- (void)setFirstStateIconName:(NSString *)firstIconName
-                   firstColor:(UIColor *)firstColor
-          secondStateIconName:(NSString *)secondIconName
-                  secondColor:(UIColor *)secondColor
-                thirdIconName:(NSString *)thirdIconName
-                   thirdColor:(UIColor *)thirdColor
-               fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor __attribute__ ((deprecated));
 
 @end

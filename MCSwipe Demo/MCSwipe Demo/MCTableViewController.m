@@ -76,7 +76,7 @@ static NSUInteger const kMCNumItems = 7;
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     cell.separatorInset = UIEdgeInsetsZero;
-
+    
     // Setting the default inactive state color to the tableView background color
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
     [cell setDelegate:self];
@@ -187,7 +187,7 @@ static NSUInteger const kMCNumItems = 7;
         
         [cell setSwipeGestureWithImage:crossImage color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
-
+            
             __strong MCTableViewController *strongSelf = weakSelf;
             strongSelf.cell = cell;
             
