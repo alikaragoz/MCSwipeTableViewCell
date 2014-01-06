@@ -8,16 +8,16 @@
 
 #import "MCSwipeTableViewCell.h"
 
-static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
-static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
-static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
-static CGFloat const kMCDamping = 0.6; // Damping of the spring animation
-static CGFloat const kMCVelocity = 0.9; // Velocity of the spring animation
-static CGFloat const kMCAnimationDuration = 0.4; // Duration of the animation
-static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
-static NSTimeInterval const kMCBounceDuration2 = 0.1; // Duration of the second part of the bounce animation
-static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
-static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swiping the cell because we try to simulate velocity
+static CGFloat const kMCStop1                       = 0.25; // Percentage limit to trigger the first action
+static CGFloat const kMCStop2                       = 0.75; // Percentage limit to trigger the second action
+static CGFloat const kMCBounceAmplitude             = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
+static CGFloat const kMCDamping                     = 0.6;  // Damping of the spring animation
+static CGFloat const kMCVelocity                    = 0.9;  // Velocity of the spring animation
+static CGFloat const kMCAnimationDuration           = 0.4;  // Duration of the animation
+static NSTimeInterval const kMCBounceDuration1      = 0.2;  // Duration of the first part of the bounce animation
+static NSTimeInterval const kMCBounceDuration2      = 0.1;  // Duration of the second part of the bounce animation
+static NSTimeInterval const kMCDurationLowLimit     = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
+static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration when swiping the cell because we try to simulate velocity
 
 
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
@@ -509,7 +509,10 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
             [self.contentView setFrame:frame];
             
             // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = [UIColor clearColor];
+            _colorIndicatorView.backgroundColor = self.defaultColor;
+            
+            [_slidingImageView setAlpha:0.0];
+            [self slideImageWithPercentage:0 image:_currentImage isDragging:NO];
             
         } completion:^(BOOL finished) {
             if (completion) {
@@ -533,6 +536,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
         } completion:^(BOOL finished1) {
             
             [UIView animateWithDuration:kMCBounceDuration2 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+                
                 CGRect frame = self.contentView.frame;
                 frame.origin.x = 0;
                 [self.contentView setFrame:frame];
