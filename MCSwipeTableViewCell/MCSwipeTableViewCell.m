@@ -243,6 +243,7 @@ secondStateIconName:(NSString *)secondIconName
                     __strong MCSwipeTableViewCell *strongSelf = weakSelf;
                     [strongSelf notifyDelegate];
                 }];
+                _numSwipes = 0;
             }
             // right direction swipe and stay there
             if (_direction == MCSwipeTableViewCellDirectionLeft && _numSwipes > 1) {
