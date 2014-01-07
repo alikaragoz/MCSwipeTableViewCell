@@ -9,7 +9,7 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 8;
+static NSUInteger const kMCNumItems = 9;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate>
 
@@ -60,26 +60,30 @@ static NSUInteger const kMCNumItems = 8;
     MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
     [cell setDelegate:self];
-//    [cell setFirstStateIconName:@"check.png"
-//                     firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-//            secondStateIconName:@"cross.png"
-//                    secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-//                  thirdIconName:@"clock.png"
-//                     thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
-//                 fourthIconName:@"list.png"
-//                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
-    [cell setFirstStateIconName:nil
-                     firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-                      firstText:@"first\ntext"
-            secondStateIconName:nil
-                    secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-                     secondText:@"second\ntext"
-                  thirdIconName:nil
-                     thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
-                      thirdText:@"third\ntext"
-                 fourthIconName:nil
-                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
-                     fourthText:@"fourth\ntext"];
+    
+    if (indexPath.row % kMCNumItems == 8) {
+        [cell setFirstStateIconName:nil
+                         firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                          firstText:@"first\ntext"
+                secondStateIconName:nil
+                        secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                         secondText:@"second\ntext"
+                      thirdIconName:nil
+                         thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                          thirdText:@"third\ntext"
+                     fourthIconName:nil
+                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                         fourthText:@"fourth\ntext"];
+    } else {
+        [cell setFirstStateIconName:@"check.png"
+                         firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                secondStateIconName:@"cross.png"
+                        secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                      thirdIconName:@"clock.png"
+                         thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                     fourthIconName:@"list.png"
+                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+    }
     
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     
@@ -161,6 +165,12 @@ static NSUInteger const kMCNumItems = 8;
         cell.shouldAnimatesIcons = NO;
     }
     
+    else if (indexPath.row % kMCNumItems == 8) {
+        [cell.textLabel setText:@"Switch Mode Cell"];
+        [cell.detailTextLabel setText:@"with text instead of icons"];
+        cell.mode = MCSwipeTableViewCellModeSwitch;
+    }
+
     return cell;
 }
 
