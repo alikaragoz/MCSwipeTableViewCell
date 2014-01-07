@@ -9,7 +9,7 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 9;
+static NSUInteger const kMCNumItems = 10;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
@@ -164,6 +164,13 @@ static NSUInteger const kMCNumItems = 9;
                      fourthIconName:nil
                         fourthColor:nil];
         
+    }
+    
+    else if (indexPath.row % kMCNumItems == 9) {
+        [cell.textLabel setText:@"For Dwellers"];
+        [cell.detailTextLabel setText:@"Left swings back; right stays till dismissal"];
+        cell.backgroundColor =[UIColor yellowColor];
+        cell.mode = MSSwipeTableViewCellModeDwellers;
     }
     
     return cell;

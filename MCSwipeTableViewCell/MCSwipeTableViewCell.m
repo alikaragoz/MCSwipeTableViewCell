@@ -166,12 +166,16 @@ secondStateIconName:(NSString *)secondIconName
     // The user does not want you to be dragged!
     if (!_shouldDrag) return;
     
+    // NSLog(@"HELLO WORLD!");
+    
     UIGestureRecognizerState state = [gesture state];
     CGPoint translation = [gesture translationInView:self];
     CGPoint velocity = [gesture velocityInView:self];
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
+    
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     _direction = [self directionWithPercentage:percentage];
+    NSLog(@"Percentage moved: %f\n", percentage);
     
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _isDragging = YES;
@@ -215,8 +219,7 @@ secondStateIconName:(NSString *)secondIconName
             [self moveWithDuration:animationDuration andDirection:_direction];
         }
         
-        else {
-            
+        else if (cellMode != MSSwipeTableViewCellModeDwellers){ // makes the cell swing back in place
             __weak MCSwipeTableViewCell *weakSelf = self;
             [self swipeToOriginWithCompletion:^{
                 __strong MCSwipeTableViewCell *strongSelf = weakSelf;
