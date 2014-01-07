@@ -70,7 +70,7 @@ static NSUInteger const kMCNumItems = 8;
 //                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
     [cell setFirstStateIconName:nil
                      firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-                      firstText:@"first\nText"
+                      firstText:@"first\ntext"
             secondStateIconName:nil
                     secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
                      secondText:@"second\ntext"
@@ -173,6 +173,15 @@ static NSUInteger const kMCNumItems = 8;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MCTableViewController *tableViewController = [[MCTableViewController alloc] init];
     [self.navigationController pushViewController:tableViewController animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {
+        MCSwipeTableViewCell *swipeCell = (MCSwipeTableViewCell *)cell;
+        NSAssert([swipeCell isKindOfClass:[MCSwipeTableViewCell class]], @"inconsistent");
+        
+        [swipeCell hintSwipeGesture];
+    }
 }
 
 #pragma mark - MCSwipeTableViewCellDelegate

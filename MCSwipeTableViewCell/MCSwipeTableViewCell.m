@@ -9,7 +9,7 @@
 #import "MCSwipeTableViewCell.h"
 
 static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
-static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
+static CGFloat const kMCStop2 = 0.55; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
 static NSTimeInterval const kMCBounceDuration2 = 0.1; // Duration of the second part of the bounce animation
@@ -250,9 +250,9 @@ secondStateIconName:(NSString *)secondIconName
         [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
         [gesture setTranslation:CGPointZero inView:self];
         
-        // Notifying the delegate that we are dragging with an offset percentage
         if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipWithPercentage:)]) {
             [_delegate swipeTableViewCell:self didSwipWithPercentage:percentage];
+            // Notifying the delegate that we are dragging with an offset percentage
         }
     }
     
@@ -303,10 +303,10 @@ secondStateIconName:(NSString *)secondIconName
         CGPoint point = [g velocityInView:self];
         
         if (fabsf(point.x) > fabsf(point.y) ) {
-            if (point.x < 0 && !_thirdColor && !_thirdIconName && !_fourthColor && !_fourthIconName){
+            if (point.x < 0 && !_thirdColor && !_thirdText && !_thirdIconName && !_fourthColor && !_fourthText && !_fourthIconName){
                 return NO;
             }
-            if (point.x > 0 && !_firstColor && !_firstIconName && !_secondColor && !_secondIconName){
+            if (point.x > 0 && !_firstColor && !_firstText && !_firstIconName && !_secondColor && !_secondText && !_secondIconName){
                 return NO;
             }
             // We notify the delegate that we just started dragging
@@ -678,6 +678,26 @@ secondStateIconName:(NSString *)secondIconName
             }
         }];
     }];
+}
+
+- (void)hintSwipeGesture {
+    
+    double delayInSeconds = 0.2;
+
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [UIView animateWithDuration:0.5f delay:0.1f options:(UIViewAnimationOptionCurveEaseIn) animations:^{
+            CGRect frame = self.contentView.frame;
+            CGRect newFrame = CGRectMake(-80, 0, frame.size.width, frame.size.height);
+            [self.contentView setFrame:newFrame];
+            [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
+
+            
+        } completion:^(BOOL finished) {
+            [self swipeToOriginWithCompletion:NULL];
+        }];
+    });
+
 }
 
 #pragma mark - Delegate Notification
