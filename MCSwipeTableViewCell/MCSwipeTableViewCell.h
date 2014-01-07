@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeNone = 0,
     MCSwipeTableViewCellModeExit,
-    MCSwipeTableViewCellModeSwitch
+    MCSwipeTableViewCellModeSwitch,
+    MSSwipeTableViewCellModeDwellers
 };
 
 @protocol MCSwipeTableViewCellDelegate <NSObject>
@@ -82,6 +83,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, assign) BOOL isDragging;
 @property (nonatomic, assign) BOOL shouldDrag;
 @property (nonatomic, assign) BOOL shouldAnimatesIcons;
+
+@property (nonatomic, assign) int numSwipes;
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
