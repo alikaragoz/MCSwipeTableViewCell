@@ -186,9 +186,6 @@ secondStateIconName:(NSString *)secondIconName
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     _direction = [self directionWithPercentage:percentage];
     
-    CGPoint translationUnderFinger = [gesture translationInView:self.superview];
-   
-    
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _isDragging = YES;
         
@@ -229,8 +226,8 @@ secondStateIconName:(NSString *)secondIconName
         
         if (cellMode == MSSwipeTableViewCellModeDwellers) {
             NSLog(@"Dwellers Mode");
-            NSLog(@"direction: %f\n", translationUnderFinger.x);
-            if (_direction == MCSwipeTableViewCellDirectionRight) {
+            NSLog(@"direction: %f\n", velocity.x);
+            if (_direction == MCSwipeTableViewCellDirectionRight || velocity.x > 0) {
                 NSLog(@"hit");
                 [self swingCellBack];
             }
