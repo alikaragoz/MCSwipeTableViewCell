@@ -22,9 +22,12 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, assign) CGFloat currentPercentage;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic, strong) UIImageView *slidingImageView;
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
+
+
 
 @end
 
@@ -115,6 +118,9 @@ secondStateIconName:(NSString *)secondIconName
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
+    
+    //num swipes count (for dwellers use)
+    _numSwipes = 0;
 }
 
 #pragma mark - Setter
@@ -157,7 +163,11 @@ secondStateIconName:(NSString *)secondIconName
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
+    
+    _numSwipes = 0;
 }
+
+
 
 #pragma mark - Handle Gestures
 
@@ -176,6 +186,7 @@ secondStateIconName:(NSString *)secondIconName
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     _direction = [self directionWithPercentage:percentage];
     NSLog(@"Percentage moved: %f\n", percentage);
+    NSLog(_shouldDrag ? @"Drag yes": @"Drag No");
     
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _isDragging = YES;
@@ -217,14 +228,26 @@ secondStateIconName:(NSString *)secondIconName
         
         if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
-        }
-        
-        else if (cellMode != MSSwipeTableViewCellModeDwellers){ // makes the cell swing back in place
+        } else if (cellMode != MSSwipeTableViewCellModeDwellers){ // makes the cell swing back in place
             __weak MCSwipeTableViewCell *weakSelf = self;
             [self swipeToOriginWithCompletion:^{
                 __strong MCSwipeTableViewCell *strongSelf = weakSelf;
                 [strongSelf notifyDelegate];
             }];
+        } else if (cellMode == MSSwipeTableViewCellModeDwellers) {
+            _numSwipes = _numSwipes + 1;
+            // left direction swing back
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                __weak MCSwipeTableViewCell *weakSelf = self;
+                [self swipeToOriginWithCompletion:^{
+                    __strong MCSwipeTableViewCell *strongSelf = weakSelf;
+                    [strongSelf notifyDelegate];
+                }];
+            }
+            // right direction swipe and stay there
+            if (_direction == MCSwipeTableViewCellDirectionLeft && _numSwipes > 0) {
+                NSLog(@"Count num swipes: %i\n", self.numSwipes);
+            }
         }
     }
 }

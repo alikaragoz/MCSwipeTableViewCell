@@ -84,6 +84,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, assign) BOOL shouldDrag;
 @property (nonatomic, assign) BOOL shouldAnimatesIcons;
 
+@property (nonatomic, assign) int numSwipes;
+
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName
