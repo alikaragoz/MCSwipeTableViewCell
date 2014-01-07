@@ -229,34 +229,36 @@ secondStateIconName:(NSString *)secondIconName
         if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         } else if (cellMode != MSSwipeTableViewCellModeDwellers){ // makes the cell swing back in place
-            __weak MCSwipeTableViewCell *weakSelf = self;
-            [self swipeToOriginWithCompletion:^{
-                __strong MCSwipeTableViewCell *strongSelf = weakSelf;
-                [strongSelf notifyDelegate];
-            }];
+//            __weak MCSwipeTableViewCell *weakSelf = self;
+//            [self swipeToOriginWithCompletion:^{
+//                __strong MCSwipeTableViewCell *strongSelf = weakSelf;
+//                [strongSelf notifyDelegate];
+//            }];
+            [self swingCellBack];
         } else if (cellMode == MSSwipeTableViewCellModeDwellers) {
             _numSwipes = _numSwipes + 1;
             // left direction swing back
             if (_direction == MCSwipeTableViewCellDirectionRight) {
-                __weak MCSwipeTableViewCell *weakSelf = self;
-                [self swipeToOriginWithCompletion:^{
-                    __strong MCSwipeTableViewCell *strongSelf = weakSelf;
-                    [strongSelf notifyDelegate];
-                }];
+                [self swingCellBack];
                 _numSwipes = 0;
             }
             // right direction swipe and stay there
             if (_direction == MCSwipeTableViewCellDirectionLeft && _numSwipes > 1) {
                 NSLog(@"Count num swipes: %i\n", self.numSwipes);
-                __weak MCSwipeTableViewCell *weakSelf = self;
-                [self swipeToOriginWithCompletion:^{
-                    __strong MCSwipeTableViewCell *strongSelf = weakSelf;
-                    [strongSelf notifyDelegate];
-                }];
+                [self swingCellBack];
             }
         }
     }
 }
+
+-(void) swingCellBack {
+    __weak MCSwipeTableViewCell *weakSelf = self;
+    [self swipeToOriginWithCompletion:^{
+        __strong MCSwipeTableViewCell *strongSelf = weakSelf;
+        [strongSelf notifyDelegate];
+    }];
+}
+
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
