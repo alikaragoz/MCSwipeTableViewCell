@@ -76,7 +76,6 @@ static NSUInteger const kMCNumItems = 9;
     // Setting the default inactive state color to the tableView background color
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
     
-    //
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 
     if (indexPath.row % kMCNumItems == 0) {
@@ -171,7 +170,7 @@ static NSUInteger const kMCNumItems = 9;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80.0;
+    return 50.0;
 }
 
 #pragma mark - Table view delegate
