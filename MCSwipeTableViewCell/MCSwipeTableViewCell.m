@@ -245,8 +245,13 @@ secondStateIconName:(NSString *)secondIconName
                 }];
             }
             // right direction swipe and stay there
-            if (_direction == MCSwipeTableViewCellDirectionLeft && _numSwipes > 0) {
+            if (_direction == MCSwipeTableViewCellDirectionLeft && _numSwipes > 1) {
                 NSLog(@"Count num swipes: %i\n", self.numSwipes);
+                __weak MCSwipeTableViewCell *weakSelf = self;
+                [self swipeToOriginWithCompletion:^{
+                    __strong MCSwipeTableViewCell *strongSelf = weakSelf;
+                    [strongSelf notifyDelegate];
+                }];
             }
         }
     }
