@@ -169,7 +169,6 @@ static NSUInteger const kMCNumItems = 10;
     else if (indexPath.row % kMCNumItems == 9) {
         [cell.textLabel setText:@"For Dwellers"];
         [cell.detailTextLabel setText:@"Left swings back; right stays till dismissal"];
-        cell.backgroundColor =[UIColor yellowColor];
         cell.mode = MSSwipeTableViewCellModeDwellers;
     }
     

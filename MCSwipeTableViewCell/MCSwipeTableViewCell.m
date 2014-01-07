@@ -185,8 +185,9 @@ secondStateIconName:(NSString *)secondIconName
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     _direction = [self directionWithPercentage:percentage];
-    NSLog(@"Percentage moved: %f\n", percentage);
-    NSLog(_shouldDrag ? @"Drag yes": @"Drag No");
+    
+    CGPoint translationUnderFinger = [gesture translationInView:self.superview];
+   
     
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _isDragging = YES;
@@ -226,31 +227,23 @@ secondStateIconName:(NSString *)secondIconName
             cellMode = self.mode;
         }
         
-        if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
+        if (cellMode == MSSwipeTableViewCellModeDwellers) {
+            NSLog(@"Dwellers Mode");
+            NSLog(@"direction: %f\n", translationUnderFinger.x);
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                NSLog(@"hit");
+                [self swingCellBack];
+            }
+        }
+        else if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         } else if (cellMode != MSSwipeTableViewCellModeDwellers){ // makes the cell swing back in place
-//            __weak MCSwipeTableViewCell *weakSelf = self;
-//            [self swipeToOriginWithCompletion:^{
-//                __strong MCSwipeTableViewCell *strongSelf = weakSelf;
-//                [strongSelf notifyDelegate];
-//            }];
             [self swingCellBack];
-        } else if (cellMode == MSSwipeTableViewCellModeDwellers) {
-            _numSwipes = _numSwipes + 1;
-            // left direction swing back
-            if (_direction == MCSwipeTableViewCellDirectionRight) {
-                [self swingCellBack];
-                _numSwipes = 0;
-            }
-            // right direction swipe and stay there
-            if (_direction == MCSwipeTableViewCellDirectionLeft && _numSwipes > 1) {
-                NSLog(@"Count num swipes: %i\n", self.numSwipes);
-                [self swingCellBack];
-            }
         }
     }
 }
 
+#pragma mark - Swings the cell back in position when called
 -(void) swingCellBack {
     __weak MCSwipeTableViewCell *weakSelf = self;
     [self swipeToOriginWithCompletion:^{
