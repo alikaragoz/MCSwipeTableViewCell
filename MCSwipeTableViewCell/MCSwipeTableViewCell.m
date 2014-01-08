@@ -129,12 +129,16 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
+                    firstView:(UIView *)firstView
           secondStateIconName:(NSString *)secondIconName
                   secondColor:(UIColor *)secondColor
+                   secondView:(UIView *)secondView
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
+                    thirdView:(UIView *)thirdView
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
+                  fourthColor:(UIColor *)fourthColor
+                   fourthView:(UIView *)fourthView {
     
     [self setFirstIconName:firstIconName];
     [self setSecondIconName:secondIconName];
@@ -145,6 +149,11 @@ secondStateIconName:(NSString *)secondIconName
     [self setSecondColor:secondColor];
     [self setThirdColor:thirdColor];
     [self setFourthColor:fourthColor];
+    
+    [self setFirstView:firstView];
+    [self setSecondView:secondView];
+    [self setThirdView:thirdView];
+    [self setFourthView:fourthView];
 }
 
 #pragma mark - Prepare reuse

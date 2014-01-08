@@ -134,10 +134,10 @@ static NSUInteger const kMCNumItems = 10;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:nil
                          firstColor:nil
-                          firstView:firstView
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
-                         secondView:secondView
+                         secondView:nil
                       thirdIconName:@"clock.png"
                          thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
                           thirdView:thirdView
@@ -157,10 +157,10 @@ static NSUInteger const kMCNumItems = 10;
                          secondView:secondView
                       thirdIconName:nil
                          thirdColor:nil
-                          thirdView:thirdView
+                          thirdView:nil
                      fourthIconName:nil
                         fourthColor:nil
-                         fourthView:fourthView];
+                         fourthView:nil];
     }
     
     else if (indexPath.row % kMCNumItems == 6) {
