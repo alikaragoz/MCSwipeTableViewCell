@@ -265,10 +265,10 @@ secondStateIconName:(NSString *)secondIconName
         CGPoint point = [g velocityInView:self];
         
         if (fabsf(point.x) > fabsf(point.y) ) {
-            if (point.x < 0 && !_thirdColor && !_thirdIconName && !_fourthColor && !_fourthIconName){
+            if (point.x < 0 && !_thirdView && !_thirdColor && !_thirdIconName && !_fourthView && !_fourthColor && !_fourthIconName) {
                 return NO;
             }
-            if (point.x > 0 && !_firstColor && !_firstIconName && !_secondColor && !_secondIconName){
+            if (point.x > 0 && !_firstView && !_firstColor && !_firstIconName && _secondView && !_secondColor && !_secondIconName) {
                 return NO;
             }
             // We notify the delegate that we just started dragging
@@ -349,20 +349,7 @@ secondStateIconName:(NSString *)secondIconName
     return alpha;
 }
 
-- (UIView*)viewWithPercentage:(CGFloat)percentage {
-    UIView* currentView;
-    
-    if (percentage >= 0 && percentage < _secondTrigger)
-        currentView = _firstView;
-    else if (percentage >= _secondTrigger)
-        currentView = _secondView;
-    else if (percentage < 0 && percentage > -_secondTrigger)
-        currentView = _thirdView;
-    else if (percentage <= -_secondTrigger)
-        currentView = _fourthView;
-    
-    return currentView;
-}
+
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
     UIColor *color;
@@ -437,10 +424,25 @@ secondStateIconName:(NSString *)secondIconName
     return isValid;
 }
 
+- (UIView*)viewWithOffset:(CGFloat)offset {
+    UIView* currentView;
+    
+    if (offset >= 0 && offset <= _firstView.bounds.size.width) {
+        currentView = _firstView;
+    } else if (offset >= 0 && offset <= _secondView.bounds.size.width) {
+        currentView = _secondView;
+    } else if (offset <= 0 && fabsf(offset) <= _thirdView.bounds.size.width) {
+        currentView = _thirdView; 
+    }
+    
+    return currentView;
+}
+
 #pragma mark - Movement
 
 - (void)animateWithOffset:(CGFloat)offset {
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
+    NSLog(@"Percentage: %f\n", offset);
     
     // Image Name
     NSString *imageName = [self imageNameWithPercentage:percentage];
@@ -452,9 +454,9 @@ secondStateIconName:(NSString *)secondIconName
         [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     }
     
-    UIView* myView = [self viewWithPercentage:percentage];
+    UIView* myView = [self viewWithOffset:offset];
     if (myView != nil) {
-        [_slidingImageView addSubview:myView];
+        [_colorIndicatorView addSubview:myView];
     }
     
     // Color

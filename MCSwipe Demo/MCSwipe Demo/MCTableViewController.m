@@ -82,16 +82,16 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
     [cell setDelegate:self];
     [cell setFirstStateIconName:@"check.png"
                      firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-                      firstView:firstView
+                      firstView:nil
             secondStateIconName:@"cross.png"
                     secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-                     secondView:secondView
+                     secondView:nil
                   thirdIconName:@"clock.png"
                      thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
-                      thirdView:thirdView
+                      thirdView:nil
                  fourthIconName:@"list.png"
                     fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
-                     fourthView:fourthView];
+                     fourthView:nil];
     
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     cell.separatorInset = UIEdgeInsetsZero;
@@ -141,10 +141,10 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
                          secondView:nil
                       thirdIconName:@"clock.png"
                          thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
-                          thirdView:thirdView
+                          thirdView:nil
                      fourthIconName:@"list.png"
                         fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
-                         fourthView:fourthView];
+                         fourthView:nil];
     }
     
     else if (indexPath.row % kMCNumItems == 5) {
@@ -152,10 +152,10 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:@"check.png"
                          firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-                          firstView:firstView
+                          firstView:nil
                 secondStateIconName:@"cross.png"
                         secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-                         secondView:secondView
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
                           thirdView:nil
@@ -186,7 +186,7 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
         
         [cell setFirstStateIconName:@"cross.png"
                          firstColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-                          firstView:firstView
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
                          secondView:nil
@@ -203,6 +203,18 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
         [cell.textLabel setText:@"For Dwellers"];
         [cell.detailTextLabel setText:@"Left swings back; right stays till dismissal"];
         cell.mode = MSSwipeTableViewCellModeDwellers;
+        [cell setFirstStateIconName:nil
+                         firstColor:nil
+                          firstView:firstView
+                secondStateIconName:nil
+                        secondColor:nil
+                         secondView:secondView
+                      thirdIconName:nil
+                         thirdColor:nil
+                          thirdView:thirdView
+                     fourthIconName:nil
+                        fourthColor:nil
+                         fourthView:fourthView];
     }
     
     return cell;
