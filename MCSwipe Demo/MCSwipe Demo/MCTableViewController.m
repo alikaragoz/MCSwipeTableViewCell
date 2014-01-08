@@ -12,6 +12,11 @@
 static NSUInteger const kMCNumItems = 10;
 static CGFloat const TABLE_CELL_HEIGHT = 50;
 
+static CGFloat const FIRST_VIEW_WIDTH = 100;
+static CGFloat const SECOND_VIEW_WIDTH = 300;
+static CGFloat const THIRD_VIEW_WIDTH = 200;
+static CGFloat const FOURTH_VIEW_WIDTH = 600;
+
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, assign) NSUInteger nbItems;
@@ -64,16 +69,16 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
     CGSize tableViewCellSize = cell.contentView.bounds.size;
     
     // add some views to test on
-    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,TABLE_CELL_HEIGHT)];
+    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,FIRST_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
     [firstView setBackgroundColor:[UIColor purpleColor]];
     
-    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,300,TABLE_CELL_HEIGHT)];
+    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,SECOND_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
     [secondView setBackgroundColor:[UIColor orangeColor]];
     
-    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-100,0,100,TABLE_CELL_HEIGHT)];
+    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-THIRD_VIEW_WIDTH,0,THIRD_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
     [thirdView setBackgroundColor:[UIColor cyanColor]];
     
-    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-200,0,200,TABLE_CELL_HEIGHT)];
+    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-FOURTH_VIEW_WIDTH,0,FOURTH_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
     [fourthView setBackgroundColor:[UIColor blackColor]];
     
     [cell setDelegate:self];
