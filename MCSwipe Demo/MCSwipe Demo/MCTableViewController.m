@@ -10,6 +10,7 @@
 #import "MCTableViewController.h"
 
 static NSUInteger const kMCNumItems = 10;
+static CGFloat const TABLE_CELL_HEIGHT = 50;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
@@ -59,19 +60,19 @@ static NSUInteger const kMCNumItems = 10;
     static NSString *CellIdentifier = @"Cell";
     
     // add some views to test on
-    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,TABLE_CELL_HEIGHT)];
     [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [firstView setBackgroundColor:[UIColor purpleColor]];
     
-    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,300,TABLE_CELL_HEIGHT)];
     [secondView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [secondView setBackgroundColor:[UIColor yellowColor]];
     
-    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,TABLE_CELL_HEIGHT)];
     [thirdView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [thirdView setBackgroundColor:[UIColor cyanColor]];
     
-    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(0,0,50,TABLE_CELL_HEIGHT)];
     [fourthView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [fourthView setBackgroundColor:[UIColor blackColor]];
     
@@ -208,7 +209,7 @@ static NSUInteger const kMCNumItems = 10;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50.0;
+    return TABLE_CELL_HEIGHT;
 }
 
 #pragma mark - Table view delegate
