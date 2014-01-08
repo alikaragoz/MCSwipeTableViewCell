@@ -65,19 +65,15 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
     
     // add some views to test on
     UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,TABLE_CELL_HEIGHT)];
-    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [firstView setBackgroundColor:[UIColor purpleColor]];
     
     UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,300,TABLE_CELL_HEIGHT)];
-    [secondView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [secondView setBackgroundColor:[UIColor yellowColor]];
+    [secondView setBackgroundColor:[UIColor orangeColor]];
     
     UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-100,0,100,TABLE_CELL_HEIGHT)];
-    [thirdView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [thirdView setBackgroundColor:[UIColor cyanColor]];
     
     UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-200,0,200,TABLE_CELL_HEIGHT)];
-    [fourthView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [fourthView setBackgroundColor:[UIColor blackColor]];
     
     [cell setDelegate:self];
@@ -201,9 +197,10 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
     }
     
     else if (indexPath.row % kMCNumItems == 9) {
-        [cell.textLabel setText:@"For Dwellers"];
+        [cell.textLabel setText:@"Dwellers"];
         [cell.detailTextLabel setText:@"Left swings back; right stays till dismissal"];
         cell.mode = MSSwipeTableViewCellModeDwellers;
+        [cell.contentView setBackgroundColor:[UIColor yellowColor]];
         [cell setFirstStateIconName:nil
                          firstColor:nil
                           firstView:firstView
