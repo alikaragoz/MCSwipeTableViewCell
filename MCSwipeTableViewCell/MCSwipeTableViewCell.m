@@ -26,6 +26,9 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
+@property (nonatomic, strong) UIView *translucentGrayCoverLeft;
+@property (nonatomic, strong) UIView *translucentGrayCoverRight;
+
 @end
 
 @implementation MCSwipeTableViewCell
@@ -444,7 +447,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)animateWithOffset:(CGFloat)offset {
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
-    NSLog(@"Percentage: %f\n", offset);
+    NSLog(@"Percentage: %f\n", percentage);
     
     // Image Name
     NSString *imageName = [self imageNameWithPercentage:percentage];
@@ -458,7 +461,17 @@ secondStateIconName:(NSString *)secondIconName
     
     UIView* myView = [self viewWithOffset:offset];
     if (myView != nil) {
-        [_colorIndicatorView addSubview:myView]; 
+        [_colorIndicatorView addSubview:myView];
+        if (offset >= 0 && percentage <= kMCStop1) { // add translucent stuff to background
+            UIView *grayTranslucentLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
+            [grayTranslucentLeftView setBackgroundColor:[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:0.5]];
+            [_colorIndicatorView addSubview:grayTranslucentLeftView];
+        } else if (offset < 0 && fabsf(percentage) <= kMCStop1) {
+            NSLog(@"I'm here!");
+            UIView *grayTranslucentRightView = [[UIView alloc] initWithFrame:CGRectMake(kMCStop2*CGRectGetWidth(self.bounds), 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
+            [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:0.5]];
+            [_colorIndicatorView addSubview:grayTranslucentRightView];
+        }
     }
     
     // Color
