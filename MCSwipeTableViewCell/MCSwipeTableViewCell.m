@@ -469,7 +469,7 @@ secondStateIconName:(NSString *)secondIconName
         } else if (offset < 0 && fabsf(percentage) <= kMCStop1) {
             NSLog(@"I'm here!");
             UIView *grayTranslucentRightView = [[UIView alloc] initWithFrame:CGRectMake(kMCStop2*CGRectGetWidth(self.bounds), 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
-            [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:0.5]];
+            [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
         }
     }
