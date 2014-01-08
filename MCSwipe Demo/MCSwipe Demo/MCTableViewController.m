@@ -59,6 +59,10 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
+    MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    
+    CGSize tableViewCellSize = cell.contentView.bounds.size;
+    
     // add some views to test on
     UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,TABLE_CELL_HEIGHT)];
     [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -68,16 +72,13 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
     [secondView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [secondView setBackgroundColor:[UIColor yellowColor]];
     
-    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(0,0,200,TABLE_CELL_HEIGHT)];
+    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-100,0,100,TABLE_CELL_HEIGHT)];
     [thirdView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [thirdView setBackgroundColor:[UIColor cyanColor]];
     
-    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(0,0,50,TABLE_CELL_HEIGHT)];
+    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-200,0,200,TABLE_CELL_HEIGHT)];
     [fourthView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [fourthView setBackgroundColor:[UIColor blackColor]];
-    
-    
-    MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
     [cell setDelegate:self];
     [cell setFirstStateIconName:@"check.png"

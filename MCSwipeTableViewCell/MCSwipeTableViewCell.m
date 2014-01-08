@@ -431,8 +431,10 @@ secondStateIconName:(NSString *)secondIconName
         currentView = _firstView;
     } else if (offset >= 0 && offset <= _secondView.bounds.size.width) {
         currentView = _secondView;
-    } else if (offset <= 0 && fabsf(offset) <= _thirdView.bounds.size.width) {
-        currentView = _thirdView; 
+    } else if (offset < 0 && fabsf(offset) <= _thirdView.bounds.size.width) {
+        currentView = _thirdView;
+    } else if (offset < 0 && fabsf(offset) <= _fourthView.bounds.size.width) {
+        currentView = _fourthView; 
     }
     
     return currentView;
@@ -456,7 +458,7 @@ secondStateIconName:(NSString *)secondIconName
     
     UIView* myView = [self viewWithOffset:offset];
     if (myView != nil) {
-        [_colorIndicatorView addSubview:myView];
+        [_colorIndicatorView addSubview:myView]; 
     }
     
     // Color
