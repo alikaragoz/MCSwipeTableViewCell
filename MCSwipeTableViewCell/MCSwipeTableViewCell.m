@@ -225,14 +225,12 @@ secondStateIconName:(NSString *)secondIconName
         }
         
         if (cellMode == MSSwipeTableViewCellModeDwellers) {
-            NSLog(@"Dwellers Mode");
-            NSLog(@"direction: %f\n", velocity.x);
-            if (_direction == MCSwipeTableViewCellDirectionRight || velocity.x > 0) {
-                NSLog(@"hit");
+            if (velocity.x < 0 && percentage > -_firstTrigger) { //swing back if before first trigger
+                [self swingCellBack];
+            } else if (_direction == MCSwipeTableViewCellDirectionRight || velocity.x > 0) {
                 [self swingCellBack];
             }
-        }
-        else if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
+        } else if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         } else if (cellMode != MSSwipeTableViewCellModeDwellers){ // makes the cell swing back in place
             [self swingCellBack];
