@@ -355,11 +355,11 @@ secondStateIconName:(NSString *)secondIconName
     if (percentage >= 0 && percentage < _secondTrigger)
         currentView = _firstView;
     else if (percentage >= _secondTrigger)
-        currentView = _firstView;
+        currentView = _secondView;
     else if (percentage < 0 && percentage > -_secondTrigger)
-        currentView = _firstView;
+        currentView = _thirdView;
     else if (percentage <= -_secondTrigger)
-        currentView = _firstView;
+        currentView = _fourthView;
     
     return currentView;
 }
@@ -377,8 +377,8 @@ secondStateIconName:(NSString *)secondIconName
     else if (percentage <= -_secondTrigger)
         color = _fourthColor;
     else
-        color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
-    
+        color = self.defaultColor;
+        //color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     return color;
 }
 
@@ -449,8 +449,7 @@ secondStateIconName:(NSString *)secondIconName
     if (imageName != nil) {
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
-        
-                [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
+        [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     }
     
     UIView* myView = [self viewWithPercentage:percentage];

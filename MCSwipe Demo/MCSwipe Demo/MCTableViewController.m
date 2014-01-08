@@ -61,19 +61,19 @@ static NSUInteger const kMCNumItems = 10;
     // add some views to test on
     UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
     [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [firstView setBackgroundColor:[UIColor redColor]];
+    [firstView setBackgroundColor:[UIColor purpleColor]];
     
     UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
-    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [firstView setBackgroundColor:[UIColor yellowColor]];
+    [secondView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [secondView setBackgroundColor:[UIColor yellowColor]];
     
     UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
-    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [firstView setBackgroundColor:[UIColor blueColor]];
+    [thirdView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [thirdView setBackgroundColor:[UIColor cyanColor]];
     
     UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
-    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [firstView setBackgroundColor:[UIColor blackColor]];
+    [fourthView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [fourthView setBackgroundColor:[UIColor blackColor]];
     
     
     MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
