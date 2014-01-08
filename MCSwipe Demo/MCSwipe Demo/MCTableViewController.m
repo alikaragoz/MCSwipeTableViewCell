@@ -58,17 +58,39 @@ static NSUInteger const kMCNumItems = 10;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
+    // add some views to test on
+    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [firstView setBackgroundColor:[UIColor redColor]];
+    
+    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [firstView setBackgroundColor:[UIColor yellowColor]];
+    
+    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [firstView setBackgroundColor:[UIColor blueColor]];
+    
+    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(0,0,100,100)];
+    [firstView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [firstView setBackgroundColor:[UIColor blackColor]];
+    
+    
     MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
     [cell setDelegate:self];
     [cell setFirstStateIconName:@"check.png"
                      firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                      firstView:firstView
             secondStateIconName:@"cross.png"
                     secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                     secondView:secondView
                   thirdIconName:@"clock.png"
                      thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                      thirdView:thirdView
                  fourthIconName:@"list.png"
-                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                     fourthView:fourthView];
     
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     cell.separatorInset = UIEdgeInsetsZero;
@@ -112,14 +134,16 @@ static NSUInteger const kMCNumItems = 10;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:nil
                          firstColor:nil
+                          firstView:firstView
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:secondView
                       thirdIconName:@"clock.png"
                          thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                          thirdView:thirdView
                      fourthIconName:@"list.png"
-                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
-
-        
+                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                         fourthView:fourthView];
     }
     
     else if (indexPath.row % kMCNumItems == 5) {
@@ -127,12 +151,16 @@ static NSUInteger const kMCNumItems = 10;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:@"check.png"
                          firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                          firstView:firstView
                 secondStateIconName:@"cross.png"
                         secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                         secondView:secondView
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:thirdView
                      fourthIconName:nil
-                        fourthColor:nil];
+                        fourthColor:nil
+                         fourthView:fourthView];
     }
     
     else if (indexPath.row % kMCNumItems == 6) {
@@ -157,12 +185,16 @@ static NSUInteger const kMCNumItems = 10;
         
         [cell setFirstStateIconName:@"cross.png"
                          firstColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                          firstView:firstView
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:nil
                      fourthIconName:nil
-                        fourthColor:nil];
+                        fourthColor:nil
+                         fourthView:nil];
         
     }
     

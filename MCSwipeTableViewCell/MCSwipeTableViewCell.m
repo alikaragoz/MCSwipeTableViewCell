@@ -26,8 +26,6 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
-
-
 @end
 
 @implementation MCSwipeTableViewCell
@@ -62,23 +60,31 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName
          firstColor:(UIColor *)firstColor
+          firstView:(UIView *)firstView
 secondStateIconName:(NSString *)secondIconName
         secondColor:(UIColor *)secondColor
+         secondView:(UIView *)secondView
       thirdIconName:(NSString *)thirdIconName
          thirdColor:(UIColor *)thirdColor
+          thirdView:(UIView *)thirdView
      fourthIconName:(NSString *)fourthIconName
-        fourthColor:(UIColor *)fourthColor {
+        fourthColor:(UIColor *)fourthColor
+         fourthView:(UIView *)fourthView{
     
     self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self setFirstStateIconName:firstIconName
                          firstColor:firstColor
+                          firstView:firstView
                 secondStateIconName:secondIconName
                         secondColor:secondColor
+                         secondView:secondView
                       thirdIconName:thirdIconName
                          thirdColor:thirdColor
+                          thirdView:thirdView
                      fourthIconName:fourthIconName
-                        fourthColor:fourthColor];
+                        fourthColor:fourthColor
+                         fourthView:fourthView];
     }
     return self;
 }
@@ -117,9 +123,6 @@ secondStateIconName:(NSString *)secondIconName
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
-    
-    //num swipes count (for dwellers use)
-    _numSwipes = 0;
 }
 
 #pragma mark - Setter
@@ -162,8 +165,6 @@ secondStateIconName:(NSString *)secondIconName
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
-    
-    _numSwipes = 0;
 }
 
 
@@ -326,6 +327,7 @@ secondStateIconName:(NSString *)secondIconName
     
     return imageName;
 }
+
 - (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
@@ -336,6 +338,21 @@ secondStateIconName:(NSString *)secondIconName
     else alpha = 1.0;
     
     return alpha;
+}
+
+- (UIView*)viewWithPercentage:(CGFloat)percentage {
+    UIView* currentView;
+    
+    if (percentage >= 0 && percentage < _secondTrigger)
+        currentView = _firstView;
+    else if (percentage >= _secondTrigger)
+        currentView = _firstView;
+    else if (percentage < 0 && percentage > -_secondTrigger)
+        currentView = _firstView;
+    else if (percentage <= -_secondTrigger)
+        currentView = _firstView;
+    
+    return currentView;
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
@@ -423,7 +440,13 @@ secondStateIconName:(NSString *)secondIconName
     if (imageName != nil) {
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
-        [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
+        
+                [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
+    }
+    
+    UIView* myView = [self viewWithPercentage:percentage];
+    if (myView != nil) {
+        [_slidingImageView addSubview:myView];
     }
     
     // Color
