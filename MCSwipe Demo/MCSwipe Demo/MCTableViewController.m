@@ -9,7 +9,13 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 9;
+static NSUInteger const kMCNumItems = 10;
+static CGFloat const TABLE_CELL_HEIGHT = 50;
+
+static CGFloat const FIRST_VIEW_WIDTH = 200;
+static CGFloat const SECOND_VIEW_WIDTH = 300;
+static CGFloat const THIRD_VIEW_WIDTH = 200;
+static CGFloat const FOURTH_VIEW_WIDTH = 300;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
@@ -60,15 +66,34 @@ static NSUInteger const kMCNumItems = 9;
     
     MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
+    CGSize tableViewCellSize = cell.contentView.bounds.size;
+    
+    // add some views to test on
+    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,FIRST_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [firstView setBackgroundColor:[UIColor purpleColor]];
+    
+    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,SECOND_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [secondView setBackgroundColor:[UIColor orangeColor]];
+    
+    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-THIRD_VIEW_WIDTH,0,THIRD_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [thirdView setBackgroundColor:[UIColor cyanColor]];
+    
+    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-FOURTH_VIEW_WIDTH,0,FOURTH_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [fourthView setBackgroundColor:[UIColor blackColor]];
+    
     [cell setDelegate:self];
     [cell setFirstStateIconName:@"check.png"
                      firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                      firstView:nil
             secondStateIconName:@"cross.png"
                     secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                     secondView:nil
                   thirdIconName:@"clock.png"
                      thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                      thirdView:nil
                  fourthIconName:@"list.png"
-                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                     fourthView:nil];
     
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     cell.separatorInset = UIEdgeInsetsZero;
@@ -76,7 +101,6 @@ static NSUInteger const kMCNumItems = 9;
     // Setting the default inactive state color to the tableView background color
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
     
-    //
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 
     if (indexPath.row % kMCNumItems == 0) {
@@ -113,14 +137,16 @@ static NSUInteger const kMCNumItems = 9;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:nil
                          firstColor:nil
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:nil
                       thirdIconName:@"clock.png"
                          thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                          thirdView:nil
                      fourthIconName:@"list.png"
-                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
-
-        
+                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                         fourthView:nil];
     }
     
     else if (indexPath.row % kMCNumItems == 5) {
@@ -128,12 +154,16 @@ static NSUInteger const kMCNumItems = 9;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:@"check.png"
                          firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                          firstView:nil
                 secondStateIconName:@"cross.png"
                         secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:nil
                      fourthIconName:nil
-                        fourthColor:nil];
+                        fourthColor:nil
+                         fourthView:nil];
     }
     
     else if (indexPath.row % kMCNumItems == 6) {
@@ -158,20 +188,43 @@ static NSUInteger const kMCNumItems = 9;
         
         [cell setFirstStateIconName:@"cross.png"
                          firstColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:nil
                      fourthIconName:nil
-                        fourthColor:nil];
+                        fourthColor:nil
+                         fourthView:nil];
         
+    }
+    
+    else if (indexPath.row % kMCNumItems == 9) {
+        [cell.textLabel setText:@"Dwellers"];
+        [cell.detailTextLabel setText:@"Left swings back; right stays till dismissal"];
+        cell.mode = MSSwipeTableViewCellModeDwellers;
+        //[cell.contentView setBackgroundColor:[UIColor yellowColor]];
+        [cell setFirstStateIconName:nil
+                         firstColor:nil
+                          firstView:firstView
+                secondStateIconName:nil
+                        secondColor:nil
+                         secondView:secondView
+                      thirdIconName:nil
+                         thirdColor:nil
+                          thirdView:thirdView
+                     fourthIconName:nil
+                        fourthColor:nil
+                         fourthView:fourthView];
     }
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80.0;
+    return TABLE_CELL_HEIGHT;
 }
 
 #pragma mark - Table view delegate

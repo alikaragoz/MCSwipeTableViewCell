@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeNone = 0,
     MCSwipeTableViewCellModeExit,
-    MCSwipeTableViewCellModeSwitch
+    MCSwipeTableViewCellModeSwitch,
+    MSSwipeTableViewCellModeDwellers
 };
 
 @protocol MCSwipeTableViewCellDelegate <NSObject>
@@ -83,26 +84,39 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, assign) BOOL shouldDrag;
 @property (nonatomic, assign) BOOL shouldAnimatesIcons;
 
+// subviews so you can add a view to the things
+@property (nonatomic, strong) UIView *firstView;
+@property (nonatomic, strong) UIView *secondView;
+@property (nonatomic, strong) UIView *thirdView;
+@property (nonatomic, strong) UIView *fourthView;
+
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName
          firstColor:(UIColor *)firstColor
+          firstView:(UIView *)firstView
 secondStateIconName:(NSString *)secondIconName
         secondColor:(UIColor *)secondColor
+         secondView:(UIView *)secondView
       thirdIconName:(NSString *)thirdIconName
          thirdColor:(UIColor *)thirdColor
+          thirdView:(UIView *)thirdView
      fourthIconName:(NSString *)fourthIconName
-        fourthColor:(UIColor *)fourthColor;
+        fourthColor:(UIColor *)fourthColor
+         fourthView:(UIView *)fourthView;
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
+                    firstView:(UIView *)firstView
           secondStateIconName:(NSString *)secondIconName
                   secondColor:(UIColor *)secondColor
+                   secondView:(UIView *)secondView
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
+                    thirdView:(UIView *)thirdView
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor;
-
+                  fourthColor:(UIColor *)fourthColor
+                   fourthView:(UIView *)fourthView;
 
 // Manually swipe to origin
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion;
