@@ -442,7 +442,7 @@ secondStateIconName:(NSString *)secondIconName
         _currentSubview = _secondView;
     } else if (offset < 0 && (self.bounds.size.width-fingerPosition.x) < _thirdView.bounds.size.width) {
         _currentSubview = _thirdView;
-    } else if (offset < 0 && fabsf(offset) < _fourthView.bounds.size.width) {
+    } else {
         _currentSubview = _fourthView;
     }
 }
