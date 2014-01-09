@@ -31,8 +31,6 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) UIView *translucentGrayCoverRight;
 
 @property (nonatomic, strong) UIView *currentSubview;
-@property (nonatomic, assign) int currentSubviewNo;
-@property (nonatomic, assign) BOOL grayTranslucentSubviewPresent;
 
 @end
 
@@ -98,10 +96,6 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)initializer {
-    /* if we have views */
-    _currentSubviewNo = 0;
-    _grayTranslucentSubviewPresent = FALSE;
-    
     _mode = MCSwipeTableViewCellModeNone;
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
@@ -441,19 +435,12 @@ secondStateIconName:(NSString *)secondIconName
     
     if (offset >= 0 && offset < _firstView.bounds.size.width) {
         _currentSubview = _firstView;
-        _currentSubviewNo = 1;
     } else if (offset >= 0 && offset < _secondView.bounds.size.width) {
         _currentSubview = _secondView;
-        _currentSubviewNo = 2;
     } else if (offset < 0 && fabsf(self.contentView.frame.origin.x) < _thirdView.bounds.size.width) {
         _currentSubview = _thirdView;
-        _currentSubviewNo = 3;
     } else if (offset < 0 && fabs(self.contentView.frame.origin.x) > _thirdView.bounds.size.width){
-        //relies on fact that FOURTH_VIEW_WIDTH > THIRD_VIEW_WIDTH
         _currentSubview = _fourthView;
-        _currentSubviewNo = 4;
-    }else {
-        _currentSubviewNo = 0;
     }
 }
 
@@ -482,21 +469,22 @@ secondStateIconName:(NSString *)secondIconName
             UIView *grayTranslucentLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentLeftView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];\
             [_colorIndicatorView addSubview:grayTranslucentLeftView];
-            _grayTranslucentSubviewPresent = TRUE;
         } else if (offset < 0 && fabsf(percentage) < kMCStop1) {
             UIView *grayTranslucentRightView = [[UIView alloc] initWithFrame:CGRectMake(kMCStop2*CGRectGetWidth(self.bounds), 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
-            _grayTranslucentSubviewPresent = TRUE;
-            NSLog(@"translucent: %d, current View: %d", _grayTranslucentSubviewPresent, _currentSubviewNo);
         } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && fabs(self.contentView.frame.origin.x) < _thirdView.bounds.size.width) { //retract completely for third view
-            CGRect frame = self.contentView.frame;
-            frame.origin.x = -_thirdView.bounds.size.width+10; //this is important!
-            [self.contentView setFrame:frame];
+            [UIView animateWithDuration:1.0 animations:^{
+                CGRect frame = self.contentView.frame;
+                frame.origin.x = -_thirdView.bounds.size.width+10; //this is important!
+                [self.contentView setFrame:frame];
+            }];
         } else if (offset < 0 && fabs(self.contentView.frame.origin.x) > _thirdView.bounds.size.width) { //retract completely for fourth view
-            CGRect frame = self.contentView.frame;
-            frame.origin.x = -_fourthView.bounds.size.width;
-            [self.contentView setFrame:frame];
+            [UIView animateWithDuration:1.0 animations:^{
+                CGRect frame = self.contentView.frame;
+                frame.origin.x = -_fourthView.bounds.size.width;
+                [self.contentView setFrame:frame];
+            }];
         }
     }
     
