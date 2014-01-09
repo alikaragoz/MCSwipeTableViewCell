@@ -199,6 +199,7 @@ secondStateIconName:(NSString *)secondIconName
     CGPoint translation = [gesture translationInView:self];
     CGPoint velocity = [gesture velocityInView:self];
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
+    CGPoint fingerPosition = [gesture locationInView:self];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     _direction = [self directionWithPercentage:percentage];
@@ -208,7 +209,7 @@ secondStateIconName:(NSString *)secondIconName
         
         CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
         [self.contentView setCenter:center];
-        [self animateWithOffset:CGRectGetMinX(self.contentView.frame) gestureAmount:translation];
+        [self animateWithOffset:CGRectGetMinX(self.contentView.frame) fingerPosition:fingerPosition];
         [gesture setTranslation:CGPointZero inView:self];
         
         // Notifying the delegate that we are dragging with an offset percentage
@@ -431,23 +432,24 @@ secondStateIconName:(NSString *)secondIconName
     return isValid;
 }
 
-- (void)viewWithOffset:(CGFloat)offset {
+- (void)viewWithOffset:(CGFloat)offset fingerPosition:(CGPoint)fingerPosition{
     _currentSubview = nil;
+    NSLog(@"finger position: %f", fingerPosition.x);
     
     if (offset >= 0 && offset < _firstView.bounds.size.width) {
         _currentSubview = _firstView;
     } else if (offset >= 0 && offset < _secondView.bounds.size.width) {
         _currentSubview = _secondView;
-    } else if (offset < 0 && fabsf(offset) < _thirdView.bounds.size.width) {
+    } else if (offset < 0 && (self.bounds.size.width-fingerPosition.x) < _thirdView.bounds.size.width) {
         _currentSubview = _thirdView;
-    } else if (offset < 0 && fabsf(offset) < _fourthView.bounds.size.width && fabsf(offset) > _thirdView.bounds.size.width) {
+    } else if (offset < 0 && fabsf(offset) < _fourthView.bounds.size.width) {
         _currentSubview = _fourthView;
     }
 }
 
 #pragma mark - Movement
 
-- (void)animateWithOffset:(CGFloat)offset gestureAmount:(CGPoint)translation{
+- (void)animateWithOffset:(CGFloat)offset fingerPosition:(CGPoint)fingerPosition{
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
     
     // Image Name
@@ -461,7 +463,7 @@ secondStateIconName:(NSString *)secondIconName
     }
     
     //dwellers case
-    [self viewWithOffset:offset];
+    [self viewWithOffset:offset fingerPosition:fingerPosition];
     if (_currentSubview != nil) {
         [_colorIndicatorView addSubview:_currentSubview];
         if (offset >= 0 && percentage < kMCStop1) { // add translucent stuff to background
@@ -476,24 +478,24 @@ secondStateIconName:(NSString *)secondIconName
             NSLog(@"third view");
             [_colorIndicatorView addSubview:_thirdView];
             [UIView animateWithDuration:1.0
-                                  delay:0.0
+                                  delay:0.1
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
                                  CGRect frame = self.contentView.frame;
                                  frame.origin.x = -_currentSubview.bounds.size.width+1;
-                                 //[self.contentView setFrame:frame];
+                                 [self.contentView setFrame:frame];
                              } completion:^(BOOL finished) {
                                  [self notifyDelegate];
                              }];
         } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && _currentSubview == _fourthView) {
             NSLog(@"fourth view");
-            [_colorIndicatorView addSubview:_currentSubview];
+            [_colorIndicatorView addSubview:_fourthView];
             [UIView animateWithDuration:1.0
-                                  delay:0
+                                  delay:1.0
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
                                  CGRect frame = self.contentView.frame;
-                                 frame.origin.x = -_currentSubview.bounds.size.width+1;
+                                 frame.origin.x = -_currentSubview.bounds.size.width;
                                  [self.contentView setFrame:frame];
                              } completion:^(BOOL finished) {
                                  [self notifyDelegate];
