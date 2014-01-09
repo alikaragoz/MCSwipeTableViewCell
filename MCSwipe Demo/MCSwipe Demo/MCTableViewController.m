@@ -205,7 +205,7 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
         [cell.textLabel setText:@"Dwellers"];
         [cell.detailTextLabel setText:@"Left swings back; right stays till dismissal"];
         cell.mode = MSSwipeTableViewCellModeDwellers;
-        [cell.contentView setBackgroundColor:[UIColor yellowColor]];
+        //[cell.contentView setBackgroundColor:[UIColor yellowColor]];
         [cell setFirstStateIconName:nil
                          firstColor:nil
                           firstView:firstView

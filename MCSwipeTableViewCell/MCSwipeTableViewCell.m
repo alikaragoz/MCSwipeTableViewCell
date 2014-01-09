@@ -8,8 +8,8 @@
 
 #import "MCSwipeTableViewCell.h"
 
-static CGFloat const kMCStop1 = 0.25; // Percentage limit to trigger the first action
-static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
+static CGFloat const kMCStop1 = 0.10; // Percentage limit to trigger the first action
+static CGFloat const kMCStop2 = 0.90; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
 static NSTimeInterval const kMCBounceDuration1 = 0.2; // Duration of the first part of the bounce animation
 static NSTimeInterval const kMCBounceDuration2 = 0.1; // Duration of the second part of the bounce animation
@@ -124,9 +124,6 @@ secondStateIconName:(NSString *)secondIconName
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
     
-    _currentSubview = nil;
-    [_colorIndicatorView addSubview:_currentSubview]; 
-    
     // Set state modes
     _modeForState1 = MCSwipeTableViewCellModeNone;
     _modeForState2 = MCSwipeTableViewCellModeNone;
@@ -183,6 +180,8 @@ secondStateIconName:(NSString *)secondIconName
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
+    
+    [_colorIndicatorView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
 }
 
 
@@ -209,7 +208,7 @@ secondStateIconName:(NSString *)secondIconName
         
         CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
         [self.contentView setCenter:center];
-        [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
+        [self animateWithOffset:CGRectGetMinX(self.contentView.frame) gestureAmount:translation];
         [gesture setTranslation:CGPointZero inView:self];
         
         // Notifying the delegate that we are dragging with an offset percentage
@@ -433,23 +432,24 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)viewWithOffset:(CGFloat)offset {
-    //UIView* currentView;
     _currentSubview = nil;
     
-    if (offset >= 0 && offset <= _firstView.bounds.size.width) {
+    if (offset >= 0 && offset < _firstView.bounds.size.width) {
         _currentSubview = _firstView;
-    } else if (offset >= 0 && offset <= _secondView.bounds.size.width) {
+    } else if (offset >= 0 && offset < _secondView.bounds.size.width) {
         _currentSubview = _secondView;
-    } else if (offset < 0 && fabsf(offset) <= _thirdView.bounds.size.width) {
+    } else if (offset < 0 && fabsf(offset) < _thirdView.bounds.size.width) {
         _currentSubview = _thirdView;
-    } else if (offset < 0 && fabsf(offset) <= _fourthView.bounds.size.width) {
+    } else if (offset < 0 && fabsf(offset) < _fourthView.bounds.size.width) {
         _currentSubview = _fourthView;
     }
 }
 
 #pragma mark - Movement
 
-- (void)animateWithOffset:(CGFloat)offset {
+- (void)animateWithOffset:(CGFloat)offset gestureAmount:(CGPoint)translation{
+    NSLog(@"translation-x: %f\n", translation.x);
+    
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
     
     // Image Name
@@ -462,6 +462,7 @@ secondStateIconName:(NSString *)secondIconName
         [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     }
     
+    //dwellers case
     [self viewWithOffset:offset];
     if (_currentSubview != nil) {
         [_colorIndicatorView addSubview:_currentSubview];
@@ -473,19 +474,19 @@ secondStateIconName:(NSString *)secondIconName
             UIView *grayTranslucentRightView = [[UIView alloc] initWithFrame:CGRectMake(kMCStop2*CGRectGetWidth(self.bounds), 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
-        } else if (offset < 0 && fabsf(percentage) >= kMCStop1) { //retract completely
+        } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && _currentSubview == _thirdView) { //retract completely
             NSLog(@"Width of the subview: %f\n", _currentSubview.bounds.size.width);
-            CGRect frame = self.contentView.frame;
-            frame.origin.x = -_currentSubview.bounds.size.width+10;
+            
             [UIView animateWithDuration:1.0
                                   delay:0.0
-             options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+             options:UIViewAnimationOptionCurveEaseIn
                              animations:^{
-                [self.contentView setFrame:frame];
+                CGRect frame = self.contentView.frame;
+                frame.origin.x = -_currentSubview.bounds.size.width+1;
+                //[self.contentView setFrame:frame];
             } completion:^(BOOL finished) {
                 [self notifyDelegate];
             }];
-            
         }
     }
     
@@ -538,7 +539,6 @@ secondStateIconName:(NSString *)secondIconName
             return;
         }
     }
-    
     
     slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
                                   position.y - slidingImageSize.height / 2.0,
@@ -594,6 +594,7 @@ secondStateIconName:(NSString *)secondIconName
         
         // Setting back the color to the default
         _colorIndicatorView.backgroundColor = self.defaultColor;
+        [_colorIndicatorView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
     } completion:^(BOOL finished1) {
         
@@ -604,6 +605,7 @@ secondStateIconName:(NSString *)secondIconName
             
             // Clearing the indicator view
             _colorIndicatorView.backgroundColor = [UIColor clearColor];
+            [_colorIndicatorView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
         } completion:^(BOOL finished2) {
             if (completion) {
