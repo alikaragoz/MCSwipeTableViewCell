@@ -448,8 +448,6 @@ secondStateIconName:(NSString *)secondIconName
 #pragma mark - Movement
 
 - (void)animateWithOffset:(CGFloat)offset gestureAmount:(CGPoint)translation{
-    NSLog(@"translation-x: %f\n", translation.x);
-    
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
     
     // Image Name
@@ -475,18 +473,31 @@ secondStateIconName:(NSString *)secondIconName
             [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
         } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && _currentSubview == _thirdView) { //retract completely
-            NSLog(@"Width of the subview: %f\n", _currentSubview.bounds.size.width);
-            
+            NSLog(@"third view");
+            [_colorIndicatorView addSubview:_thirdView];
             [UIView animateWithDuration:1.0
                                   delay:0.0
-             options:UIViewAnimationOptionCurveEaseIn
+                                options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
-                CGRect frame = self.contentView.frame;
-                frame.origin.x = -_currentSubview.bounds.size.width+1;
-                //[self.contentView setFrame:frame];
-            } completion:^(BOOL finished) {
-                [self notifyDelegate];
-            }];
+                                 CGRect frame = self.contentView.frame;
+                                 frame.origin.x = -_currentSubview.bounds.size.width+1;
+                                 [self.contentView setFrame:frame];
+                             } completion:^(BOOL finished) {
+                                 [self notifyDelegate];
+                             }];
+        } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && _currentSubview == _fourthView) {
+            NSLog(@"fourth view");
+            [_colorIndicatorView addSubview:_currentSubview];
+            [UIView animateWithDuration:1.0
+                                  delay:0.001
+                                options:UIViewAnimationOptionCurveEaseOut
+                             animations:^{
+                                 CGRect frame = self.contentView.frame;
+                                 frame.origin.x = -_currentSubview.bounds.size.width+1;
+                                 [self.contentView setFrame:frame];
+                             } completion:^(BOOL finished) {
+                                 [self notifyDelegate];
+                             }];
         }
     }
     
