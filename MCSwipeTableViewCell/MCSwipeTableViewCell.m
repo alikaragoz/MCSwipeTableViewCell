@@ -433,8 +433,8 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)viewWithOffset:(CGFloat)offset fingerPosition:(CGPoint)fingerPosition{
-    _currentSubview = nil;
-    NSLog(@"finger position: %f", fingerPosition.x);
+    //_currentSubview = nil;
+    NSLog(@"finger position: %f", _currentSubview.bounds.size.width);
     
     if (offset >= 0 && offset < _firstView.bounds.size.width) {
         _currentSubview = _firstView;
@@ -442,7 +442,8 @@ secondStateIconName:(NSString *)secondIconName
         _currentSubview = _secondView;
     } else if (offset < 0 && (self.bounds.size.width-fingerPosition.x) < _thirdView.bounds.size.width) {
         _currentSubview = _thirdView;
-    } else {
+    } else if (offset < 0 && _currentSubview.bounds.size.width != _fourthView.bounds.size.width){
+        //relies on fact that FOURTH_VIEW_WIDTH > THIRD_VIEW_WIDTH
         _currentSubview = _fourthView;
     }
 }
@@ -474,9 +475,7 @@ secondStateIconName:(NSString *)secondIconName
             UIView *grayTranslucentRightView = [[UIView alloc] initWithFrame:CGRectMake(kMCStop2*CGRectGetWidth(self.bounds), 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
-        } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && _currentSubview == _thirdView) { //retract completely
-            NSLog(@"third view");
-            [_colorIndicatorView addSubview:_thirdView];
+        } else if (offset < 0 && fabsf(percentage) >= kMCStop1) { //retract completely
             [UIView animateWithDuration:1.0
                                   delay:0.1
                                 options:UIViewAnimationOptionCurveEaseOut
@@ -487,9 +486,7 @@ secondStateIconName:(NSString *)secondIconName
                              } completion:^(BOOL finished) {
                                  [self notifyDelegate];
                              }];
-        } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && _currentSubview == _fourthView) {
-            NSLog(@"fourth view");
-            [_colorIndicatorView addSubview:_fourthView];
+        } else if (offset < 0 && fabsf(percentage) > kMCStop1) {
             [UIView animateWithDuration:1.0
                                   delay:1.0
                                 options:UIViewAnimationOptionCurveEaseOut
