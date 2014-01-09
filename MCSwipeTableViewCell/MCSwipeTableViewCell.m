@@ -489,12 +489,14 @@ secondStateIconName:(NSString *)secondIconName
             [_colorIndicatorView addSubview:grayTranslucentRightView];
             _grayTranslucentSubviewPresent = TRUE;
             NSLog(@"translucent: %d, current View: %d", _grayTranslucentSubviewPresent, _currentSubviewNo);
-        } else if (offset < 0 && fabsf(percentage) >= kMCStop1) { //retract completely for third view
-            
-        } else if (offset < 0 && fabsf(percentage) > kMCStop1) { //retract completely for fourth view
-            
-        } else {
-            _grayTranslucentSubviewPresent = FALSE;
+        } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && fabs(self.contentView.frame.origin.x) < _thirdView.bounds.size.width) { //retract completely for third view
+            CGRect frame = self.contentView.frame;
+            frame.origin.x = -_thirdView.bounds.size.width;
+            [self.contentView setFrame:frame];
+        } else if (offset < 0 && fabs(self.contentView.frame.origin.x) == _thirdView.bounds.size.width) { //retract completely for fourth view
+            CGRect frame = self.contentView.frame;
+            frame.origin.x = -_fourthView.bounds.size.width;
+            [self.contentView setFrame:frame];
         }
     }
     
