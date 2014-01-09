@@ -471,15 +471,15 @@ secondStateIconName:(NSString *)secondIconName
             [_colorIndicatorView addSubview:grayTranslucentRightView];
         } else if (offset < 0 && fabsf(percentage) >= kMCStop1) { //retract completely
             NSLog(@"Width of the subview: %f\n", myView.bounds.size.width);
+            CGRect frame = self.contentView.frame;
+            frame.origin.x = -myView.bounds.size.width+10;
             [UIView animateWithDuration:1.0
                                   delay:0.0
              options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
                              animations:^{
-                CGRect frame = self.contentView.frame;
-                frame.origin.x = -myView.bounds.size.width+10;
                 [self.contentView setFrame:frame];
             } completion:^(BOOL finished) {
-                
+                [self notifyDelegate];
             }];
             
         }
