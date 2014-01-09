@@ -124,6 +124,9 @@ secondStateIconName:(NSString *)secondIconName
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
     
+    _currentSubview = nil;
+    [_colorIndicatorView addSubview:_currentSubview]; 
+    
     // Set state modes
     _modeForState1 = MCSwipeTableViewCellModeNone;
     _modeForState2 = MCSwipeTableViewCellModeNone;
