@@ -491,9 +491,9 @@ secondStateIconName:(NSString *)secondIconName
             NSLog(@"translucent: %d, current View: %d", _grayTranslucentSubviewPresent, _currentSubviewNo);
         } else if (offset < 0 && fabsf(percentage) >= kMCStop1 && fabs(self.contentView.frame.origin.x) < _thirdView.bounds.size.width) { //retract completely for third view
             CGRect frame = self.contentView.frame;
-            frame.origin.x = -_thirdView.bounds.size.width;
+            frame.origin.x = -_thirdView.bounds.size.width+10; //this is important!
             [self.contentView setFrame:frame];
-        } else if (offset < 0 && fabs(self.contentView.frame.origin.x) == _thirdView.bounds.size.width) { //retract completely for fourth view
+        } else if (offset < 0 && fabs(self.contentView.frame.origin.x) > _thirdView.bounds.size.width) { //retract completely for fourth view
             CGRect frame = self.contentView.frame;
             frame.origin.x = -_fourthView.bounds.size.width;
             [self.contentView setFrame:frame];
