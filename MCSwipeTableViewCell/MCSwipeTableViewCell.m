@@ -440,7 +440,7 @@ secondStateIconName:(NSString *)secondIconName
         _currentSubview = _secondView;
     } else if (offset < 0 && fabsf(offset) < _thirdView.bounds.size.width) {
         _currentSubview = _thirdView;
-    } else if (offset < 0 && fabsf(offset) < _fourthView.bounds.size.width) {
+    } else if (offset < 0 && fabsf(offset) < _fourthView.bounds.size.width && fabsf(offset) > _thirdView.bounds.size.width) {
         _currentSubview = _fourthView;
     }
 }
@@ -481,7 +481,7 @@ secondStateIconName:(NSString *)secondIconName
                              animations:^{
                                  CGRect frame = self.contentView.frame;
                                  frame.origin.x = -_currentSubview.bounds.size.width+1;
-                                 [self.contentView setFrame:frame];
+                                 //[self.contentView setFrame:frame];
                              } completion:^(BOOL finished) {
                                  [self notifyDelegate];
                              }];
@@ -489,7 +489,7 @@ secondStateIconName:(NSString *)secondIconName
             NSLog(@"fourth view");
             [_colorIndicatorView addSubview:_currentSubview];
             [UIView animateWithDuration:1.0
-                                  delay:1.0
+                                  delay:0
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
                                  CGRect frame = self.contentView.frame;
