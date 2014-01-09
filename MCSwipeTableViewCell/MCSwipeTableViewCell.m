@@ -30,6 +30,8 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) UIView *translucentGrayCoverLeft;
 @property (nonatomic, strong) UIView *translucentGrayCoverRight;
 
+@property (nonatomic, strong) UIView *currentSubview;
+
 @end
 
 @implementation MCSwipeTableViewCell
@@ -427,20 +429,19 @@ secondStateIconName:(NSString *)secondIconName
     return isValid;
 }
 
-- (UIView*)viewWithOffset:(CGFloat)offset {
-    UIView* currentView;
+- (void)viewWithOffset:(CGFloat)offset {
+    //UIView* currentView;
+    _currentSubview = nil;
     
     if (offset >= 0 && offset <= _firstView.bounds.size.width) {
-        currentView = _firstView;
+        _currentSubview = _firstView;
     } else if (offset >= 0 && offset <= _secondView.bounds.size.width) {
-        currentView = _secondView;
+        _currentSubview = _secondView;
     } else if (offset < 0 && fabsf(offset) <= _thirdView.bounds.size.width) {
-        currentView = _thirdView;
+        _currentSubview = _thirdView;
     } else if (offset < 0 && fabsf(offset) <= _fourthView.bounds.size.width) {
-        currentView = _fourthView; 
+        _currentSubview = _fourthView;
     }
-    
-    return currentView;
 }
 
 #pragma mark - Movement
@@ -458,9 +459,9 @@ secondStateIconName:(NSString *)secondIconName
         [self slideImageWithPercentage:percentage imageName:imageName isDragging:self.shouldAnimatesIcons];
     }
     
-    UIView* myView = [self viewWithOffset:offset];
-    if (myView != nil) {
-        [_colorIndicatorView addSubview:myView];
+    [self viewWithOffset:offset];
+    if (_currentSubview != nil) {
+        [_colorIndicatorView addSubview:_currentSubview];
         if (offset >= 0 && percentage < kMCStop1) { // add translucent stuff to background
             UIView *grayTranslucentLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentLeftView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
@@ -470,9 +471,9 @@ secondStateIconName:(NSString *)secondIconName
             [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
         } else if (offset < 0 && fabsf(percentage) >= kMCStop1) { //retract completely
-            NSLog(@"Width of the subview: %f\n", myView.bounds.size.width);
+            NSLog(@"Width of the subview: %f\n", _currentSubview.bounds.size.width);
             CGRect frame = self.contentView.frame;
-            frame.origin.x = -myView.bounds.size.width+10;
+            frame.origin.x = -_currentSubview.bounds.size.width+10;
             [UIView animateWithDuration:1.0
                                   delay:0.0
              options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
