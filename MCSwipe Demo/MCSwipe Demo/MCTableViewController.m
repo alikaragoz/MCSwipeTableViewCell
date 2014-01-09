@@ -15,7 +15,7 @@ static CGFloat const TABLE_CELL_HEIGHT = 50;
 static CGFloat const FIRST_VIEW_WIDTH = 200;
 static CGFloat const SECOND_VIEW_WIDTH = 400;
 static CGFloat const THIRD_VIEW_WIDTH = 200;
-static CGFloat const FOURTH_VIEW_WIDTH = 600;
+static CGFloat const FOURTH_VIEW_WIDTH = 300;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 

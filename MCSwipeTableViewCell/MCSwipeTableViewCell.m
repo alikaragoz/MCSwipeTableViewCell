@@ -26,6 +26,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
+/* make the view look grayed out if you swipe less than kMCStop1 percent on the left or right */
 @property (nonatomic, strong) UIView *translucentGrayCoverLeft;
 @property (nonatomic, strong) UIView *translucentGrayCoverRight;
 
@@ -367,8 +368,7 @@ secondStateIconName:(NSString *)secondIconName
     else if (percentage <= -_secondTrigger)
         color = _fourthColor;
     else
-        color = self.defaultColor;
-        //color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
+        color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     return color;
 }
 
@@ -461,14 +461,20 @@ secondStateIconName:(NSString *)secondIconName
     UIView* myView = [self viewWithOffset:offset];
     if (myView != nil) {
         [_colorIndicatorView addSubview:myView];
-        if (offset >= 0 && percentage <= kMCStop1) { // add translucent stuff to background
+        if (offset >= 0 && percentage < kMCStop1) { // add translucent stuff to background
             UIView *grayTranslucentLeftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentLeftView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentLeftView];
-        } else if (offset < 0 && fabsf(percentage) <= kMCStop1) {
+        } else if (offset < 0 && fabsf(percentage) < kMCStop1) {
             UIView *grayTranslucentRightView = [[UIView alloc] initWithFrame:CGRectMake(kMCStop2*CGRectGetWidth(self.bounds), 0, kMCStop1*CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))];
             [grayTranslucentRightView setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:0.8]];
             [_colorIndicatorView addSubview:grayTranslucentRightView];
+        } else if (offset < 0 && fabsf(percentage) >= kMCStop1) { //retract completely
+            CGRect frame = self.contentView.frame;
+            frame.origin.x = -myView.bounds.size.width;
+            NSLog(@"Width of the subview: %f\n", self.contentView.frame.size.width);
+            //frame.origin.x = -100;
+            [self.contentView setFrame:frame];
         }
     }
     
