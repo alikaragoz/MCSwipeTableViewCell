@@ -489,7 +489,7 @@ secondStateIconName:(NSString *)secondIconName
             NSLog(@"fourth view");
             [_colorIndicatorView addSubview:_currentSubview];
             [UIView animateWithDuration:1.0
-                                  delay:0.001
+                                  delay:1.0
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
                                  CGRect frame = self.contentView.frame;
