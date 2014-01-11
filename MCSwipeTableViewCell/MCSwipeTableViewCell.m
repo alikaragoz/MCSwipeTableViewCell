@@ -195,11 +195,14 @@ secondStateIconName:(NSString *)secondIconName
         
         if (self.mode == MCSwipeTableViewCellModeDwellers) {//dwellers: can move only as much as the subview allow
             CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
-            int distFromLeftEdge = center.x-self.contentView.frame.size.width/2;
-            if (distFromLeftEdge < _thirdSubview.bounds.size.width && translation.x > 0) {
+            CGFloat distFromLeftEdge = center.x-self.contentView.frame.size.width/2;
+            CGFloat distFromRightEdge = self.contentView.frame.size.width/2-center.x;
+            if (distFromLeftEdge < _firstSubview.bounds.size.width && translation.x > 0) {
                 [self.contentView setCenter:center];
+            } else if (translation.x < 0 && distFromRightEdge < _thirdSubview.bounds.size.width) {
+                [self.contentView setCenter:center];
+                NSLog(@"fill the spot: %f", distFromRightEdge);
             }
-            
         } else {
             CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
             [self.contentView setCenter:center]; //allows you to move the outside cell
