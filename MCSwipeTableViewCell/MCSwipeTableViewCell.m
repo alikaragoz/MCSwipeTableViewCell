@@ -236,6 +236,8 @@ secondStateIconName:(NSString *)secondIconName
         
         if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
+        } else if (cellMode == MCSwipeTableViewCellModeDwellers ) {
+            [self moveToOrigin];
         } else {
             [self moveToOrigin];
         }
@@ -426,7 +428,8 @@ secondStateIconName:(NSString *)secondIconName
         subview = _thirdSubview;
     else if (percentage <= -_secondTrigger)
         subview = _fourthSubview;
-    else
+    
+    if (self.mode == MCSwipeTableViewCellModeDwellers)
         [[_colorIndicatorView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     return subview;
