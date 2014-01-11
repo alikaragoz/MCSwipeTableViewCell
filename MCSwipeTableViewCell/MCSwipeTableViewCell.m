@@ -60,23 +60,31 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName
          firstColor:(UIColor *)firstColor
+          firstView:(UIView *)firstView
 secondStateIconName:(NSString *)secondIconName
         secondColor:(UIColor *)secondColor
+          secondView:(UIView *)secondView
       thirdIconName:(NSString *)thirdIconName
          thirdColor:(UIColor *)thirdColor
+          thirdView:(UIView *)thirdView
      fourthIconName:(NSString *)fourthIconName
-        fourthColor:(UIColor *)fourthColor {
+        fourthColor:(UIColor *)fourthColor
+    fourthView:(UIView *)fourthView {
     
     self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self setFirstStateIconName:firstIconName
                          firstColor:firstColor
+                          firstView:firstView
                 secondStateIconName:secondIconName
                         secondColor:secondColor
+                         secondView:secondView
                       thirdIconName:thirdIconName
                          thirdColor:thirdColor
+                          thirdView:thirdView
                      fourthIconName:fourthIconName
-                        fourthColor:fourthColor];
+                        fourthColor:fourthColor
+                         fourthView:fourthView];
     }
     return self;
 }
@@ -121,12 +129,16 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
+                    firstView:(UIView *)firstView
           secondStateIconName:(NSString *)secondIconName
                   secondColor:(UIColor *)secondColor
+                   secondView:(UIView *)secondView
                 thirdIconName:(NSString *)thirdIconName
                    thirdColor:(UIColor *)thirdColor
+                    thirdView:(UIView *)thirdView
                fourthIconName:(NSString *)fourthIconName
-                  fourthColor:(UIColor *)fourthColor {
+                  fourthColor:(UIColor *)fourthColor
+                   fourthView:(UIView *)fourthView {
     
     [self setFirstIconName:firstIconName];
     [self setSecondIconName:secondIconName];

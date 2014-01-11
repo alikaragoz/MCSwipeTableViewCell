@@ -9,7 +9,7 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 9;
+static NSUInteger const kMCNumItems = 10;
 
 static CGFloat const TABLE_CELL_HEIGHT = 50;
 
@@ -67,15 +67,21 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
     
     MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
+    CGSize tableViewCellSize = cell.contentView.bounds.size;
+    
     [cell setDelegate:self];
     [cell setFirstStateIconName:@"check.png"
                      firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                      firstView:nil
             secondStateIconName:@"cross.png"
                     secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                     secondView:nil
                   thirdIconName:@"clock.png"
                      thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                      thirdView:nil
                  fourthIconName:@"list.png"
-                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                     fourthView:nil];
     
     // add some views to test on
     UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, FIRST_VIEW_WIDTH, TABLE_CELL_HEIGHT)];
@@ -133,14 +139,16 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:nil
                          firstColor:nil
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:nil
                       thirdIconName:@"clock.png"
                          thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                          thirdView:nil
                      fourthIconName:@"list.png"
-                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
-
-        
+                        fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                         fourthView:nil];
     }
     
     else if (indexPath.row % kMCNumItems == 5) {
@@ -148,12 +156,16 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
         [cell.detailTextLabel setText:@"Swipe"];
         [cell setFirstStateIconName:@"check.png"
                          firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                          firstView:nil
                 secondStateIconName:@"cross.png"
                         secondColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:nil
                      fourthIconName:nil
-                        fourthColor:nil];
+                        fourthColor:nil
+                         fourthView:nil];
     }
     
     else if (indexPath.row % kMCNumItems == 6) {
@@ -178,29 +190,36 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
         
         [cell setFirstStateIconName:@"cross.png"
                          firstColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+                          firstView:firstView
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:nil
                      fourthIconName:nil
-                        fourthColor:nil];
+                        fourthColor:nil
+                         fourthView:nil];
         
     }
     
     else if (indexPath.row % kMCNumItems == 9) {
-        [cell.textLabel setText:@"Exit Mode Cell + Confirmation"];
-        [cell.detailTextLabel setText:@"Swipe to delete"];
+        [cell.textLabel setText:@"Dwellers"];
+        [cell.detailTextLabel setText:@"Swipe left returns, right retracts"];
         cell.mode = MCSwipeTableViewCellModeDwellers;
         
-        [cell setFirstStateIconName:@"cross.png"
+        [cell setFirstStateIconName:nil
                          firstColor:nil
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
+                         secondView:nil
                       thirdIconName:nil
                          thirdColor:nil
+                          thirdView:nil
                      fourthIconName:nil
-                        fourthColor:nil];
-        
+                        fourthColor:nil
+                         fourthView:nil];
     }
     
     return cell;
