@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeNone = 0,
     MCSwipeTableViewCellModeExit,
-    MCSwipeTableViewCellModeSwitch
+    MCSwipeTableViewCellModeSwitch,
+    MCSwipeTableViewCellModeDwellers 
 };
 
 @protocol MCSwipeTableViewCellDelegate <NSObject>

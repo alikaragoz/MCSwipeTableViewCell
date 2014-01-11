@@ -167,11 +167,27 @@ static NSUInteger const kMCNumItems = 9;
         
     }
     
+    else if (indexPath.row % kMCNumItems == 9) {
+        [cell.textLabel setText:@"Exit Mode Cell + Confirmation"];
+        [cell.detailTextLabel setText:@"Swipe to delete"];
+        cell.mode = MCSwipeTableViewCellModeDwellers;
+        
+        [cell setFirstStateIconName:@"cross.png"
+                         firstColor:nil
+                secondStateIconName:nil
+                        secondColor:nil
+                      thirdIconName:nil
+                         thirdColor:nil
+                     fourthIconName:nil
+                        fourthColor:nil];
+        
+    }
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80.0;
+    return 50;
 }
 
 #pragma mark - Table view delegate
