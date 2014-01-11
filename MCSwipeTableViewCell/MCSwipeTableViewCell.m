@@ -426,8 +426,8 @@ secondStateIconName:(NSString *)secondIconName
         subview = _thirdSubview;
     else if (percentage <= -_secondTrigger)
         subview = _fourthSubview;
-    //else
-        //[[_colorIndicatorView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    else
+        [[_colorIndicatorView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     return subview;
 }
