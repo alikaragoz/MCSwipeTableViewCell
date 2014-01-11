@@ -70,6 +70,19 @@ static NSUInteger const kMCNumItems = 9;
                  fourthIconName:@"list.png"
                     fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
     
+    // add some views to test on
+    UIView *firstView = [[UIView alloc] initWithFrame:CGRectMake(0,0,FIRST_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [firstView setBackgroundColor:[UIColor purpleColor]];
+    
+    UIView *secondView = [[UIView alloc] initWithFrame:CGRectMake(0,0,SECOND_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [secondView setBackgroundColor:[UIColor orangeColor]];
+    
+    UIView *thirdView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-THIRD_VIEW_WIDTH,0,THIRD_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [thirdView setBackgroundColor:[UIColor cyanColor]];
+    
+    UIView *fourthView = [[UIView alloc] initWithFrame:CGRectMake(tableViewCellSize.width-FOURTH_VIEW_WIDTH,0,FOURTH_VIEW_WIDTH,TABLE_CELL_HEIGHT)];
+    [fourthView setBackgroundColor:[UIColor blackColor]];
+    
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     cell.separatorInset = UIEdgeInsetsZero;
     
