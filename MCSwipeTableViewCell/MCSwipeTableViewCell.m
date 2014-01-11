@@ -193,15 +193,17 @@ secondStateIconName:(NSString *)secondIconName
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _isDragging = YES;
         
-        
-        
         if (self.mode == MCSwipeTableViewCellModeDwellers) {//dwellers: can move only as much as the subview allow
             CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
+            int distFromLeftEdge = center.x-self.contentView.frame.size.width/2;
+            if (distFromLeftEdge < _thirdSubview.bounds.size.width && translation.x > 0) {
+                [self.contentView setCenter:center];
+            }
+            
         } else {
             CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
             [self.contentView setCenter:center]; //allows you to move the outside cell
         }
-        
         
         [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
         [gesture setTranslation:CGPointZero inView:self];
