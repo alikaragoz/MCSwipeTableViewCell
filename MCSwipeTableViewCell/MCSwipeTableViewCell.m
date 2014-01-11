@@ -245,8 +245,13 @@ secondStateIconName:(NSString *)secondIconName
         
         if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
-        } else if (cellMode == MCSwipeTableViewCellModeDwellers ) {
-            [self moveToOrigin];
+        } else if (cellMode == MCSwipeTableViewCellModeDwellers) {
+            NSLog(@"Content frame start: %f\n",self.contentView.frame.origin.x);
+            if (self.contentView.frame.origin.x == -200.0) {
+                NSLog(@"Content frame start: %f\n",self.contentView.frame.origin.x);
+            } else {
+                [self moveToOrigin];
+            }
         } else {
             [self moveToOrigin];
         }
