@@ -26,8 +26,6 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
-@property (nonatomic, assign) CGFloat DWStopRight;
-
 @end
 
 @implementation MCSwipeTableViewCell
@@ -94,10 +92,6 @@ secondStateIconName:(NSString *)secondIconName
 - (void)initializer {
     
     _mode = MCSwipeTableViewCellModeNone;
-    
-    if (_thirdSubview) {
-        //_DWStopRight = self.
-    }
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -199,11 +193,12 @@ secondStateIconName:(NSString *)secondIconName
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _isDragging = YES;
         
-        CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
         
-        if (self.mode == MCSwipeTableViewCellModeDwellers) {
-            
+        
+        if (self.mode == MCSwipeTableViewCellModeDwellers) {//dwellers: can move only as much as the subview allow
+            CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
         } else {
+            CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
             [self.contentView setCenter:center]; //allows you to move the outside cell
         }
         
