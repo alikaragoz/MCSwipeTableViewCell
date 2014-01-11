@@ -206,17 +206,18 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
     else if (indexPath.row % kMCNumItems == 9) {
         [cell.textLabel setText:@"Dwellers"];
         [cell.detailTextLabel setText:@"Swipe left returns, right retracts"];
-        cell.mode = MCSwipeTableViewCellModeDwellers;
+        //cell.mode = MCSwipeTableViewCellModeDwellers;
+        //cell.mode = MCSwipeTableViewCellModeSwitch;
         
         [cell setFirstStateIconName:nil
                          firstColor:nil
-                          firstView:nil
+                          firstView:firstView
                 secondStateIconName:nil
                         secondColor:nil
-                         secondView:nil
+                         secondView:secondView
                       thirdIconName:nil
                          thirdColor:nil
-                          thirdView:nil
+                          thirdView:thirdView
                      fourthIconName:nil
                         fourthColor:nil
                          fourthView:nil];

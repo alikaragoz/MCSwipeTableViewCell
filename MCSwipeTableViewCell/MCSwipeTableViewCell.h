@@ -63,10 +63,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, strong) UIColor *thirdColor;
 @property (nonatomic, strong) UIColor *fourthColor;
 
-@property (nonatomic, strong) UIColor *firstSubview;
-@property (nonatomic, strong) UIColor *secondSubview;
-@property (nonatomic, strong) UIColor *thirdSubview;
-@property (nonatomic, strong) UIColor *fourthSubview;
+@property (nonatomic, strong) UIView *firstSubview;
+@property (nonatomic, strong) UIView *secondSubview;
+@property (nonatomic, strong) UIView *thirdSubview;
+@property (nonatomic, strong) UIView *fourthSubview;
 
 // Percentage of when the first and second action are activated, respectively
 @property (nonatomic, assign) CGFloat firstTrigger;

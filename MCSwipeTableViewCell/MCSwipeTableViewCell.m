@@ -26,6 +26,8 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property (nonatomic, strong) NSString *currentImageName;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 
+@property (nonatomic, assign) CGFloat DWStopRight;
+
 @end
 
 @implementation MCSwipeTableViewCell
@@ -93,6 +95,10 @@ secondStateIconName:(NSString *)secondIconName
     
     _mode = MCSwipeTableViewCellModeNone;
     
+    if (_thirdSubview) {
+        //_DWStopRight = self.
+    }
+    
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
@@ -149,6 +155,11 @@ secondStateIconName:(NSString *)secondIconName
     [self setSecondColor:secondColor];
     [self setThirdColor:thirdColor];
     [self setFourthColor:fourthColor];
+    
+    [self setFirstSubview:firstView];
+    [self setSecondSubview:secondView];
+    [self setThirdSubview:thirdView];
+    [self setFourthSubview:fourthView];
 }
 
 #pragma mark - Prepare reuse
@@ -225,17 +236,18 @@ secondStateIconName:(NSString *)secondIconName
         
         if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState]) {
             [self moveWithDuration:animationDuration andDirection:_direction];
-        }
-        
-        else {
-            
-            __weak MCSwipeTableViewCell *weakSelf = self;
-            [self swipeToOriginWithCompletion:^{
-                __strong MCSwipeTableViewCell *strongSelf = weakSelf;
-                [strongSelf notifyDelegate];
-            }];
+        } else {
+            [self moveToOrigin];
         }
     }
+}
+
+- (void)moveToOrigin {
+    __weak MCSwipeTableViewCell *weakSelf = self;
+    [self swipeToOriginWithCompletion:^{
+        __strong MCSwipeTableViewCell *strongSelf = weakSelf;
+        [strongSelf notifyDelegate];
+    }];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -246,10 +258,10 @@ secondStateIconName:(NSString *)secondIconName
         CGPoint point = [g velocityInView:self];
         
         if (fabsf(point.x) > fabsf(point.y) ) {
-            if (point.x < 0 && !_thirdColor && !_thirdIconName && !_fourthColor && !_fourthIconName){
+            if (point.x < 0 && !_thirdSubview && !_thirdColor && !_thirdIconName && !_fourthSubview && !_fourthColor && !_fourthIconName){
                 return NO;
             }
-            if (point.x > 0 && !_firstColor && !_firstIconName && !_secondColor && !_secondIconName){
+            if (point.x > 0 && !_firstSubview && !_firstColor && !_firstIconName && !_secondSubview && !_secondColor && !_secondIconName){
                 return NO;
             }
             // We notify the delegate that we just started dragging
@@ -402,6 +414,24 @@ secondStateIconName:(NSString *)secondIconName
     return isValid;
 }
 
+- (UIView*) findCurrentSubview:(CGFloat)percentage {
+    UIView *subview = nil;
+    
+    // Background Color
+    if (percentage >= _firstTrigger && percentage < _secondTrigger)
+        subview = _firstSubview;
+    else if (percentage >= _secondTrigger)
+        subview =_secondSubview;
+    else if (percentage < -_firstTrigger && percentage > -_secondTrigger)
+        subview = _thirdSubview;
+    else if (percentage <= -_secondTrigger)
+        subview = _fourthSubview;
+    //else
+        //[[_colorIndicatorView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    return subview;
+}
+
 #pragma mark - Movement
 
 - (void)animateWithOffset:(CGFloat)offset {
@@ -421,6 +451,12 @@ secondStateIconName:(NSString *)secondIconName
     UIColor *color = [self colorWithPercentage:percentage];
     if (color != nil) {
         [_colorIndicatorView setBackgroundColor:color];
+    }
+    
+    UIView *subview = [self findCurrentSubview:percentage];
+    if (subview != nil) {
+        NSLog(@"'lol");
+        [_colorIndicatorView addSubview:subview];
     }
 }
 
