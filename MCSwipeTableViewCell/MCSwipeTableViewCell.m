@@ -199,9 +199,11 @@ secondStateIconName:(NSString *)secondIconName
             CGFloat distFromRightEdge = self.contentView.frame.size.width/2-center.x;
             if (distFromLeftEdge < _firstSubview.bounds.size.width && translation.x > 0) {
                 [self.contentView setCenter:center];
-            } else if (translation.x < 0 && distFromRightEdge < _thirdSubview.bounds.size.width) {
+            } else if (translation.x < 0 && distFromRightEdge < kMCStop1*self.contentView.frame.size.width) {
                 [self.contentView setCenter:center];
-                NSLog(@"fill the spot: %f", distFromRightEdge);
+            } else if (translation.x < 0 && distFromRightEdge > kMCStop1*self.contentView.frame.size.width) {
+                center.x = self.contentView.frame.size.width/2-_thirdSubview.bounds.size.width;
+                [self.contentView setCenter:center];
             }
         } else {
             CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
