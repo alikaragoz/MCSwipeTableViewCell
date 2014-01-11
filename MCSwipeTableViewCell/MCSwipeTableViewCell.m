@@ -200,7 +200,14 @@ secondStateIconName:(NSString *)secondIconName
         _isDragging = YES;
         
         CGPoint center = {self.contentView.center.x + translation.x, self.contentView.center.y};
-        [self.contentView setCenter:center];
+        
+        if (self.mode == MCSwipeTableViewCellModeDwellers) {
+            
+        } else {
+            [self.contentView setCenter:center]; //allows you to move the outside cell
+        }
+        
+        
         [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
         [gesture setTranslation:CGPointZero inView:self];
         
@@ -458,7 +465,6 @@ secondStateIconName:(NSString *)secondIconName
     
     UIView *subview = [self findCurrentSubview:percentage];
     if (subview != nil) {
-        NSLog(@"'lol");
         [_colorIndicatorView addSubview:subview];
     }
 }

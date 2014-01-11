@@ -190,7 +190,7 @@ static CGFloat const FOURTH_VIEW_WIDTH = 300;
         
         [cell setFirstStateIconName:@"cross.png"
                          firstColor:[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-                          firstView:firstView
+                          firstView:nil
                 secondStateIconName:nil
                         secondColor:nil
                          secondView:nil
