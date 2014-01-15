@@ -58,8 +58,19 @@ static NSUInteger const kMCNumItems = 7;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
-    MCSwipeTableViewCell *cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    MCSwipeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
+    if (!cell) {
+        cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+        // iOS 7 separator
+        if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+            cell.separatorInset = UIEdgeInsetsZero;
+        }
+        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+        cell.contentView.backgroundColor = [UIColor whiteColor];
+    }
     
     UIImage *checkImage = [UIImage imageNamed:@"check"];
     UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
@@ -73,15 +84,10 @@ static NSUInteger const kMCNumItems = 7;
     UIImage *listImage = [UIImage imageNamed:@"list"];
     UIColor *brownColor = [UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0];
     
-    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
-    [cell.contentView setBackgroundColor:[UIColor whiteColor]];
-    cell.separatorInset = UIEdgeInsetsZero;
-    
     // Setting the default inactive state color to the tableView background color
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
+
     [cell setDelegate:self];
-    
-    __weak MCTableViewController *weakSelf = self;
     
     if (indexPath.row % kMCNumItems == 0) {
         [cell.textLabel setText:@"Switch Mode Cell"];
@@ -110,9 +116,8 @@ static NSUInteger const kMCNumItems = 7;
         
         [cell setSwipeGestureWithImage:crossImage color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
-            
-            __strong MCTableViewController *strongSelf = weakSelf;
-            [strongSelf deleteCell:cell];
+
+            [self deleteCell:cell];
         }];
     }
     
@@ -128,8 +133,7 @@ static NSUInteger const kMCNumItems = 7;
         [cell setSwipeGestureWithImage:crossImage color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
             
-            __strong MCTableViewController *strongSelf = weakSelf;
-            [strongSelf deleteCell:cell];
+            [self deleteCell:cell];
         }];
     }
     
@@ -145,8 +149,7 @@ static NSUInteger const kMCNumItems = 7;
         [cell setSwipeGestureWithImage:crossImage color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
             
-            __strong MCTableViewController *strongSelf = weakSelf;
-            [strongSelf deleteCell:cell];
+            [self deleteCell:cell];
         }];
     }
     
@@ -176,8 +179,7 @@ static NSUInteger const kMCNumItems = 7;
         [cell setSwipeGestureWithImage:crossImage color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
             
-            __strong MCTableViewController *strongSelf = weakSelf;
-            [strongSelf deleteCell:cell];
+            [self deleteCell:cell];
         }];
     }
     
@@ -185,6 +187,7 @@ static NSUInteger const kMCNumItems = 7;
         [cell.textLabel setText:@"Exit Mode Cell + Confirmation"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
         
+        __strong MCTableViewController *weakSelf = self;
         [cell setSwipeGestureWithImage:crossImage color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
             
@@ -237,7 +240,7 @@ static NSUInteger const kMCNumItems = 7;
 
 - (void)reload:(id)sender {
     _nbItems = kMCNumItems;
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)deleteCell:(MCSwipeTableViewCell *)cell {
@@ -245,7 +248,7 @@ static NSUInteger const kMCNumItems = 7;
     
     _nbItems--;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark - UIAlertViewDelegate
