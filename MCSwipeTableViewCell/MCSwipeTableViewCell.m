@@ -19,6 +19,12 @@ static NSTimeInterval const kMCBounceDuration2      = 0.1;  // Duration of the s
 static NSTimeInterval const kMCDurationLowLimit     = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
 static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration when swiping the cell because we try to simulate velocity
 
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
+    MCSwipeTableViewCellDirectionLeft = 0,
+    MCSwipeTableViewCellDirectionCenter,
+    MCSwipeTableViewCellDirectionRight
+};
+
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) MCSwipeTableViewCellDirection direction;
@@ -106,7 +112,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     _isExited = NO;
     _isDragging = NO;
     _shouldDrag = YES;
-    _shouldAnimatesIcons = YES;
+    _shouldAnimateIcons = YES;
     
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
@@ -122,10 +128,10 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     _modeForState3 = MCSwipeTableViewCellModeNone;
     _modeForState4 = MCSwipeTableViewCellModeNone;
     
-    _firstColor = nil;
-    _secondColor = nil;
-    _thirdColor = nil;
-    _fourthColor = nil;
+    _color1 = nil;
+    _color2 = nil;
+    _color3 = nil;
+    _color4 = nil;
     
     _activeView = nil;
     _view1 = nil;
@@ -221,7 +227,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         case MCSwipeTableViewCellState1: {
             _completionBlock1 = completionBlock;
             _view1 = view;
-            _firstColor = color;
+            _color1 = color;
             _modeForState1 = mode;
             
         } break;
@@ -229,21 +235,21 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         case MCSwipeTableViewCellState2: {
             _completionBlock2 = completionBlock;
             _view2 = view;
-            _secondColor = color;
+            _color2 = color;
             _modeForState2 = mode;
         } break;
             
         case MCSwipeTableViewCellState3: {
             _completionBlock3 = completionBlock;
             _view3 = view;
-            _thirdColor = color;
+            _color3 = color;
             _modeForState3 = mode;
         } break;
             
         case MCSwipeTableViewCellState4: {
             _completionBlock4 = completionBlock;
             _view4 = view;
-            _fourthColor = color;
+            _color4 = color;
             _modeForState4 = mode;
         } break;
             
@@ -279,8 +285,8 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         [gesture setTranslation:CGPointZero inView:self];
         
         // Notifying the delegate that we are dragging with an offset percentage.
-        if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipWithPercentage:)]) {
-            [_delegate swipeTableViewCell:self didSwipWithPercentage:percentage];
+        if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipeWithPercentage:)]) {
+            [_delegate swipeTableViewCell:self didSwipeWithPercentage:percentage];
         }
     }
     
@@ -447,19 +453,19 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     
     if (percentage > _firstTrigger && _modeForState1) {
-        color = _firstColor;
+        color = _color1;
     }
     
     if (percentage > _secondTrigger && _modeForState2) {
-        color = _secondColor;
+        color = _color2;
     }
     
     if (percentage < -_firstTrigger && _modeForState3) {
-        color = _thirdColor;
+        color = _color3;
     }
     
     if (percentage <= -_secondTrigger && _modeForState4) {
-        color = _fourthColor;
+        color = _color4;
     }
     
     return color;
@@ -500,7 +506,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     if (view) {
         [self setViewOfSlidingView:view];
         _slidingView.alpha = [self alphaWithPercentage:percentage];
-        [self slideViewWithPercentage:percentage view:view isDragging:self.shouldAnimatesIcons];
+        [self slideViewWithPercentage:percentage view:view isDragging:self.shouldAnimateIcons];
     }
     
     // Color
@@ -590,7 +596,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
         _contentScreenshotView.frame = frame;
         _slidingView.alpha = 0;
-        [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimatesIcons];
+        [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimateIcons];
     } completion:^(BOOL finished) {
         [self notifyDelegate];
     }];

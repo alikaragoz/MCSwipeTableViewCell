@@ -124,7 +124,7 @@ static NSUInteger const kMCNumItems = 7;
     else if (indexPath.row % kMCNumItems == 2) {
         [cell.textLabel setText:@"Mixed Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch or delete"];
-        cell.shouldAnimatesIcons = YES;
+        cell.shouldAnimateIcons = YES;
         
         [cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Checkmark\" cell");
@@ -140,7 +140,7 @@ static NSUInteger const kMCNumItems = 7;
     else if (indexPath.row % kMCNumItems == 3) {
         [cell.textLabel setText:@"Unanimated Icons"];
         [cell.detailTextLabel setText:@"Swipe"];
-        cell.shouldAnimatesIcons = NO;
+        cell.shouldAnimateIcons = NO;
         
         [cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Checkmark\" cell");
@@ -232,7 +232,7 @@ static NSUInteger const kMCNumItems = 7;
 }
 
 // When the user is dragging, this method is called and return the dragged percentage from the border
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipWithPercentage:(CGFloat)percentage {
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage {
     // NSLog(@"Did swipe with percentage : %f", percentage);
 }
 
