@@ -31,6 +31,36 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
 @property (nonatomic, strong) UIView *slidingView;
 @property (nonatomic, strong) UIView *activeView;
 
+// Initialization
+- (void)initializer;
+- (void)initDefaults;
+
+// View Manipulation.
+- (void)setupSwipingView;
+- (void)uninstallSwipingView;
+- (void)setViewOfSlidingView:(UIView *)view;
+
+// Percentage
+- (CGFloat)offsetWithPercentage:(CGFloat)percentage relativeToWidth:(CGFloat)width;
+- (CGFloat)percentageWithOffset:(CGFloat)offset relativeToWidth:(CGFloat)width;
+- (NSTimeInterval)animationDurationWithVelocity:(CGPoint)velocity;
+- (MCSwipeTableViewCellDirection)directionWithPercentage:(CGFloat)percentage;
+- (UIView *)viewWithPercentage:(CGFloat)percentage;
+- (CGFloat)alphaWithPercentage:(CGFloat)percentage;
+- (UIColor *)colorWithPercentage:(CGFloat)percentage;
+- (MCSwipeTableViewCellState)stateWithPercentage:(CGFloat)percentage;
+
+// Movement
+- (void)animateWithOffset:(CGFloat)offset;
+- (void)slideViewWithPercentage:(CGFloat)percentage view:(UIView *)view isDragging:(BOOL)isDragging;
+- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction;
+
+// Utilities
+- (UIImage *)imageWithView:(UIView *)view;
+
+// Delegate Notification.
+- (void)notifyDelegate;
+
 @end
 
 @implementation MCSwipeTableViewCell
@@ -65,7 +95,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     
     [self initDefaults];
     
-    // Setup Gesture Reco
+    // Setup Gesture Recognizer.
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
     [self addGestureRecognizer:_panGestureRecognizer];
     _panGestureRecognizer.delegate = self;
@@ -248,7 +278,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         [self animateWithOffset:CGRectGetMinX(_contentScreenshotView.frame)];
         [gesture setTranslation:CGPointZero inView:self];
         
-        // Notifying the delegate that we are dragging with an offset percentage
+        // Notifying the delegate that we are dragging with an offset percentage.
         if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipWithPercentage:)]) {
             [_delegate swipeTableViewCell:self didSwipWithPercentage:percentage];
         }
@@ -466,7 +496,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     
     UIView *view = [self viewWithPercentage:percentage];
     
-    // View Position
+    // View Position.
     if (view) {
         [self setViewOfSlidingView:view];
         _slidingView.alpha = [self alphaWithPercentage:percentage];
@@ -604,7 +634,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
             _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
-            // Setting back the color to the default
+            // Setting back the color to the default.
             _colorIndicatorView.backgroundColor = self.defaultColor;
             
         } completion:^(BOOL finished1) {
@@ -637,9 +667,9 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     short scale = [[UIScreen mainScreen] scale];
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, scale);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return img;
+    return image;
 }
 
 #pragma mark - Delegate Notification
@@ -674,7 +704,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
             break;
     }
     
-    // We notify the delegate that we just ended dragging
+    // We notify the delegate that we just ended dragging.
     if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
         [_delegate swipeTableViewCellDidEndSwiping:self];
     }
