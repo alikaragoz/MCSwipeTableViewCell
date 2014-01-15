@@ -23,13 +23,13 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
 
 @property (nonatomic, assign) MCSwipeTableViewCellDirection direction;
 @property (nonatomic, assign) CGFloat currentPercentage;
+@property (nonatomic, assign) BOOL isExited;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-@property (nonatomic, strong) UIImageView *slidingImageView;
-@property (nonatomic, strong) UIImage *currentImage;
-@property (nonatomic, strong) UIView *colorIndicatorView;
-
 @property (nonatomic, strong) UIImageView *contentScreenshotView;
+@property (nonatomic, strong) UIView *colorIndicatorView;
+@property (nonatomic, strong) UIView *slidingView;
+@property (nonatomic, strong) UIView *activeView;
 
 @end
 
@@ -68,33 +68,25 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     // Setup Gesture Reco
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
     [self addGestureRecognizer:_panGestureRecognizer];
-    [_panGestureRecognizer setDelegate:self];
+    _panGestureRecognizer.delegate = self;
 }
 
 - (void)initDefaults {
-
-    // At start we are not swipping
+    
+    _isExited = NO;
     _isDragging = NO;
-    
-    // Default the cells are draggable
     _shouldDrag = YES;
-    
-    // Default the icons are animating
     _shouldAnimatesIcons = YES;
     
-    // Defaut triggers match the icons location
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
     
-    // Spring animation
     _damping = kMCDamping;
     _velocity = kMCVelocity;
     _animationDuration = kMCAnimationDuration;
     
-    //
     _defaultColor = [UIColor whiteColor];
     
-    // Set state modes
     _modeForState1 = MCSwipeTableViewCellModeNone;
     _modeForState2 = MCSwipeTableViewCellModeNone;
     _modeForState3 = MCSwipeTableViewCellModeNone;
@@ -105,11 +97,11 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     _thirdColor = nil;
     _fourthColor = nil;
     
-    _image1 = nil;
-    _image2 = nil;
-    _image3 = nil;
-    _image4 = nil;
-    
+    _activeView = nil;
+    _view1 = nil;
+    _view2 = nil;
+    _view3 = nil;
+    _view4 = nil;
 }
 
 #pragma mark - Prepare reuse
@@ -143,13 +135,13 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     }
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
-    [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-    [_colorIndicatorView setBackgroundColor:(self.defaultColor ? self.defaultColor : [UIColor clearColor])];
+    _colorIndicatorView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
+    _colorIndicatorView.backgroundColor = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     [self addSubview:_colorIndicatorView];
     
-    _slidingImageView = [[UIImageView alloc] init];
-    [_slidingImageView setContentMode:UIViewContentModeCenter];
-    [_colorIndicatorView addSubview:_slidingImageView];
+    _slidingView = [[UIView alloc] init];
+    _slidingView.contentMode = UIViewContentModeCenter;
+    [_colorIndicatorView addSubview:_slidingView];
     
     _contentScreenshotView = [[UIImageView alloc] initWithImage:contentViewScreenshotImage];
     [self addSubview:_contentScreenshotView];
@@ -160,8 +152,8 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         return;
     }
     
-    [_slidingImageView removeFromSuperview];
-    _slidingImageView = nil;
+    [_slidingView removeFromSuperview];
+    _slidingView = nil;
     
     [_colorIndicatorView removeFromSuperview];
     _colorIndicatorView = nil;
@@ -170,22 +162,35 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     _contentScreenshotView = nil;
 }
 
+- (void)setViewOfSlidingView:(UIView *)view {
+    if (!_slidingView) {
+        return;
+    }
+    
+    NSArray *subviews = [_slidingView subviews];
+    [subviews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+        [view removeFromSuperview];
+    }];
+    
+    [_slidingView addSubview:view];
+}
+
 #pragma mark - Swipe configuration
 
-- (void)setSwipeGestureWithImage:(UIImage *)image
-                           color:(UIColor *)color
-                            mode:(MCSwipeTableViewCellMode)mode
-                           state:(MCSwipeTableViewCellState)state
-                 completionBlock:(MCSwipeCompletionBlock)completionBlock {
+- (void)setSwipeGestureWithView:(UIView *)view
+                          color:(UIColor *)color
+                           mode:(MCSwipeTableViewCellMode)mode
+                          state:(MCSwipeTableViewCellState)state
+                completionBlock:(MCSwipeCompletionBlock)completionBlock {
     
-    NSParameterAssert(image);
+    NSParameterAssert(view);
     NSParameterAssert(color);
     
     // Depending on the state we assign the attributes
     switch (state) {
         case MCSwipeTableViewCellState1: {
             _completionBlock1 = completionBlock;
-            _image1 = image;
+            _view1 = view;
             _firstColor = color;
             _modeForState1 = mode;
             
@@ -193,21 +198,21 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
             
         case MCSwipeTableViewCellState2: {
             _completionBlock2 = completionBlock;
-            _image2 = image;
+            _view2 = view;
             _secondColor = color;
             _modeForState2 = mode;
         } break;
             
         case MCSwipeTableViewCellState3: {
             _completionBlock3 = completionBlock;
-            _image3 = image;
+            _view3 = view;
             _thirdColor = color;
             _modeForState3 = mode;
         } break;
             
         case MCSwipeTableViewCellState4: {
             _completionBlock4 = completionBlock;
-            _image4 = image;
+            _view4 = view;
             _fourthColor = color;
             _modeForState4 = mode;
         } break;
@@ -222,8 +227,9 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     
-    // The user does not want you to be dragged!
-    if (!_shouldDrag) return;
+    if (!_shouldDrag || _isExited) {
+        return;
+    }
     
     UIGestureRecognizerState state      = [gesture state];
     CGPoint translation                 = [gesture translationInView:self];
@@ -238,7 +244,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         [self setupSwipingView];
         
         CGPoint center = {_contentScreenshotView.center.x + translation.x, _contentScreenshotView.center.y};
-        [_contentScreenshotView setCenter:center];
+        _contentScreenshotView.center = center;
         [self animateWithOffset:CGRectGetMinX(_contentScreenshotView.frame)];
         [gesture setTranslation:CGPointZero inView:self];
         
@@ -251,7 +257,7 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     else if (state == UIGestureRecognizerStateEnded || state == UIGestureRecognizerStateCancelled) {
         
         _isDragging = NO;
-        _currentImage = [self imageWithPercentage:percentage];
+        _activeView = [self viewWithPercentage:percentage];
         _currentPercentage = percentage;
         
         MCSwipeTableViewCellState cellState = [self stateWithPercentage:percentage];
@@ -338,9 +344,9 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
 }
 
 - (NSTimeInterval)animationDurationWithVelocity:(CGPoint)velocity {
-    CGFloat width = CGRectGetWidth(self.bounds);
-    NSTimeInterval animationDurationDiff = kMCDurationHightLimit - kMCDurationLowLimit;
-    CGFloat horizontalVelocity = velocity.x;
+    CGFloat width                           = CGRectGetWidth(self.bounds);
+    NSTimeInterval animationDurationDiff    = kMCDurationHightLimit - kMCDurationLowLimit;
+    CGFloat horizontalVelocity              = velocity.x;
     
     if (horizontalVelocity < -width) horizontalVelocity = -width;
     else if (horizontalVelocity > width) horizontalVelocity = width;
@@ -349,45 +355,56 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
 }
 
 - (MCSwipeTableViewCellDirection)directionWithPercentage:(CGFloat)percentage {
-    if (percentage < 0)
+    if (percentage < 0) {
         return MCSwipeTableViewCellDirectionLeft;
-    else if (percentage > 0)
+    }
+    
+    else if (percentage > 0) {
         return MCSwipeTableViewCellDirectionRight;
-    else
+    }
+    
+    else {
         return MCSwipeTableViewCellDirectionCenter;
+    }
 }
 
-- (UIImage *)imageWithPercentage:(CGFloat)percentage {
+- (UIView *)viewWithPercentage:(CGFloat)percentage {
     
-    UIImage *image;
+    UIView *view;
     
     if (percentage >= 0 && _modeForState1) {
-        image = _image1;
+        view = _view1;
     }
     
     if (percentage >= _secondTrigger && _modeForState2) {
-        image = _image2;
+        view = _view2;
     }
     
     if (percentage < 0  && _modeForState3) {
-        image = _image3;
+        view = _view3;
     }
     
     if (percentage <= -_secondTrigger && _modeForState4) {
-        image = _image4;
+        view = _view4;
     }
     
-    return image;
+    return view;
 }
 
-- (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
+- (CGFloat)alphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
-    if (percentage >= 0 && percentage < _firstTrigger)
+    if (percentage >= 0 && percentage < _firstTrigger) {
         alpha = percentage / _firstTrigger;
-    else if (percentage < 0 && percentage > -_firstTrigger)
+    }
+    
+    else if (percentage < 0 && percentage > -_firstTrigger) {
         alpha = fabsf(percentage / _firstTrigger);
-    else alpha = 1.0;
+    }
+    
+    else {
+        alpha = 1.0;
+    }
     
     return alpha;
 }
@@ -447,31 +464,28 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
 - (void)animateWithOffset:(CGFloat)offset {
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
     
-    // Image Name
-    UIImage *image = [self imageWithPercentage:percentage];
+    UIView *view = [self viewWithPercentage:percentage];
     
-    // Image Position
-    if (image != nil) {
-        [_slidingImageView setImage:image];
-        [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
-        [self slideImageWithPercentage:percentage image:image isDragging:self.shouldAnimatesIcons];
+    // View Position
+    if (view) {
+        [self setViewOfSlidingView:view];
+        _slidingView.alpha = [self alphaWithPercentage:percentage];
+        [self slideViewWithPercentage:percentage view:view isDragging:self.shouldAnimatesIcons];
     }
     
     // Color
     UIColor *color = [self colorWithPercentage:percentage];
     if (color != nil) {
-        [_colorIndicatorView setBackgroundColor:color];
+        _colorIndicatorView.backgroundColor = color;
     }
 }
 
-- (void)slideImageWithPercentage:(CGFloat)percentage image:(UIImage *)image isDragging:(BOOL)isDragging {
-    if (!image) return;
-    
-    CGSize slidingImageSize = image.size;
-    CGRect slidingImageRect;
+- (void)slideViewWithPercentage:(CGFloat)percentage view:(UIView *)view isDragging:(BOOL)isDragging {
+    if (!view) {
+        return;
+    }
     
     CGPoint position = CGPointZero;
-    
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
     if (isDragging) {
@@ -506,23 +520,32 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
         }
     }
     
+    CGSize activeViewSize = view.bounds.size;
+    CGRect activeViewFrame = CGRectMake(position.x - activeViewSize.width / 2.0,
+                                        position.y - activeViewSize.height / 2.0,
+                                        activeViewSize.width,
+                                        activeViewSize.height);
     
-    slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
-                                  position.y - slidingImageSize.height / 2.0,
-                                  slidingImageSize.width,
-                                  slidingImageSize.height);
-    
-    slidingImageRect = CGRectIntegral(slidingImageRect);
-    [_slidingImageView setFrame:slidingImageRect];
+    activeViewFrame = CGRectIntegral(activeViewFrame);
+    _slidingView.frame = activeViewFrame;
 }
 
 - (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
+    
+    _isExited = YES;
     CGFloat origin;
     
-    if (direction == MCSwipeTableViewCellDirectionLeft)
+    if (direction == MCSwipeTableViewCellDirectionLeft) {
         origin = -CGRectGetWidth(self.bounds);
-    else
+    }
+    
+    else if (direction == MCSwipeTableViewCellDirectionRight) {
         origin = CGRectGetWidth(self.bounds);
+    }
+    
+    else {
+        origin = 0;
+    }
     
     CGFloat percentage = [self percentageWithOffset:origin relativeToWidth:CGRectGetWidth(self.bounds)];
     CGRect frame = _contentScreenshotView.frame;
@@ -530,19 +553,14 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
     
     // Color
     UIColor *color = [self colorWithPercentage:_currentPercentage];
-    if (color != nil) {
+    if (color) {
         [_colorIndicatorView setBackgroundColor:color];
     }
     
-    // Image
-    if (_currentImage != nil) {
-        [_slidingImageView setImage:_currentImage];
-    }
-    
-    [UIView animateWithDuration:duration delay:0.0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
+    [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
         _contentScreenshotView.frame = frame;
-        [_slidingImageView setAlpha:0];
-        [self slideImageWithPercentage:percentage image:_currentImage isDragging:self.shouldAnimatesIcons];
+        _slidingView.alpha = 0;
+        [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimatesIcons];
     } completion:^(BOOL finished) {
         [self notifyDelegate];
     }];
@@ -562,10 +580,12 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
             // Clearing the indicator view
             _colorIndicatorView.backgroundColor = self.defaultColor;
             
-            [_slidingImageView setAlpha:0.0];
-            [self slideImageWithPercentage:0 image:_currentImage isDragging:NO];
+            _slidingView.alpha = 0;
+            [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
         } completion:^(BOOL finished) {
+            
+            _isExited = NO;
             [self uninstallSwipingView];
             
             if (completion) {
@@ -581,8 +601,8 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
             frame.origin.x = -bounceDistance;
             _contentScreenshotView.frame = frame;
             
-            [_slidingImageView setAlpha:0.0];
-            [self slideImageWithPercentage:0 image:_currentImage isDragging:NO];
+            _slidingView.alpha = 0;
+            [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
             // Setting back the color to the default
             _colorIndicatorView.backgroundColor = self.defaultColor;
@@ -599,6 +619,8 @@ static NSTimeInterval const kMCDurationHightLimit   = 0.1;  // Highest duration 
                 _colorIndicatorView.backgroundColor = [UIColor clearColor];
                 
             } completion:^(BOOL finished2) {
+                
+                _isExited = NO;
                 [self uninstallSwipingView];
                 
                 if (completion) {

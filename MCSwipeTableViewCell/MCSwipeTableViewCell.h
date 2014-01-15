@@ -56,10 +56,10 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 @property (nonatomic, strong) UIColor *thirdColor;
 @property (nonatomic, strong) UIColor *fourthColor;
 
-@property (nonatomic, strong) UIImage *image1;
-@property (nonatomic, strong) UIImage *image2;
-@property (nonatomic, strong) UIImage *image3;
-@property (nonatomic, strong) UIImage *image4;
+@property (nonatomic, strong) UIView *view1;
+@property (nonatomic, strong) UIView *view2;
+@property (nonatomic, strong) UIView *view3;
+@property (nonatomic, strong) UIView *view4;
 
 @property (nonatomic, copy) MCSwipeCompletionBlock completionBlock1;
 @property (nonatomic, copy) MCSwipeCompletionBlock completionBlock2;
@@ -92,11 +92,11 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 @property (nonatomic, assign) BOOL shouldDrag;
 @property (nonatomic, assign) BOOL shouldAnimatesIcons;
 
-- (void)setSwipeGestureWithImage:(UIImage *)image
-                           color:(UIColor *)color
-                            mode:(MCSwipeTableViewCellMode)mode
-                           state:(MCSwipeTableViewCellState)state
-                 completionBlock:(MCSwipeCompletionBlock)completionBlock;
+- (void)setSwipeGestureWithView:(UIView *)view
+                          color:(UIColor *)color
+                           mode:(MCSwipeTableViewCellMode)mode
+                          state:(MCSwipeTableViewCellState)state
+                completionBlock:(MCSwipeCompletionBlock)completionBlock;
 
 // Manually swipe to origin
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion;
