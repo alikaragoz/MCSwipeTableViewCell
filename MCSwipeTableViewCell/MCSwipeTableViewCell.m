@@ -64,8 +64,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 // Utilities
 - (UIImage *)imageWithView:(UIView *)view;
 
-// Delegate Notification.
-- (void)notifyDelegate;
+// Completion block.
+- (void)executeCompletionBlock;
 
 @end
 
@@ -319,11 +319,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         }
         
         else {
-            __weak MCSwipeTableViewCell *weakSelf = self;
             [self swipeToOriginWithCompletion:^{
-                __strong MCSwipeTableViewCell *strongSelf = weakSelf;
-                [strongSelf notifyDelegate];
+                [self executeCompletionBlock];
             }];
+        }
+        
+        // We notify the delegate that we just ended swiping.
+        if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
+            [_delegate swipeTableViewCellDidEndSwiping:self];
         }
     }
 }
@@ -597,7 +600,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         _slidingView.alpha = 0;
         [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimateIcons];
     } completion:^(BOOL finished) {
-        [self notifyDelegate];
+        [self executeCompletionBlock];
     }];
 }
 
@@ -666,7 +669,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     }
 }
 
-#pragma mark - Utils
+#pragma mark - Utilities
 
 - (UIImage *)imageWithView:(UIView *)view {
     short scale = [[UIScreen mainScreen] scale];
@@ -677,9 +680,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     return image;
 }
 
-#pragma mark - Delegate Notification
+#pragma mark - Completion block
 
-- (void)notifyDelegate {
+- (void)executeCompletionBlock {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
     MCSwipeTableViewCellMode mode = MCSwipeTableViewCellModeNone;
     MCSwipeCompletionBlock completionBlock;
@@ -707,11 +710,6 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             
         default:
             break;
-    }
-    
-    // We notify the delegate that we just ended dragging.
-    if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
-        [_delegate swipeTableViewCellDidEndSwiping:self];
     }
     
     if (completionBlock) {
