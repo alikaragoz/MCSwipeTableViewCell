@@ -3,7 +3,7 @@
 //  MCSwipe Demo
 //
 //  Created by Ali Karagoz on 02/03/13.
-//  Copyright (c) 2013 Mad Castle. All rights reserved.
+//  Copyright (c) 2014 Ali Karagoz. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
