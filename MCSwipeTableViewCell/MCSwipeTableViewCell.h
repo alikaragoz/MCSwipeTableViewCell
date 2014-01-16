@@ -152,7 +152,7 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 @property (nonatomic, assign, readwrite) BOOL shouldAnimateIcons;
 
 /**
- *  Confgures the properties of a cell.
+ *  Configures the properties of a cell.
  *
  *  @param view            `UIView` of the state triggered during a swipe.
  *  @param color           `UIColor` of the state triggered during a swipe.
@@ -170,7 +170,7 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /**
  *  Swiped back the cell to it's original position
  *
- *  @param completion Callback block exectued at the end of the enimation.
+ *  @param completion Callback block executed at the end of the animation.
  */
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion;
 
