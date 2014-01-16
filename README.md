@@ -7,58 +7,83 @@ An Effort to show how one would implement a TableViewCell like the one we can se
 
 ##Demo
 ###Exit Mode
-The exit mode (`MCSwipeTableViewCellModeExit`) is the original behavior we can see in the **Mailbox**app. Swiping the cell should make it disappear.
+The exit mode `MCSwipeTableViewCellModeExit` is the original behavior we can see in the Mailbox app. Swiping the cell should make it disappear. Convenient in destructive modes.
 
 <p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-exit.gif"/></p>
 
 ###Switch Mode
-The switch mode (`MCSwipeTableViewCellModeSwitch`) is a new behavior I'm introducing. The cell will bounce back after selecting a state, this allows you to keep the cell. Very useful to switch an option quickly.
+The switch mode `MCSwipeTableViewCellModeSwitch` is a new behavior I'm introducing. The cell will bounce back after selecting a state, this allows you to keep the cell. Convenient to switch an option quickly.
 
 <p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-switch.gif"/></p>
+
+## API Reference
+Please refer to the header file [`MCSwipeTableViewCell.h`](MCSwipeTableViewCell/MCSwipeTableViewCell.h) for a complete overview of the capabilities of the class.
 
 ##Usage
 
 ```objc
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-        
+    
     MCSwipeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    if (!cell)
-    {
+    if (!cell) {
         cell = [[MCSwipeTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+        // Remove inset of iOS 7 separators.
+        if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+            cell.separatorInset = UIEdgeInsetsZero;
+        }
+        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+
+        // Setting the background color of the cell.
+        cell.contentView.backgroundColor = [UIColor whiteColor];
     }
     
-    // For the delegate callback
-    [cell setDelegate:self];
+    // Configuring the views and colors.
+    UIView *checkView = [self viewWithImageName:@"check"];
+    UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
     
-    // We need to provide the icon names and the desired colors
-    [cell setFirstStateIconName:@"check.png"
-                     firstColor:[UIColor colorWithRed:85.0/255.0 green:213.0/255.0 blue:80.0/255.0 alpha:1.0]
-            secondStateIconName:@"cross.png"
-                    secondColor:[UIColor colorWithRed:232.0/255.0 green:61.0/255.0 blue:14.0/255.0 alpha:1.0]
-                  thirdIconName:@"clock.png"
-                     thirdColor:[UIColor colorWithRed:254.0/255.0 green:217.0/255.0 blue:56.0/255.0 alpha:1.0]
-                 fourthIconName:@"list.png"
-                    fourthColor:[UIColor colorWithRed:206.0/255.0 green:149.0/255.0 blue:98.0/255.0 alpha:1.0]];
+    UIView *crossView = [self viewWithImageName:@"cross"];
+    UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
     
-    // We need to set a background to the content view of the cell
-    [cell.contentView setBackgroundColor:[UIColor whiteColor]];
+    UIView *clockView = [self viewWithImageName:@"clock"];
+    UIColor *yellowColor = [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0];
     
-    // Setting the default inactive state color to the tableView background color
+    UIView *listView = [self viewWithImageName:@"list"];
+    UIColor *brownColor = [UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0];
+    
+    // Setting the default inactive state color to the tableView background color.
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
     
-    // Setting the type of the cell
-	[cell setMode:MCSwipeTableViewCellModeExit];
+    [cell.textLabel setText:@"Switch Mode Cell"];
+    [cell.detailTextLabel setText:@"Swipe to switch"];
+    
+    // Adding gestures per state basis.
+    [cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"Checkmark\" cell");
+    }];
+    
+    [cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"Cross\" cell");
+    }];
+    
+    [cell setSwipeGestureWithView:clockView color:yellowColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"Clock\" cell");
+    }];
+    
+    [cell setSwipeGestureWithView:listView color:brownColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState4 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"List\" cell");
+    }];
     
     return cell;
-}	
+}
 ```
 
-###Delegate
+###Delegation
 
-MCSwipeTableViewCell has a delegate to retrieve the cell/state/mode of the triggered item.
+MCSwipeTableViewCell has a set of delegate methods in order to track the user behaviors. Take a look at the header file to be aware of all the methods provided by `MCSwipeTableViewCellDelegate`.
 
 ```objc
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate>
@@ -67,30 +92,71 @@ MCSwipeTableViewCell has a delegate to retrieve the cell/state/mode of the trigg
 ```objc
 #pragma mark - MCSwipeTableViewCellDelegate
 
-// When the user starts swiping the cell this method is called
+// Called when the user starts swiping the cell.
 - (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell;
 
-// When the user is dragging, this method is called and return the dragged percentage from the border
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipWithPercentage:(CGFloat)percentage;
+// Called when the user ends swiping the cell.
+- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell;
 
-// When the user releases the cell, after swiping it, this method is called
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didEndSwipingSwipingWithState:(MCSwipeTableViewCellState)state mode:(MCSwipeTableViewCellMode)mode;
-
+// Called during a swipe.
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage;
 ```
 
-###Deleting cells in Exit mode
+###Cell Deletion
 In `MCSwipeTableViewCellModeExit` mode you may want to delete the cell with a nice fading animation, the following lines will give you an idea how to execute it:
 
 ```objc
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didEndSwipingSwipingWithState:(MCSwipeTableViewCellState)state mode:(MCSwipeTableViewCellMode)mode
-{    
-    if (mode == MCSwipeTableViewCellModeExit)
-    {
-		// Remove the item in your data array and then remove it with the following method
-        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationFade];
+[cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+    NSLog(@"Did swipe \"Cross\" cell");
+   
+    // Code to delete your cell.
+    []
+}];
+```
+
+You can also ask for a confirmation before deleting a cell:
+
+```objc
+
+__strong MCTableViewController *weakSelf = self;
+
+[cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+    NSLog(@"Did swipe \"Cross\" cell");
+            
+    __strong MCTableViewController *strongSelf = weakSelf;
+    strongSelf.cellToDelete = cell;
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete?"
+                                                        message:@"Are you sure your want to delete the cell?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"No"
+                                              otherButtonTitles:@"Yes", nil];
+    [alertView show];
+}];
+```
+Then handle the `UIAlertView` action:
+
+```objc
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    // No
+    if (buttonIndex == 0) {
+        [_cellToDelete swipeToOriginWithCompletion:^{
+            NSLog(@"Swiped back");
+        }];
+        _cellToDelete = nil;
+    }
+    
+    // Yes
+    else {
+        // Code to delete your cell.
+        [...]
     }
 }
 ```
+
 There is also an example in the demo project, I recommend to take a look at it.
 
 ###Changing the trigger percentage
@@ -110,49 +176,11 @@ It is possible to put the cell back to it's position when using the `MCSwipeTabl
 }];
 ```
 
-###Customization
-You may want to change the number of states, have a color without the icon or the opposite. All those combinations are possible.
-
-In `setFirstStateIconName:` method you just need to put a `nil` in the required fields to disable a state, remove the color or the icon. 
-
-For instance if you only want to have two states out of four:
-
-```objc
-[cell setFirstStateIconName:@"check.png"
-				 firstColor:[UIColor colorWithRed:85.0/255.0 green:213.0/255.0 blue:80.0/255.0 alpha:1.0]
-		secondStateIconName:@"cross.png"
-				secondColor:[UIColor colorWithRed:232.0/255.0 green:61.0/255.0 blue:14.0/255.0 alpha:1.0]
-			  thirdIconName:nil
-				 thirdColor:nil
-			 fourthIconName:nil
-				fourthColor:nil];
-```
-Also you can set modes per state. Non-set states will use the default mode set by `-setMode:` method.
-
-```objc
-[cell setModeForState1:MCSwipeTableViewCellModeSwitch];
-[cell setModeForState3:MCSwipeTableViewCellModeSwitch];
-```
-
-You can set the color of background, apart from state colors, which will be visible just before triggering a state.
-
-```objc
-cell.defaultColor = [UIColor darkGrayColor];
-```
-
-You can choose if the icons should animate or not.
-
-```objc
-// If set NO, the icons will be standing where they appear
-// Otherwise, they will be moving along the cell
-cell.animatesIcons = NO;
-```
-
-##Consideration
+##Compatibility
 This library is not compatible with auto-layout so you will need to disable auto-layout in your xib properties.
 
 ##Requirements
-- iOS >= 5.0 (iOS 7 compatible)
+- iOS >= 5.0
 - ARC
 
 ## Contact
