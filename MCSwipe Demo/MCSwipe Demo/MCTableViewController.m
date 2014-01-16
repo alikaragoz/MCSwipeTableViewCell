@@ -138,7 +138,7 @@ static NSUInteger const kMCNumItems = 7;
     }
     
     else if (indexPath.row % kMCNumItems == 3) {
-        [cell.textLabel setText:@"Unanimated Icons"];
+        [cell.textLabel setText:@"Un-animated Icons"];
         [cell.detailTextLabel setText:@"Swipe"];
         cell.shouldAnimateIcons = NO;
         
@@ -265,7 +265,7 @@ static NSUInteger const kMCNumItems = 7;
     // No
     if (buttonIndex == 0) {
         [_cell swipeToOriginWithCompletion:^{
-            NSLog(@"Swipped back");
+            NSLog(@"Swiped back");
         }];
         _cell = nil;
     }
