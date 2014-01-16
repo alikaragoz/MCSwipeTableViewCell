@@ -14,7 +14,7 @@ static NSUInteger const kMCNumItems = 7;
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, assign) NSUInteger nbItems;
-@property (nonatomic, strong) MCSwipeTableViewCell *cell;
+@property (nonatomic, strong) MCSwipeTableViewCell *cellToDelete;
 
 @end
 
@@ -71,6 +71,15 @@ static NSUInteger const kMCNumItems = 7;
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
         cell.contentView.backgroundColor = [UIColor whiteColor];
     }
+    
+    [self configureCell:cell forRowAtIndexPath:indexPath];
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDataSource
+
+- (void)configureCell:(MCSwipeTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UIView *checkView = [self viewWithImageName:@"check"];
     UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
@@ -187,12 +196,10 @@ static NSUInteger const kMCNumItems = 7;
         [cell.textLabel setText:@"Exit Mode Cell + Confirmation"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
         
-        __strong MCTableViewController *weakSelf = self;
         [cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
             NSLog(@"Did swipe \"Cross\" cell");
             
-            __strong MCTableViewController *strongSelf = weakSelf;
-            strongSelf.cell = cell;
+            _cellToDelete = cell;
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete?"
                                                                 message:@"Are you sure your want to delete the cell?"
@@ -201,10 +208,7 @@ static NSUInteger const kMCNumItems = 7;
                                                       otherButtonTitles:@"Yes", nil];
             [alertView show];
         }];
-        
     }
-    
-    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -264,16 +268,16 @@ static NSUInteger const kMCNumItems = 7;
     
     // No
     if (buttonIndex == 0) {
-        [_cell swipeToOriginWithCompletion:^{
+        [_cellToDelete swipeToOriginWithCompletion:^{
             NSLog(@"Swiped back");
         }];
-        _cell = nil;
+        _cellToDelete = nil;
     }
     
     // Yes
     else {
         _nbItems--;
-        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:_cell]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:_cellToDelete]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

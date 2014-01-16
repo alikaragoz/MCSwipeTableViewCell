@@ -146,7 +146,6 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     [super prepareForReuse];
     
     [self uninstallSwipingView];
-    
     [self initDefaults];
 }
 
