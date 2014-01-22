@@ -222,40 +222,33 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     NSParameterAssert(color);
     
     // Depending on the state we assign the attributes
-    switch (state) {
-        case MCSwipeTableViewCellState1: {
-            _completionBlock1 = completionBlock;
-            _view1 = view;
-            _color1 = color;
-            _modeForState1 = mode;
-            
-        } break;
-            
-        case MCSwipeTableViewCellState2: {
-            _completionBlock2 = completionBlock;
-            _view2 = view;
-            _color2 = color;
-            _modeForState2 = mode;
-        } break;
-            
-        case MCSwipeTableViewCellState3: {
-            _completionBlock3 = completionBlock;
-            _view3 = view;
-            _color3 = color;
-            _modeForState3 = mode;
-        } break;
-            
-        case MCSwipeTableViewCellState4: {
-            _completionBlock4 = completionBlock;
-            _view4 = view;
-            _color4 = color;
-            _modeForState4 = mode;
-        } break;
-            
-        default:
-            break;
+    if ((state & MCSwipeTableViewCellState1) == MCSwipeTableViewCellState1) {
+        _completionBlock1 = completionBlock;
+        _view1 = view;
+        _color1 = color;
+        _modeForState1 = mode;
     }
     
+    if ((state & MCSwipeTableViewCellState2) == MCSwipeTableViewCellState2) {
+        _completionBlock2 = completionBlock;
+        _view2 = view;
+        _color2 = color;
+        _modeForState2 = mode;
+    }
+    
+    if ((state & MCSwipeTableViewCellState3) == MCSwipeTableViewCellState3) {
+        _completionBlock3 = completionBlock;
+        _view3 = view;
+        _color3 = color;
+        _modeForState3 = mode;
+    }
+    
+    if ((state & MCSwipeTableViewCellState4) == MCSwipeTableViewCellState4) {
+        _completionBlock4 = completionBlock;
+        _view4 = view;
+        _color4 = color;
+        _modeForState4 = mode;
+    }
 }
 
 #pragma mark - Handle Gestures

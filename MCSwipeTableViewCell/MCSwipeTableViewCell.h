@@ -11,22 +11,22 @@
 @class MCSwipeTableViewCell;
 
 /** Describes the state that has been triggered by the user. */
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState) {
+typedef NS_OPTIONS(NSUInteger, MCSwipeTableViewCellState) {
 
     /** No state has been triggered. */
     MCSwipeTableViewCellStateNone = 0,
     
     /** 1st state triggered during a Left -> Right swipe. */
-    MCSwipeTableViewCellState1,
+    MCSwipeTableViewCellState1 = (1 << 0),
     
     /** 2nd state triggered during a Left -> Right swipe. */
-    MCSwipeTableViewCellState2,
+    MCSwipeTableViewCellState2 = (1 << 1),
 
     /** 1st state triggered during a Right -> Left swipe. */
-    MCSwipeTableViewCellState3,
+    MCSwipeTableViewCellState3 = (1 << 2),
     
     /** 2nd state triggered during a Right -> Left swipe. */
-    MCSwipeTableViewCellState4
+    MCSwipeTableViewCellState4 = (1 << 3)
 };
 
 /** Describes the mode used during a swipe */
