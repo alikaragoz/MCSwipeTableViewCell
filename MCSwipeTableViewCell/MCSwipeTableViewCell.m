@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 // Movement
 - (void)animateWithOffset:(CGFloat)offset;
 - (void)slideViewWithPercentage:(CGFloat)percentage view:(UIView *)view isDragging:(BOOL)isDragging;
-- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction;
+- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction andMode:(MCSwipeTableViewCellMode)mode;
 
 // Utilities
 - (UIImage *)imageWithView:(UIView *)view;
@@ -319,7 +319,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         
         if ( (cellMode == MCSwipeTableViewCellModeExit || cellMode == MCSwipeTableViewCellModeHold)
             && _direction != MCSwipeTableViewCellDirectionCenter) {
-            [self moveWithDuration:animationDuration andDirection:_direction];
+            [self moveWithDuration:animationDuration andDirection:_direction andMode:cellMode];
         }
         
         else {
@@ -575,9 +575,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _slidingView.frame = activeViewFrame;
 }
 
-- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
+- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction andMode:(MCSwipeTableViewCellMode)mode {
     
-    _isExited = YES;
+    if (mode == MCSwipeTableViewCellModeExit) {
+        _isExited = YES;
+    }
+
     CGFloat origin;
     
     if (direction == MCSwipeTableViewCellDirectionLeft) {
@@ -604,7 +607,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
         _contentScreenshotView.frame = frame;
-        _slidingView.alpha = 0;
+        if (mode == MCSwipeTableViewCellModeExit) {
+            _slidingView.alpha = 0;
+        }
         [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimateIcons];
     } completion:^(BOOL finished) {
         [self executeCompletionBlock];

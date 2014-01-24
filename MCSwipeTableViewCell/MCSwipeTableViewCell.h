@@ -38,7 +38,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeExit,
 
     /** Upon swipe the cell if automatically swiped back to it's initial position. */
-    MCSwipeTableViewCellModeSwitch
+    MCSwipeTableViewCellModeSwitch,
+
+    /** Upon swipe the cell stays in the fully swiped position and remains visable and swipeable */
+    MCSwipeTableViewCellModeHold
 };
 
 /**
@@ -82,7 +85,6 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 
 /** Color for background during a Right -> Left swipe, when no state has been triggered. */
 @property (nonatomic, strong, readwrite) UIColor *rightDefaultColor;
-
 
 /** 1st `UIColor` of the state triggered during a Left -> Right swipe. */
 @property (nonatomic, strong, readwrite) UIColor *color1;
