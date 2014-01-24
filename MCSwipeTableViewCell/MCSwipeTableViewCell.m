@@ -253,6 +253,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     }
 }
 
+- (UIColor *)rightDefaultColor {
+    if (!_rightDefaultColor) {
+        return self.defaultColor;
+    } else {
+        return _rightDefaultColor;
+    }
+}
+
 #pragma mark - Handle Gestures
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
@@ -309,7 +317,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             cellMode = self.modeForState4;
         }
         
-        if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter) {
+        if ( (cellMode == MCSwipeTableViewCellModeExit || cellMode == MCSwipeTableViewCellModeHold)
+            && _direction != MCSwipeTableViewCellDirectionCenter) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         }
         
@@ -446,8 +455,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     UIColor *color;
     
     // Background Color
-    
-    color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
+    if (_direction == MCSwipeTableViewCellDirectionRight) {
+        color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
+    } else {
+        color = self.rightDefaultColor ? self.rightDefaultColor : [UIColor clearColor];
+    }
     
     if (percentage > _firstTrigger && _modeForState1) {
         color = _color1;
@@ -611,7 +623,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             _contentScreenshotView.frame = frame;
             
             // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+            } else {
+                _colorIndicatorView.backgroundColor = self.rightDefaultColor;
+            }
             
             _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
@@ -637,8 +653,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
-            // Setting back the color to the default.
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+            } else {
+                _colorIndicatorView.backgroundColor = self.rightDefaultColor;
+            }
             
         } completion:^(BOOL finished1) {
             

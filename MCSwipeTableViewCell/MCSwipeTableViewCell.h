@@ -80,6 +80,9 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Color for background, when no state has been triggered. */
 @property (nonatomic, strong, readwrite) UIColor *defaultColor;
 
+/** Color for background during a Right -> Left swipe, when no state has been triggered. */
+@property (nonatomic, strong, readwrite) UIColor *rightDefaultColor;
+
 
 /** 1st `UIColor` of the state triggered during a Left -> Right swipe. */
 @property (nonatomic, strong, readwrite) UIColor *color1;
