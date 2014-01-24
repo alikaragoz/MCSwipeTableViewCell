@@ -10,7 +10,7 @@
 
 @class MCSwipeTableViewCell;
 
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState) {
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState){
     MCSwipeTableViewCellStateNone = 0,
     MCSwipeTableViewCellState1,
     MCSwipeTableViewCellState2,
@@ -18,13 +18,13 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState) {
     MCSwipeTableViewCellState4
 };
 
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection){
     MCSwipeTableViewCellDirectionLeft = 0,
     MCSwipeTableViewCellDirectionCenter,
     MCSwipeTableViewCellDirectionRight
 };
 
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
     MCSwipeTableViewCellModeNone = 0,
     MCSwipeTableViewCellModeExit,
     MCSwipeTableViewCellModeSwitch
@@ -37,9 +37,6 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 // When the user starts swiping the cell this method is called
 - (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell;
 
-// When the user ends swiping the cell this method is called
-- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell;
-
 // When the user is dragging, this method is called and return the dragged percentage from the border
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipWithPercentage:(CGFloat)percentage;
 
@@ -48,7 +45,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 
 @end
 
-@interface MCSwipeTableViewCell : UITableViewCell
+@interface MCSwipeTableViewCell : UITableViewCell <UIDynamicAnimatorDelegate>
 
 @property (nonatomic, assign) id <MCSwipeTableViewCellDelegate> delegate;
 
@@ -62,12 +59,17 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
 @property (nonatomic, strong) UIColor *thirdColor;
 @property (nonatomic, strong) UIColor *fourthColor;
 
-// Percentage of when the first and second action are activated, respectively
-@property (nonatomic, assign) CGFloat firstTrigger;
-@property (nonatomic, assign) CGFloat secondTrigger;
+// Views to be used instead of icons
+@property (nonatomic, strong) UIView* firstView;
+@property (nonatomic, strong) UIView* secondView;
+@property (nonatomic, strong) UIView* thirdView;
+@property (nonatomic, strong) UIView* fourthView;
 
 // Color for background, when any state hasn't triggered yet
 @property (nonatomic, strong) UIColor *defaultColor;
+
+// Color for highlight
+@property (nonatomic, strong) UIColor *highlightColor;
 
 // This is the general mode for all states
 // If a specific mode for a state isn't defined, this mode will be taken in action
@@ -94,6 +96,17 @@ secondStateIconName:(NSString *)secondIconName
      fourthIconName:(NSString *)fourthIconName
         fourthColor:(UIColor *)fourthColor;
 
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString *)reuseIdentifier
+     firstStateView:(UIView *)firstView
+         firstColor:(UIColor *)firstColor
+    secondStateView:(UIView *)secondView
+        secondColor:(UIColor *)secondColor
+     thirdStateView:(UIView *)thirdView
+         thirdColor:(UIColor *)thirdColor
+    fourthStateView:(UIView *)fourthView
+        fourthColor:(UIColor *)fourthColor;
+
 - (void)setFirstStateIconName:(NSString *)firstIconName
                    firstColor:(UIColor *)firstColor
           secondStateIconName:(NSString *)secondIconName
@@ -103,7 +116,15 @@ secondStateIconName:(NSString *)secondIconName
                fourthIconName:(NSString *)fourthIconName
                   fourthColor:(UIColor *)fourthColor;
 
+- (void)setFirstStateView:(UIView *)firstView
+               firstColor:(UIColor *)firstColor
+          secondStateView:(UIView *)secondView
+              secondColor:(UIColor *)secondColor
+           thirdStateView:(UIView *)thirdView
+               thirdColor:(UIColor *)thirdColor
+          fourthStateView:(UIView *)fourthView
+              fourthColor:(UIColor *)fourthColor;
 
-// Manually swipe to origin
-- (void)swipeToOriginWithCompletion:(void(^)(void))completion;
+- (void)bounceDirection:(MCSwipeTableViewCellDirection)direction withVelocity:(CGFloat)velocity;
+
 @end
