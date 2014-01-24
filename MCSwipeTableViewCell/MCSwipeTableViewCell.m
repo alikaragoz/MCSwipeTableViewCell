@@ -116,6 +116,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
+    _thirdTrigger = kMCStop1;
+    _fourthTrigger = kMCStop2;
     
     _damping = kMCDamping;
     _velocity = kMCVelocity;
@@ -415,7 +417,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -_fourthTrigger && _modeForState4) {
         view = _view4;
     }
     
@@ -429,8 +431,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         alpha = percentage / _firstTrigger;
     }
     
-    else if (percentage < 0 && percentage > -_firstTrigger) {
-        alpha = fabsf(percentage / _firstTrigger);
+    else if (percentage < 0 && percentage > -_thirdTrigger) {
+        alpha = fabsf(percentage / _thirdTrigger);
     }
     
     else {
@@ -455,11 +457,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         color = _color2;
     }
     
-    if (percentage < -_firstTrigger && _modeForState3) {
+    if (percentage < -_thirdTrigger && _modeForState3) {
         color = _color3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -_fourthTrigger && _modeForState4) {
         color = _color4;
     }
     
@@ -479,11 +481,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         state = MCSwipeTableViewCellState2;
     }
     
-    if (percentage <= -_firstTrigger && _modeForState3) {
+    if (percentage <= -_thirdTrigger && _modeForState3) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -_fourthTrigger && _modeForState4) {
         state = MCSwipeTableViewCellState4;
     }
     
@@ -528,12 +530,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             position.x = [self offsetWithPercentage:percentage - (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < 0 && percentage >= -_firstTrigger) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < 0 && percentage >= -_thirdTrigger) {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < -_firstTrigger) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < -_thirdTrigger) {
+            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
     }
     
@@ -543,7 +545,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         }
         
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
         else {
