@@ -458,7 +458,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     UIColor *color;
     
     // Background Color
-    if (_direction == MCSwipeTableViewCellDirectionRight) {
+    if (percentage >= 0.0f) {
         color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     } else {
         color = self.rightDefaultColor ? self.rightDefaultColor : [UIColor clearColor];
