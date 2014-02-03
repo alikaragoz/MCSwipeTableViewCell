@@ -116,8 +116,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
-    _thirdTrigger = kMCStop1;
-    _fourthTrigger = kMCStop2;
+    _thirdTrigger = NAN; // NAN implies use firstTrigger
+    _fourthTrigger = NAN; // NAN implies use secondTrigger
     
     _damping = kMCDamping;
     _velocity = kMCVelocity;
@@ -421,7 +421,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= self.secondTrigger && _modeForState2) {
         view = _view2;
     }
     
@@ -429,7 +429,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view3;
     }
     
-    if (percentage <= -_fourthTrigger && _modeForState4) {
+    if (percentage <= -self.fourthTrigger && _modeForState4) {
         view = _view4;
     }
     
@@ -439,12 +439,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 - (CGFloat)alphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
-    if (percentage >= 0 && percentage < _firstTrigger) {
-        alpha = percentage / _firstTrigger;
+    if (percentage >= 0 && percentage < self.firstTrigger) {
+        alpha = percentage / self.firstTrigger;
     }
     
-    else if (percentage < 0 && percentage > -_thirdTrigger) {
-        alpha = fabsf(percentage / _thirdTrigger);
+    else if (percentage < 0 && percentage > -self.thirdTrigger) {
+        alpha = fabsf(percentage / self.thirdTrigger);
     }
     
     else {
@@ -464,19 +464,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         color = self.rightDefaultColor ? self.rightDefaultColor : [UIColor clearColor];
     }
     
-    if (percentage > _firstTrigger && _modeForState1) {
+    if (percentage > self.firstTrigger && _modeForState1) {
         color = _color1;
     }
     
-    if (percentage > _secondTrigger && _modeForState2) {
+    if (percentage > self.secondTrigger && _modeForState2) {
         color = _color2;
     }
     
-    if (percentage < -_thirdTrigger && _modeForState3) {
+    if (percentage < -self.thirdTrigger && _modeForState3) {
         color = _color3;
     }
     
-    if (percentage <= -_fourthTrigger && _modeForState4) {
+    if (percentage <= -self.fourthTrigger && _modeForState4) {
         color = _color4;
     }
     
@@ -488,19 +488,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     state = MCSwipeTableViewCellStateNone;
     
-    if (percentage >= _firstTrigger && _modeForState1) {
+    if (percentage >= self.firstTrigger && _modeForState1) {
         state = MCSwipeTableViewCellState1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= self.secondTrigger && _modeForState2) {
         state = MCSwipeTableViewCellState2;
     }
     
-    if (percentage <= -_thirdTrigger && _modeForState3) {
+    if (percentage <= -self.thirdTrigger && _modeForState3) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= -_fourthTrigger && _modeForState4) {
+    if (percentage <= -self.fourthTrigger && _modeForState4) {
         state = MCSwipeTableViewCellState4;
     }
     
@@ -537,30 +537,30 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
     if (isDragging) {
-        if (percentage >= 0 && percentage < _firstTrigger) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        if (percentage >= 0 && percentage < self.firstTrigger) {
+            position.x = [self offsetWithPercentage:(self.firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage >= _firstTrigger) {
-            position.x = [self offsetWithPercentage:percentage - (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage >= self.firstTrigger) {
+            position.x = [self offsetWithPercentage:percentage - (self.firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < 0 && percentage >= -_thirdTrigger) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < 0 && percentage >= -self.thirdTrigger) {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < -_thirdTrigger) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < -self.thirdTrigger) {
+            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
     }
     
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = [self offsetWithPercentage:(self.firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
         else {
@@ -738,6 +738,23 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         completionBlock(self, state, mode);
     }
     
+}
+
+#pragma mark - Properties
+- (CGFloat)thirdTrigger {
+    if (isnan(_thirdTrigger)) {
+        return _firstTrigger;
+    } else {
+        return _thirdTrigger;
+    }
+}
+
+- (CGFloat)fourthTrigger {
+    if (isnan(_fourthTrigger)) {
+        return _secondTrigger;
+    } else {
+        return _fourthTrigger;
+    }
 }
 
 @end
