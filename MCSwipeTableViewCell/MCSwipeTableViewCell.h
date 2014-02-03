@@ -206,6 +206,13 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 - (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell;
 
 /**
+ *  Called when the user ends swiping the cell and includes the final state of the cell.
+ *
+ *  @param cell `MCSwipeTableViewCell` currently swiped.
+ */
+- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell withState:(MCSwipeTableViewCellState)state;
+
+/**
  *  Called during a swipe.
  *
  *  @param cell         `MCSwipeTableViewCell` currently swiped.

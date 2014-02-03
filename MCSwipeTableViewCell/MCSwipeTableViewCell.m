@@ -332,6 +332,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
             [_delegate swipeTableViewCellDidEndSwiping:self];
         }
+        if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:withState:)]) {
+            [_delegate swipeTableViewCellDidEndSwiping:self withState:cellState];
+        }
     }
 }
 
