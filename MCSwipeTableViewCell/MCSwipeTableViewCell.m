@@ -536,21 +536,25 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     CGPoint position = CGPointZero;
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
+    
     if (isDragging) {
-        if (percentage >= 0 && percentage < self.firstTrigger) {
-            position.x = [self offsetWithPercentage:(self.firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        if (percentage >= 0 && percentage < _firstTrigger) {
+            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage >= self.firstTrigger) {
-            position.x = [self offsetWithPercentage:percentage - (self.firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage >= _firstTrigger) {
+            position.x = [self offsetWithPercentage:percentage - (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < 0 && percentage >= -self.thirdTrigger) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < 0 && percentage >= -(50.0f / CGRectGetWidth(self.bounds))) {
+            //            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)]; // This tries to center halfway to the first trigger
+            position.x = CGRectGetWidth(self.bounds) * 1.5f - 30.0f - 20.0f;
+
         }
         
-        else if (percentage < -self.thirdTrigger) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < -(50.0f / CGRectGetWidth(self.bounds))) {
+            //            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds)*1.5f + [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)];
         }
     }
     
@@ -560,7 +564,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         }
         
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            //position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) * 1.5f - 30.0f - 20.0f;
         }
         
         else {
