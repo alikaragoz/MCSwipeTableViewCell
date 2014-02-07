@@ -135,6 +135,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _color3 = nil;
     _color4 = nil;
     
+    _minLeftViewPercentWidth = NAN;
+    _minRightViewPercentWidth = NAN;
+    
+    _shouldCenterLeftSlideView = YES;
+    _shouldCenterRightSlideView = YES;
+    
     _activeView = nil;
     _view1 = nil;
     _view2 = nil;
@@ -536,39 +542,54 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     CGPoint position = CGPointZero;
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
+    CGFloat minLeftWidth = self.minLeftViewPercentWidth;
+    CGFloat minRightWidth = self.minRightViewPercentWidth;
     
     if (isDragging) {
-        if (percentage >= 0 && percentage < _firstTrigger) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage >= _firstTrigger) {
-            position.x = [self offsetWithPercentage:percentage - (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage < 0 && percentage >= -(50.0f / CGRectGetWidth(self.bounds))) {
-            //            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)]; // This tries to center halfway to the first trigger
-            position.x = CGRectGetWidth(self.bounds) * 1.5f - 30.0f - 20.0f;
-
-        }
-        
-        else if (percentage < -(50.0f / CGRectGetWidth(self.bounds))) {
-            //            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-            position.x = CGRectGetWidth(self.bounds)*1.5f + [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)];
+        if (percentage >= 0 && percentage < minLeftWidth) {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = [self offsetWithPercentage:(minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = [self offsetWithPercentage:(minLeftWidth) relativeToWidth:CGRectGetWidth(self.bounds)] - CGRectGetWidth(view.frame)/2.0f;
+            }
+            
+        } else if (percentage >= minLeftWidth) {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = [self offsetWithPercentage:percentage - (minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] - CGRectGetWidth(view.frame)/2.0f;
+            }
+            
+        } else if (percentage < 0 && percentage >= -minRightWidth) {
+            if (self.shouldCenterRightSlideView) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(minRightWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:minRightWidth relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
+            }
+        } else if (percentage < -(minRightWidth)) {
+            if (self.shouldCenterRightSlideView) {
+                position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (minRightWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
+            }
         }
     }
     
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(self.firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            //position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(self.thirdTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-            position.x = CGRectGetWidth(self.bounds) * 1.5f - 30.0f - 20.0f;
-        }
-        
-        else {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = [self offsetWithPercentage:(minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = [self offsetWithPercentage:(minLeftWidth) relativeToWidth:CGRectGetWidth(self.bounds)] - CGRectGetWidth(view.frame)/2.0f;
+            }
+
+        } else if (_direction == MCSwipeTableViewCellDirectionLeft) {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:minRightWidth relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
+            }
+        } else {
             return;
         }
     }
@@ -759,6 +780,22 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         return _secondTrigger;
     } else {
         return _fourthTrigger;
+    }
+}
+
+- (CGFloat)minLeftViewPercentWidth {
+    if (isnan(_minLeftViewPercentWidth)) {
+        return self.firstTrigger;
+    } else {
+        return _minLeftViewPercentWidth;
+    }
+}
+
+- (CGFloat)minRightViewPercentWidth {
+    if (isnan(_minRightViewPercentWidth)) {
+        return self.thirdTrigger;
+    } else {
+        return _minRightViewPercentWidth;
     }
 }
 
