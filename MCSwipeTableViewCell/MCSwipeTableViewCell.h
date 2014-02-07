@@ -177,6 +177,11 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Boolean to enable/disable the animation of the view during the swipe.  */
 @property (nonatomic, assign, readwrite) BOOL shouldAnimateIcons;
 
+/** Boolean to enable/disable the the spring/damper behavior (which also delays
+ calling of the completion delegate method  */
+@property (nonatomic, assign, readwrite) BOOL shouldUseSpringWithDamping;
+
+
 /**
  *  Configures the properties of a cell.
  *

@@ -140,6 +140,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     _shouldCenterLeftSlideView = YES;
     _shouldCenterRightSlideView = YES;
+    _shouldUseSpringWithDamping = YES;
     
     _activeView = nil;
     _view1 = nil;
@@ -584,8 +585,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             }
 
         } else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            if (self.shouldCenterLeftSlideView) {
-                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            if (self.shouldCenterRightSlideView) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(minRightWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
             } else {
             position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:minRightWidth relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
             }
@@ -650,8 +651,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
         
-        [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            
+        void (^animationBlock)() = ^{
             CGRect frame = _contentScreenshotView.frame;
             frame.origin.x = 0;
             _contentScreenshotView.frame = frame;
@@ -666,7 +666,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
-        } completion:^(BOOL finished) {
+        };
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
             
             _isExited = NO;
             [self uninstallSwipingView];
@@ -674,7 +675,15 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             if (completion) {
                 completion();
             }
-        }];
+        };
+        
+        if (self.shouldUseSpringWithDamping) {
+            [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:animationBlock completion:completionBlock];
+
+        } else {
+            [UIView animateWithDuration:_animationDuration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:animationBlock completion:completionBlock];
+        }
+
     }
     
     else {
