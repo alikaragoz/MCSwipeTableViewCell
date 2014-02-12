@@ -142,11 +142,11 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 @property (nonatomic, assign, readwrite) CGFloat fourthTrigger;
 
 /** Optional Minimum percentage of cell width to display of view 3 (or view 4) when swiping Right -> Left. If this
- value is not specified, cell uses the edge of thirdTrigger **/
+ value is not specified, cell uses the edge of thirdTrigger */
 @property (nonatomic, assign, readwrite) CGFloat minRightViewPercentWidth;
 
 /** Optional Minimum percentage of cell width to display of view 1 (or view 2) when swiping Left -> Right. If this
- value is not specified, cell uses the edge of thirdTrigger **/
+ value is not specified, cell uses the edge of thirdTrigger */
 @property (nonatomic, assign, readwrite) CGFloat minLeftViewPercentWidth;
 
 /** Boolean to enable/disable centering the sliding view. YES by default. When disabled, the left sliding view edge is placed next to the cell. */
