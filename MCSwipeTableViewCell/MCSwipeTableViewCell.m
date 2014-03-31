@@ -255,7 +255,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     
-    if (!_shouldDrag || _isExited) {
+    if (![self shouldDrag] || _isExited) {
         return;
     }
     
