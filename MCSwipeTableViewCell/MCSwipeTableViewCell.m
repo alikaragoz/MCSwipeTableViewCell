@@ -25,6 +25,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     MCSwipeTableViewCellDirectionRight
 };
 
+#define SNAPSHOT(view) [view respondsToSelector:@selector(snapshotViewAfterScreenUpdates:)] ? [view snapshotViewAfterScreenUpdates:YES] : [[UIImageView alloc] initWithImage:[self imageWithView:view]]
+
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) MCSwipeTableViewCellDirection direction;
@@ -32,7 +34,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 @property (nonatomic, assign) BOOL isExited;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-@property (nonatomic, strong) UIImageView *contentScreenshotView;
+@property (nonatomic, strong) UIView *contentScreenshotView;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 @property (nonatomic, strong) UIView *slidingView;
 @property (nonatomic, strong) UIView *activeView;
@@ -158,15 +160,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     // If the content view background is transparent we get the background color.
     BOOL isContentViewBackgroundClear = !self.contentView.backgroundColor;
-    if (isContentViewBackgroundClear) {
+    BOOL hasBackgroundView = (self.selectedBackgroundView && self.isHighlighted) || (self.backgroundView && !self.isHighlighted);
+    if (isContentViewBackgroundClear && !hasBackgroundView) {
         BOOL isBackgroundClear = [self.backgroundColor isEqual:[UIColor clearColor]];
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
-    }
-    
-    UIImage *contentViewScreenshotImage = [self imageWithView:self];
-    
-    if (isContentViewBackgroundClear) {
-        self.contentView.backgroundColor = nil;
     }
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
@@ -178,7 +175,25 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _slidingView.contentMode = UIViewContentModeCenter;
     [_colorIndicatorView addSubview:_slidingView];
     
-    _contentScreenshotView = [[UIImageView alloc] initWithImage:contentViewScreenshotImage];
+    _contentScreenshotView = [[UIView alloc] initWithFrame:self.bounds];
+    
+    if (self.backgroundView || self.selectedBackgroundView) {
+        if (self.isHighlighted && self.selectedBackgroundView) {
+            [_contentScreenshotView addSubview:SNAPSHOT(self.selectedBackgroundView)];
+        }
+        else if (!self.isHighlighted && self.backgroundView) {
+            [_contentScreenshotView addSubview:SNAPSHOT(self.backgroundView)];
+        }
+    }
+    else {
+        [_contentScreenshotView addSubview:SNAPSHOT(self)];
+    }
+    [_contentScreenshotView addSubview:SNAPSHOT(self.contentView)];
+    
+    if (isContentViewBackgroundClear) {
+        self.contentView.backgroundColor = nil;
+    }
+    
     [self addSubview:_contentScreenshotView];
 }
 
