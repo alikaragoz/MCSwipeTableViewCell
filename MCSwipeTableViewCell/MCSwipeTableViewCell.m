@@ -648,6 +648,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
                 _colorIndicatorView.backgroundColor = self.defaultColor;
                 _slidingView.alpha = 0;
             }
+            else {
+                _slidingView.alpha = 1;
+            }
             
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
