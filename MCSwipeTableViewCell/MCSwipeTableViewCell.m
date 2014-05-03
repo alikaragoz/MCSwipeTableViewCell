@@ -326,14 +326,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         }
         
-        else if (cellMode == MCSwipeTableViewCellModeSwitch) {
+        else if (cellMode == MCSwipeTableViewCellModeSwitch || cellState == MCSwipeTableViewCellModeNone) {
             [self swipeToOriginWithCompletion:^{
-                [self executeCompletionBlock];
+                [self executeCompletionBlockForState:cellState];
             }];
         }
         else {
             [self swipeToStickyPositionWithCompletion:^{
-                [self executeCompletionBlock];
+                [self executeCompletionBlockForState:cellState];
             }];
         }
         
@@ -719,6 +719,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 
 - (void)executeCompletionBlock {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
+    [self executeCompletionBlockForState:state];
+}
+
+- (void)executeCompletionBlockForState:(MCSwipeTableViewCellState)state {
     MCSwipeTableViewCellMode mode = MCSwipeTableViewCellModeNone;
     MCSwipeCompletionBlock completionBlock;
     
