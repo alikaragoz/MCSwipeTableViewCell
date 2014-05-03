@@ -34,11 +34,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     /** Disabled swipe.  */
     MCSwipeTableViewCellModeNone = 0,
 
-    /** Upon swipe the cell if exited from the view. Useful for destructive actions. */
+    /** Upon swipe the cell is exited from the view. Useful for destructive actions. */
     MCSwipeTableViewCellModeExit,
 
-    /** Upon swipe the cell if automatically swiped back to it's initial position. */
-    MCSwipeTableViewCellModeSwitch
+    /** Upon swipe the cell is automatically swiped back to it's initial position. */
+    MCSwipeTableViewCellModeSwitch,
+
+    /** Upon swipe the cell is automatically swiped back to the width of the view for the swipe gesture. */
+    MCSwipeTableViewCellModeSticky
 };
 
 /**

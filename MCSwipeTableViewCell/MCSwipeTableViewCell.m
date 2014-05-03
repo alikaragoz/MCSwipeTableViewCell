@@ -326,8 +326,13 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         }
         
-        else {
+        else if (cellMode == MCSwipeTableViewCellModeSwitch) {
             [self swipeToOriginWithCompletion:^{
+                [self executeCompletionBlock];
+            }];
+        }
+        else {
+            [self swipeToStickyPositionWithCompletion:^{
                 [self executeCompletionBlock];
             }];
         }
@@ -612,7 +617,17 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     }];
 }
 
+- (void)swipeToStickyPositionWithCompletion:(void(^)(void))completion {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    UIView *currentView = [self viewWithPercentage:self.currentPercentage];
+    [self swipeToOriginWithCompletion:completion offset:CGRectGetWidth(currentView.frame)];
+}
+
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion {
+    [self swipeToOriginWithCompletion:completion offset:0];
+}
+
+- (void)swipeToOriginWithCompletion:(void(^)(void))completion offset:(CGFloat)offset {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
     
     if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
@@ -620,19 +635,28 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             CGRect frame = _contentScreenshotView.frame;
-            frame.origin.x = 0;
+            if (self.currentPercentage >= 0) {
+                frame.origin.x = offset;
+            }
+            else {
+                frame.origin.x = -1 * offset;
+            }
             _contentScreenshotView.frame = frame;
             
             // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (offset == 0) {
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+                _slidingView.alpha = 0;
+            }
             
-            _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
         } completion:^(BOOL finished) {
             
             _isExited = NO;
-            [self uninstallSwipingView];
+            if (offset == 0) {
+                [self uninstallSwipingView];
+            }
             
             if (completion) {
                 completion();
