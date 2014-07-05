@@ -156,18 +156,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         return;
     }
     
-    // If the content view background is transparent we get the background color.
-    BOOL isContentViewBackgroundClear = !self.contentView.backgroundColor;
-    if (isContentViewBackgroundClear) {
-        BOOL isBackgroundClear = [self.backgroundColor isEqual:[UIColor clearColor]];
-        self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
-    }
-    
     UIImage *contentViewScreenshotImage = [self imageWithView:self];
-    
-    if (isContentViewBackgroundClear) {
-        self.contentView.backgroundColor = nil;
-    }
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     _colorIndicatorView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
@@ -176,10 +165,23 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     _slidingView = [[UIView alloc] init];
     _slidingView.contentMode = UIViewContentModeCenter;
-    [_colorIndicatorView addSubview:_slidingView];
+    [self addSubview:_slidingView];
     
     _contentScreenshotView = [[UIImageView alloc] initWithImage:contentViewScreenshotImage];
     [self addSubview:_contentScreenshotView];
+    
+    for (UIView *view in [self.subviews[0] subviews]) {
+        if (view == _contentScreenshotView || view == _colorIndicatorView || view == _slidingView) {
+            view.hidden = NO;
+        } else {
+            view.hidden = YES;
+        }
+    }
+    
+    [self.contentScreenshotView.layer addObserver:self
+           forKeyPath:@"position"
+              options:NSKeyValueObservingOptionOld
+              context:NULL];
 }
 
 - (void)uninstallSwipingView {
@@ -195,6 +197,32 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     [_contentScreenshotView removeFromSuperview];
     _contentScreenshotView = nil;
+    
+    for (UIView *view in [self.subviews[0] subviews]) {
+        view.hidden = NO;
+    }
+    
+    [self.contentScreenshotView.layer removeObserver:self
+              forKeyPath:@"position"];
+}
+
+- (void)observeValueForKeyPath:(NSString*)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary*)change
+                       context:(void*)context {
+    if([keyPath isEqualToString:@"position"]) {
+        CGRect contentFrame = [self.contentScreenshotView.layer frame];
+        if (contentFrame.origin.x > 0.0f) {
+            CGRect colorFrame = self.colorIndicatorView.frame;
+            colorFrame.size.width = contentFrame.origin.x;
+            self.colorIndicatorView.frame = colorFrame;
+        } else {
+            CGRect colorFrame = self.colorIndicatorView.frame;
+            colorFrame.origin.x = contentFrame.origin.x + contentFrame.size.width;
+            colorFrame.size.width = contentFrame.size.width - contentFrame.origin.x;
+            self.colorIndicatorView.frame = colorFrame;
+        }
+    }
 }
 
 - (void)setViewOfSlidingView:(UIView *)slidingView {
@@ -255,7 +283,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     
-    if (![self shouldDrag] || _isExited) {
+    if (!_shouldDrag || _isExited) {
         return;
     }
     
