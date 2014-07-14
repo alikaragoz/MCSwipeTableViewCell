@@ -118,7 +118,7 @@ You can also ask for a confirmation before deleting a cell:
 
 ```objc
 
-__strong MCTableViewController *weakSelf = self;
+__weak MCTableViewController *weakSelf = self;
 
 [cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
     NSLog(@"Did swipe \"Cross\" cell");
