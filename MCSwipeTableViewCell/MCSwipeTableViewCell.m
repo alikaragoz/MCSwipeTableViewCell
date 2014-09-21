@@ -351,7 +351,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         }
     }
     
-    return NO;
+    return YES;
 }
 
 #pragma mark - Percentage
