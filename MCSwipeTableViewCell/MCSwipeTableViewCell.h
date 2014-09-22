@@ -38,7 +38,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeExit,
 
     /** Upon swipe the cell if automatically swiped back to it's initial position. */
-    MCSwipeTableViewCellModeSwitch
+    MCSwipeTableViewCellModeSwitch,
+
+    /** Upon swipe the cell stays in the fully swiped position and remains visable and swipeable */
+    MCSwipeTableViewCellModeHold
 };
 
 /**
@@ -80,6 +83,8 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Color for background, when no state has been triggered. */
 @property (nonatomic, strong, readwrite) UIColor *defaultColor;
 
+/** Color for background during a Right -> Left swipe, when no state has been triggered. */
+@property (nonatomic, strong, readwrite) UIColor *rightDefaultColor;
 
 /** 1st color of the state triggered during a Left -> Right swipe. */
 @property (nonatomic, strong, readwrite) UIColor *color1;
@@ -122,12 +127,33 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 
 // Percentage of when the first and second action are activated, respectively
 
-/** Percentage value to trigger the 1st state of a swipe gesture. */
+/** Percentage value to trigger the 1st state of a Left -> Right swipe. */
 @property (nonatomic, assign, readwrite) CGFloat firstTrigger;
 
-/** Percentage value to trigger the 2nd state of a swipe gesture. */
+/** Percentage value to trigger the 2nd state of a Left -> Right swipe. */
 @property (nonatomic, assign, readwrite) CGFloat secondTrigger;
 
+/** Percentage value to trigger the 1st state of a Right -> Left swipe. Default is to
+ use firstTrigger value. */
+@property (nonatomic, assign, readwrite) CGFloat thirdTrigger;
+
+/** Percentage value to trigger the 2nd state of a Right -> Left swipe. Default is to
+ use secondTrigger value. */
+@property (nonatomic, assign, readwrite) CGFloat fourthTrigger;
+
+/** Optional Minimum percentage of cell width to display of view 3 (or view 4) when swiping Right -> Left. If this
+ value is not specified, cell uses the edge of thirdTrigger */
+@property (nonatomic, assign, readwrite) CGFloat minRightViewPercentWidth;
+
+/** Optional Minimum percentage of cell width to display of view 1 (or view 2) when swiping Left -> Right. If this
+ value is not specified, cell uses the edge of thirdTrigger */
+@property (nonatomic, assign, readwrite) CGFloat minLeftViewPercentWidth;
+
+/** Boolean to enable/disable centering the sliding view. YES by default. When disabled, the left sliding view edge is placed next to the cell. */
+@property (nonatomic, assign, readwrite) BOOL shouldCenterLeftSlideView;
+
+/** Boolean to enable/disable centering the sliding view. YES by default. When disabled, the right sliding view edge is placed next to the cell. */
+@property (nonatomic, assign, readwrite) BOOL shouldCenterRightSlideView;
 
 /** 1st `MCSwipeTableViewCellMode` of the state triggered during a Left -> Right swipe. */
 @property (nonatomic, assign, readwrite) MCSwipeTableViewCellMode modeForState1;
@@ -150,6 +176,11 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 
 /** Boolean to enable/disable the animation of the view during the swipe.  */
 @property (nonatomic, assign, readwrite) BOOL shouldAnimateIcons;
+
+/** Boolean to enable/disable the the spring/damper behavior (which also delays
+ calling of the completion delegate method  */
+@property (nonatomic, assign, readwrite) BOOL shouldUseSpringWithDamping;
+
 
 /**
  *  Configures the properties of a cell.
@@ -194,6 +225,13 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
  *  @param cell `MCSwipeTableViewCell` currently swiped.
  */
 - (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell;
+
+/**
+ *  Called when the user ends swiping the cell and includes the final state of the cell.
+ *
+ *  @param cell `MCSwipeTableViewCell` currently swiped.
+ */
+- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell withState:(MCSwipeTableViewCellState)state;
 
 /**
  *  Called during a swipe.

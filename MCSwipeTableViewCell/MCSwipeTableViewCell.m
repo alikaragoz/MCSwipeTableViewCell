@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 // Movement
 - (void)animateWithOffset:(CGFloat)offset;
 - (void)slideViewWithPercentage:(CGFloat)percentage view:(UIView *)view isDragging:(BOOL)isDragging;
-- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction;
+- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction andMode:(MCSwipeTableViewCellMode)mode;
 
 // Utilities
 - (UIImage *)imageWithView:(UIView *)view;
@@ -116,6 +116,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
+    _thirdTrigger = NAN; // NAN implies use firstTrigger
+    _fourthTrigger = NAN; // NAN implies use secondTrigger
     
     _damping = kMCDamping;
     _velocity = kMCVelocity;
@@ -132,6 +134,13 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _color2 = nil;
     _color3 = nil;
     _color4 = nil;
+    
+    _minLeftViewPercentWidth = NAN;
+    _minRightViewPercentWidth = NAN;
+    
+    _shouldCenterLeftSlideView = YES;
+    _shouldCenterRightSlideView = YES;
+    _shouldUseSpringWithDamping = YES;
     
     _activeView = nil;
     _view1 = nil;
@@ -251,6 +260,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     }
 }
 
+- (UIColor *)rightDefaultColor {
+    if (!_rightDefaultColor) {
+        return self.defaultColor;
+    } else {
+        return _rightDefaultColor;
+    }
+}
+
 #pragma mark - Handle Gestures
 
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
@@ -307,8 +324,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             cellMode = self.modeForState4;
         }
         
-        if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter) {
-            [self moveWithDuration:animationDuration andDirection:_direction];
+        if ( (cellMode == MCSwipeTableViewCellModeExit || cellMode == MCSwipeTableViewCellModeHold)
+            && _direction != MCSwipeTableViewCellDirectionCenter) {
+            [self moveWithDuration:animationDuration andDirection:_direction andMode:cellMode];
         }
         
         else {
@@ -320,6 +338,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         // We notify the delegate that we just ended swiping.
         if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
             [_delegate swipeTableViewCellDidEndSwiping:self];
+        }
+        if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:withState:)]) {
+            [_delegate swipeTableViewCellDidEndSwiping:self withState:cellState];
         }
     }
 }
@@ -407,7 +428,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= self.secondTrigger && _modeForState2) {
         view = _view2;
     }
     
@@ -415,7 +436,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -self.fourthTrigger && _modeForState4) {
         view = _view4;
     }
     
@@ -425,12 +446,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 - (CGFloat)alphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
-    if (percentage >= 0 && percentage < _firstTrigger) {
-        alpha = percentage / _firstTrigger;
+    if (percentage >= 0 && percentage < self.firstTrigger) {
+        alpha = percentage / self.firstTrigger;
     }
     
-    else if (percentage < 0 && percentage > -_firstTrigger) {
-        alpha = fabsf(percentage / _firstTrigger);
+    else if (percentage < 0 && percentage > -self.thirdTrigger) {
+        alpha = fabsf(percentage / self.thirdTrigger);
     }
     
     else {
@@ -444,22 +465,25 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     UIColor *color;
     
     // Background Color
+    if (percentage >= 0.0f) {
+        color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
+    } else {
+        color = self.rightDefaultColor ? self.rightDefaultColor : [UIColor clearColor];
+    }
     
-    color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
-    
-    if (percentage > _firstTrigger && _modeForState1) {
+    if (percentage > self.firstTrigger && _modeForState1) {
         color = _color1;
     }
     
-    if (percentage > _secondTrigger && _modeForState2) {
+    if (percentage > self.secondTrigger && _modeForState2) {
         color = _color2;
     }
     
-    if (percentage < -_firstTrigger && _modeForState3) {
+    if (percentage < -self.thirdTrigger && _modeForState3) {
         color = _color3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -self.fourthTrigger && _modeForState4) {
         color = _color4;
     }
     
@@ -471,19 +495,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     state = MCSwipeTableViewCellStateNone;
     
-    if (percentage >= _firstTrigger && _modeForState1) {
+    if (percentage >= self.firstTrigger && _modeForState1) {
         state = MCSwipeTableViewCellState1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= self.secondTrigger && _modeForState2) {
         state = MCSwipeTableViewCellState2;
     }
     
-    if (percentage <= -_firstTrigger && _modeForState3) {
+    if (percentage <= -self.thirdTrigger && _modeForState3) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -self.fourthTrigger && _modeForState4) {
         state = MCSwipeTableViewCellState4;
     }
     
@@ -519,34 +543,54 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     CGPoint position = CGPointZero;
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
+    CGFloat minLeftWidth = self.minLeftViewPercentWidth;
+    CGFloat minRightWidth = self.minRightViewPercentWidth;
+    
     if (isDragging) {
-        if (percentage >= 0 && percentage < _firstTrigger) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage >= _firstTrigger) {
-            position.x = [self offsetWithPercentage:percentage - (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage < 0 && percentage >= -_firstTrigger) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (percentage < -_firstTrigger) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        if (percentage >= 0 && percentage < minLeftWidth) {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = [self offsetWithPercentage:(minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = [self offsetWithPercentage:(minLeftWidth) relativeToWidth:CGRectGetWidth(self.bounds)] - CGRectGetWidth(view.frame)/2.0f;
+            }
+            
+        } else if (percentage >= minLeftWidth) {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = [self offsetWithPercentage:percentage - (minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] - CGRectGetWidth(view.frame)/2.0f;
+            }
+            
+        } else if (percentage < 0 && percentage >= -minRightWidth) {
+            if (self.shouldCenterRightSlideView) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(minRightWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:minRightWidth relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
+            }
+        } else if (percentage < -(minRightWidth)) {
+            if (self.shouldCenterRightSlideView) {
+                position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (minRightWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
+            }
         }
     }
     
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
-        
-        else {
+            if (self.shouldCenterLeftSlideView) {
+                position.x = [self offsetWithPercentage:(minLeftWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+                position.x = [self offsetWithPercentage:(minLeftWidth) relativeToWidth:CGRectGetWidth(self.bounds)] - CGRectGetWidth(view.frame)/2.0f;
+            }
+
+        } else if (_direction == MCSwipeTableViewCellDirectionLeft) {
+            if (self.shouldCenterRightSlideView) {
+                position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(minRightWidth / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            } else {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:minRightWidth relativeToWidth:CGRectGetWidth(self.bounds)] + CGRectGetWidth(view.frame)/2.0f;
+            }
+        } else {
             return;
         }
     }
@@ -561,9 +605,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _slidingView.frame = activeViewFrame;
 }
 
-- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction {
+- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction andMode:(MCSwipeTableViewCellMode)mode {
     
-    _isExited = YES;
+    if (mode == MCSwipeTableViewCellModeExit) {
+        _isExited = YES;
+    }
+
     CGFloat origin;
     
     if (direction == MCSwipeTableViewCellDirectionLeft) {
@@ -590,7 +637,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
         _contentScreenshotView.frame = frame;
-        _slidingView.alpha = 0;
+        if (mode == MCSwipeTableViewCellModeExit) {
+            _slidingView.alpha = 0;
+        }
         [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimateIcons];
     } completion:^(BOOL finished) {
         [self executeCompletionBlock];
@@ -602,19 +651,23 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
         
-        [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            
+        void (^animationBlock)() = ^{
             CGRect frame = _contentScreenshotView.frame;
             frame.origin.x = 0;
             _contentScreenshotView.frame = frame;
             
             // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+            } else {
+                _colorIndicatorView.backgroundColor = self.rightDefaultColor;
+            }
             
             _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
-        } completion:^(BOOL finished) {
+        };
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
             
             _isExited = NO;
             [self uninstallSwipingView];
@@ -622,7 +675,15 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             if (completion) {
                 completion();
             }
-        }];
+        };
+        
+        if (self.shouldUseSpringWithDamping) {
+            [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:animationBlock completion:completionBlock];
+
+        } else {
+            [UIView animateWithDuration:_animationDuration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:animationBlock completion:completionBlock];
+        }
+
     }
     
     else {
@@ -635,8 +696,11 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
-            // Setting back the color to the default.
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (_direction == MCSwipeTableViewCellDirectionRight) {
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+            } else {
+                _colorIndicatorView.backgroundColor = self.rightDefaultColor;
+            }
             
         } completion:^(BOOL finished1) {
             
@@ -709,6 +773,39 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         completionBlock(self, state, mode);
     }
     
+}
+
+#pragma mark - Properties
+- (CGFloat)thirdTrigger {
+    if (isnan(_thirdTrigger)) {
+        return _firstTrigger;
+    } else {
+        return _thirdTrigger;
+    }
+}
+
+- (CGFloat)fourthTrigger {
+    if (isnan(_fourthTrigger)) {
+        return _secondTrigger;
+    } else {
+        return _fourthTrigger;
+    }
+}
+
+- (CGFloat)minLeftViewPercentWidth {
+    if (isnan(_minLeftViewPercentWidth)) {
+        return self.firstTrigger;
+    } else {
+        return _minLeftViewPercentWidth;
+    }
+}
+
+- (CGFloat)minRightViewPercentWidth {
+    if (isnan(_minRightViewPercentWidth)) {
+        return self.thirdTrigger;
+    } else {
+        return _minRightViewPercentWidth;
+    }
 }
 
 @end
