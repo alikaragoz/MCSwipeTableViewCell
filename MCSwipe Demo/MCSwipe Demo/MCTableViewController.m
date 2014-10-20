@@ -9,7 +9,7 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 7;
+static NSUInteger const kMCNumItems = 8;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
@@ -131,6 +131,22 @@ static NSUInteger const kMCNumItems = 7;
     }
     
     else if (indexPath.row % kMCNumItems == 2) {
+        [cell.textLabel setText:@"Confirm Mode Cell"];
+        [cell.detailTextLabel setText:@"Swipe to confirm"];
+        cell.shouldAnimateIcons = YES;
+        
+        [cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeConfirm state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+            NSLog(@"Did confirm \"Checkmark\" cell");
+        }];
+        
+        [cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeConfirm state:MCSwipeTableViewCellState4 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+            NSLog(@"Did confirm \"Cross\" cell");
+            
+            [self deleteCell:cell];
+        }];
+    }
+    
+    else if (indexPath.row % kMCNumItems == 3) {
         [cell.textLabel setText:@"Mixed Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch or delete"];
         cell.shouldAnimateIcons = YES;
@@ -146,7 +162,7 @@ static NSUInteger const kMCNumItems = 7;
         }];
     }
     
-    else if (indexPath.row % kMCNumItems == 3) {
+    else if (indexPath.row % kMCNumItems == 4) {
         [cell.textLabel setText:@"Un-animated Icons"];
         [cell.detailTextLabel setText:@"Swipe"];
         cell.shouldAnimateIcons = NO;
@@ -162,7 +178,7 @@ static NSUInteger const kMCNumItems = 7;
         }];
     }
     
-    else if (indexPath.row % kMCNumItems == 4) {
+    else if (indexPath.row % kMCNumItems == 5) {
         [cell.textLabel setText:@"Right swipe only"];
         [cell.detailTextLabel setText:@"Swipe"];
         
@@ -175,7 +191,7 @@ static NSUInteger const kMCNumItems = 7;
         }];
     }
     
-    else if (indexPath.row % kMCNumItems == 5) {
+    else if (indexPath.row % kMCNumItems == 6) {
         [cell.textLabel setText:@"Small triggers"];
         [cell.detailTextLabel setText:@"Using 10% and 50%"];
         cell.firstTrigger = 0.1;
@@ -192,7 +208,7 @@ static NSUInteger const kMCNumItems = 7;
         }];
     }
     
-    else if (indexPath.row % kMCNumItems == 6) {
+    else if (indexPath.row % kMCNumItems == 7) {
         [cell.textLabel setText:@"Exit Mode Cell + Confirmation"];
         [cell.detailTextLabel setText:@"Swipe to delete"];
         

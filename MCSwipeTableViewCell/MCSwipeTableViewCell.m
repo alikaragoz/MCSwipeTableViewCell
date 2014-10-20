@@ -18,6 +18,7 @@ static NSTimeInterval const kMCBounceDuration1      = 0.2;  // Duration of the f
 static NSTimeInterval const kMCBounceDuration2      = 0.1;  // Duration of the second part of the bounce animation
 static NSTimeInterval const kMCDurationLowLimit     = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
 static NSTimeInterval const kMCDurationHighLimit    = 0.1;  // Highest duration when swiping the cell because we try to simulate velocity
+static CGFloat const kMCConfirmWidth                = 80.0; // Width of confirmation state
 
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     MCSwipeTableViewCellDirectionLeft = 0,
@@ -113,6 +114,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _dragging = NO;
     _shouldDrag = YES;
     _shouldAnimateIcons = YES;
+    
+    _confirmationWidth = kMCConfirmWidth;
     
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
@@ -311,6 +314,18 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         }
         
+        else if (cellMode == MCSwipeTableViewCellModeConfirm && _direction != MCSwipeTableViewCellDirectionCenter) {
+            
+            // add required gesture if state is confirm
+            UITapGestureRecognizer *cancelTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
+            [_contentScreenshotView addGestureRecognizer:cancelTapGestureRecognizer];
+            _contentScreenshotView.userInteractionEnabled = YES;
+            
+            UITapGestureRecognizer *confirmTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureRecognizer:)];
+            [_colorIndicatorView addGestureRecognizer:confirmTapGestureRecognizer];
+            
+            [self swipeToOffset:[self confirmationWidthWithState:cellState] withCompletion:nil];
+        }
         else {
             [self swipeToOriginWithCompletion:^{
                 [self executeCompletionBlock];
@@ -321,6 +336,17 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
             [_delegate swipeTableViewCellDidEndSwiping:self];
         }
+    }
+}
+
+- (void)handleTapGestureRecognizer:(UIGestureRecognizer *)gesture {
+    
+    UIView *onView = gesture.view;
+    if (onView == _colorIndicatorView) {
+        [self executeCompletionBlock];
+    }
+    else if (onView == _contentScreenshotView) {
+        [self swipeToOriginWithCompletion:nil];
     }
 }
 
@@ -490,6 +516,20 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     return state;
 }
 
+- (CGFloat)confirmationWidthWithState:(MCSwipeTableViewCellState)state {
+    if (state == MCSwipeTableViewCellState1 || state == MCSwipeTableViewCellState2) {
+        return _confirmationWidth;
+    }
+    
+    if (state == MCSwipeTableViewCellState3 || state == MCSwipeTableViewCellState4) {
+        return -_confirmationWidth;
+    }
+    
+    else {
+        return 0;
+    }
+}
+
 #pragma mark - Movement
 
 - (void)animateWithOffset:(CGFloat)offset {
@@ -598,6 +638,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 }
 
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion {
+    [self swipeToOffset:0 withCompletion:completion];
+}
+
+- (void)swipeToOffset:(CGFloat)offset withCompletion:(void(^)(void))completion {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
     
     if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
@@ -605,19 +649,23 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             CGRect frame = _contentScreenshotView.frame;
-            frame.origin.x = 0;
+            frame.origin.x = offset;
             _contentScreenshotView.frame = frame;
             
-            // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (offset == 0) {
+                // Clearing the indicator view
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+                _slidingView.alpha = 0;
+            }
             
-            _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
         } completion:^(BOOL finished) {
             
             _isExited = NO;
-            [self uninstallSwipingView];
+            if (offset == 0) {
+                [self uninstallSwipingView];
+            }
             
             if (completion) {
                 completion();
@@ -629,21 +677,23 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         [UIView animateWithDuration:kMCBounceDuration1 delay:0 options:(UIViewAnimationOptionCurveEaseOut) animations:^{
             
             CGRect frame = _contentScreenshotView.frame;
-            frame.origin.x = -bounceDistance;
+            frame.origin.x = offset-bounceDistance;
             _contentScreenshotView.frame = frame;
             
-            _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
-            // Setting back the color to the default.
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (offset == 0) {
+                // Setting back the color to the default.
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+                _slidingView.alpha = 0;
+            }
             
         } completion:^(BOOL finished1) {
             
             [UIView animateWithDuration:kMCBounceDuration2 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 
                 CGRect frame = _contentScreenshotView.frame;
-                frame.origin.x = 0;
+                frame.origin.x = offset;
                 _contentScreenshotView.frame = frame;
                 
                 // Clearing the indicator view
@@ -652,7 +702,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             } completion:^(BOOL finished2) {
                 
                 _isExited = NO;
-                [self uninstallSwipingView];
+                if (offset == 0) {
+                    [self uninstallSwipingView];
+                }
                 
                 if (completion) {
                     completion();

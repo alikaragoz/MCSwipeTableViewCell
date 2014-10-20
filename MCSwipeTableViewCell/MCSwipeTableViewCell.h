@@ -38,7 +38,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
     MCSwipeTableViewCellModeExit,
 
     /** Upon swipe the cell if automatically swiped back to it's initial position. */
-    MCSwipeTableViewCellModeSwitch
+    MCSwipeTableViewCellModeSwitch,
+    
+    /** Upon swipe the cell if automatically swiped back to it's action and wait for confirmation*/
+    MCSwipeTableViewCellModeConfirm
 };
 
 /**
@@ -75,6 +78,9 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 
 /** Duration of the animations. */
 @property (nonatomic, assign, readwrite) NSTimeInterval animationDuration;
+
+/** Width of confirmation state */
+@property (nonatomic, assign, readwrite) CGFloat confirmationWidth;
 
 
 /** Color for background, when no state has been triggered. */
