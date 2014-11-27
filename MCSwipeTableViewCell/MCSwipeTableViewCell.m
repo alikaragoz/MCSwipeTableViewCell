@@ -113,7 +113,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _dragging = NO;
     _shouldDrag = YES;
     _shouldAnimateIcons = YES;
-    
+    _bounces = YES;
+  
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
     
@@ -268,20 +269,34 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         _dragging = YES;
-        
+    
         [self setupSwipingView];
-        
-        CGPoint center = {_contentScreenshotView.center.x + translation.x, _contentScreenshotView.center.y};
-        _contentScreenshotView.center = center;
-        [self animateWithOffset:CGRectGetMinX(_contentScreenshotView.frame)];
-        [gesture setTranslation:CGPointZero inView:self];
-        
-        // Notifying the delegate that we are dragging with an offset percentage.
-        if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipeWithPercentage:)]) {
-            [_delegate swipeTableViewCell:self didSwipeWithPercentage:percentage];
+    
+        BOOL shouldPan = _bounces;
+        CGFloat newPosition = CGRectGetMinX(_contentScreenshotView.frame) + translation.x;
+        if((newPosition >= 0 && (_modeForState1 || _modeForState2)) || (newPosition <= 0 && (_modeForState3 || _modeForState4))) {
+            shouldPan = YES;
+        }
+    
+        [self setupSwipingView];
+    
+        if (shouldPan) {
+            CGPoint center = {_contentScreenshotView.center.x + translation.x, _contentScreenshotView.center.y};
+            _contentScreenshotView.center = center;
+            [self animateWithOffset:CGRectGetMinX(_contentScreenshotView.frame)];
+            [gesture setTranslation:CGPointZero inView:self];
+      
+            // Notifying the delegate that we are dragging with an offset percentage.
+            if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipeWithPercentage:)]) {
+                [_delegate swipeTableViewCell:self didSwipeWithPercentage:percentage];
+            }
+        } else {
+            CGRect frame = _contentScreenshotView.frame;
+            frame.origin.x = 0;
+            _contentScreenshotView.frame = frame;
         }
     }
-    
+  
     else if (state == UIGestureRecognizerStateEnded || state == UIGestureRecognizerStateCancelled) {
         
         _dragging = NO;
