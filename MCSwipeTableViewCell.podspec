@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/alikaragoz/MCSwipeTableViewCell'
   s.summary  = 'Convenient UITableViewCell subclass that implements a swippable content to trigger actions.'
   s.license  = 'MIT'
-  s.source   = { :git => 'https://github.com/alikaragoz/MCSwipeTableViewCell.git', :tag => '2.1.2' }
+  s.source   = { :git => 'https://github.com/alikaragoz/MCSwipeTableViewCell.git', :tag => '2.1.3' }
   s.source_files = 'MCSwipeTableViewCell'
   s.platform = :ios
   s.ios.deployment_target = '5.0'
