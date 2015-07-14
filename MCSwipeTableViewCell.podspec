@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'MCSwipeTableViewCell'
-  s.version  = '2.1.2'
+  s.version  = '2.1.3'
   s.author   = { 'Ali Karagoz' => 'mail@alikaragoz.net' }
   s.homepage = 'https://github.com/alikaragoz/MCSwipeTableViewCell'
   s.summary  = 'Convenient UITableViewCell subclass that implements a swippable content to trigger actions.'
