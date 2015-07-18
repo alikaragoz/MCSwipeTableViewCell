@@ -82,7 +82,6 @@
 		7BAFD96917E7BB7800C148BF /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		7C23B01517DB87F100771FA0 /* libMCSwipeTableViewCell-Static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libMCSwipeTableViewCell-Static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C23B01917DB87F100771FA0 /* MCSwipeTableViewCell-Static-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCSwipeTableViewCell-Static-Prefix.pch"; sourceTree = "<group>"; };
-		7C23B02317DB87F100771FA0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,7 +159,6 @@
 				7B9CAA5C16E2459D00F376BC /* UIKit.framework */,
 				7B9CAA5E16E2459D00F376BC /* Foundation.framework */,
 				7B9CAA6016E2459D00F376BC /* CoreGraphics.framework */,
-				7C23B02317DB87F100771FA0 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -596,6 +594,7 @@
 				7B54DA301B5A5DC70019D711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7B9CAA5416E2459D00F376BC /* Build configuration list for PBXProject "MCSwipe Demo" */ = {
 			isa = XCConfigurationList;
