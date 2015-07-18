@@ -10,27 +10,16 @@
 		7B54DA361B5A5F8A0019D711 /* MCSwipeTableViewCell-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B54DA1F1B5A5DC70019D711 /* MCSwipeTableViewCell-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B54DA371B5A61610019D711 /* MCSwipeTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B54DA381B5A616D0019D711 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */; };
+		7B54DA3C1B5A64200019D711 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B54DA3B1B5A64200019D711 /* Images.xcassets */; };
+		7B54DA3E1B5A64B20019D711 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B54DA3D1B5A64B20019D711 /* LaunchScreen.xib */; };
 		7B9CAA5D16E2459D00F376BC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA5C16E2459D00F376BC /* UIKit.framework */; };
 		7B9CAA5F16E2459D00F376BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA5E16E2459D00F376BC /* Foundation.framework */; };
 		7B9CAA6116E2459D00F376BC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA6016E2459D00F376BC /* CoreGraphics.framework */; };
 		7B9CAA6716E2459D00F376BC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6516E2459D00F376BC /* InfoPlist.strings */; };
 		7B9CAA6916E2459D00F376BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6816E2459D00F376BC /* main.m */; };
 		7B9CAA6D16E2459D00F376BC /* MCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6C16E2459D00F376BC /* MCAppDelegate.m */; };
-		7B9CAA6F16E2459D00F376BC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA6E16E2459D00F376BC /* Default.png */; };
-		7B9CAA7116E2459D00F376BC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7016E2459D00F376BC /* Default@2x.png */; };
-		7B9CAA7316E2459D00F376BC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */; };
-		7B9CAA8216E245F900F376BC /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7A16E245F900F376BC /* check.png */; };
-		7B9CAA8316E245F900F376BC /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7B16E245F900F376BC /* check@2x.png */; };
-		7B9CAA8416E245F900F376BC /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7C16E245F900F376BC /* clock.png */; };
-		7B9CAA8516E245F900F376BC /* clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7D16E245F900F376BC /* clock@2x.png */; };
-		7B9CAA8616E245F900F376BC /* cross.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7E16E245F900F376BC /* cross.png */; };
-		7B9CAA8716E245F900F376BC /* cross@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA7F16E245F900F376BC /* cross@2x.png */; };
-		7B9CAA8816E245F900F376BC /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8016E245F900F376BC /* list.png */; };
-		7B9CAA8916E245F900F376BC /* list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8116E245F900F376BC /* list@2x.png */; };
 		7B9CAA8F16E2465500F376BC /* MCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA8E16E2465500F376BC /* MCTableViewController.m */; };
 		7B9CAA9316E2469900F376BC /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */; };
-		7BAFD96A17E7BB7800C148BF /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BAFD96817E7BB7800C148BF /* Icon.png */; };
-		7BAFD96B17E7BB7800C148BF /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BAFD96917E7BB7800C148BF /* Icon@2x.png */; };
 		7C23B01617DB87F100771FA0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9CAA5E16E2459D00F376BC /* Foundation.framework */; };
 		7C23B03817DB884A00771FA0 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */; };
 		7C23B03917DB885D00771FA0 /* MCSwipeTableViewCell.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */; };
@@ -53,6 +42,8 @@
 		7B54DA1B1B5A5DC70019D711 /* MCSwipeTableViewCell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MCSwipeTableViewCell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B54DA1E1B5A5DC70019D711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B54DA1F1B5A5DC70019D711 /* MCSwipeTableViewCell-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCSwipeTableViewCell-iOS.h"; sourceTree = "<group>"; };
+		7B54DA3B1B5A64200019D711 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		7B54DA3D1B5A64B20019D711 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		7B9CAA5916E2459D00F376BC /* Swipe Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swipe Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B9CAA5C16E2459D00F376BC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7B9CAA5E16E2459D00F376BC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -63,23 +54,10 @@
 		7B9CAA6A16E2459D00F376BC /* MCSwipe Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCSwipe Demo-Prefix.pch"; sourceTree = "<group>"; };
 		7B9CAA6B16E2459D00F376BC /* MCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAppDelegate.h; sourceTree = "<group>"; };
 		7B9CAA6C16E2459D00F376BC /* MCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAppDelegate.m; sourceTree = "<group>"; };
-		7B9CAA6E16E2459D00F376BC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		7B9CAA7016E2459D00F376BC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		7B9CAA7A16E245F900F376BC /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
-		7B9CAA7B16E245F900F376BC /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
-		7B9CAA7C16E245F900F376BC /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
-		7B9CAA7D16E245F900F376BC /* clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock@2x.png"; sourceTree = "<group>"; };
-		7B9CAA7E16E245F900F376BC /* cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross.png; sourceTree = "<group>"; };
-		7B9CAA7F16E245F900F376BC /* cross@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cross@2x.png"; sourceTree = "<group>"; };
-		7B9CAA8016E245F900F376BC /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
-		7B9CAA8116E245F900F376BC /* list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list@2x.png"; sourceTree = "<group>"; };
 		7B9CAA8D16E2465500F376BC /* MCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCTableViewController.h; sourceTree = "<group>"; };
 		7B9CAA8E16E2465500F376BC /* MCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCTableViewController.m; sourceTree = "<group>"; };
 		7B9CAA9116E2469900F376BC /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCSwipeTableViewCell.h; path = ../../MCSwipeTableViewCell/MCSwipeTableViewCell.h; sourceTree = "<group>"; };
 		7B9CAA9216E2469900F376BC /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCSwipeTableViewCell.m; path = ../../MCSwipeTableViewCell/MCSwipeTableViewCell.m; sourceTree = "<group>"; };
-		7BAFD96817E7BB7800C148BF /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		7BAFD96917E7BB7800C148BF /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		7C23B01517DB87F100771FA0 /* libMCSwipeTableViewCell-Static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libMCSwipeTableViewCell-Static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C23B01917DB87F100771FA0 /* MCSwipeTableViewCell-Static-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCSwipeTableViewCell-Static-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,7 +148,8 @@
 				7B9CAA6C16E2459D00F376BC /* MCAppDelegate.m */,
 				7B9CAA8D16E2465500F376BC /* MCTableViewController.h */,
 				7B9CAA8E16E2465500F376BC /* MCTableViewController.m */,
-				7B9CAA7916E245F900F376BC /* Images */,
+				7B54DA3B1B5A64200019D711 /* Images.xcassets */,
+				7B54DA3D1B5A64B20019D711 /* LaunchScreen.xib */,
 				7B9CAA6316E2459D00F376BC /* Supporting Files */,
 			);
 			path = "MCSwipe Demo";
@@ -183,28 +162,8 @@
 				7B9CAA6516E2459D00F376BC /* InfoPlist.strings */,
 				7B9CAA6816E2459D00F376BC /* main.m */,
 				7B9CAA6A16E2459D00F376BC /* MCSwipe Demo-Prefix.pch */,
-				7B9CAA6E16E2459D00F376BC /* Default.png */,
-				7B9CAA7016E2459D00F376BC /* Default@2x.png */,
-				7B9CAA7216E2459D00F376BC /* Default-568h@2x.png */,
-				7BAFD96817E7BB7800C148BF /* Icon.png */,
-				7BAFD96917E7BB7800C148BF /* Icon@2x.png */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		7B9CAA7916E245F900F376BC /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				7B9CAA7A16E245F900F376BC /* check.png */,
-				7B9CAA7B16E245F900F376BC /* check@2x.png */,
-				7B9CAA7C16E245F900F376BC /* clock.png */,
-				7B9CAA7D16E245F900F376BC /* clock@2x.png */,
-				7B9CAA7E16E245F900F376BC /* cross.png */,
-				7B9CAA7F16E245F900F376BC /* cross@2x.png */,
-				7B9CAA8016E245F900F376BC /* list.png */,
-				7B9CAA8116E245F900F376BC /* list@2x.png */,
-			);
-			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,19 +280,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B9CAA6716E2459D00F376BC /* InfoPlist.strings in Resources */,
-				7B9CAA6F16E2459D00F376BC /* Default.png in Resources */,
-				7B9CAA7116E2459D00F376BC /* Default@2x.png in Resources */,
-				7B9CAA7316E2459D00F376BC /* Default-568h@2x.png in Resources */,
-				7B9CAA8216E245F900F376BC /* check.png in Resources */,
-				7B9CAA8316E245F900F376BC /* check@2x.png in Resources */,
-				7B9CAA8416E245F900F376BC /* clock.png in Resources */,
-				7BAFD96A17E7BB7800C148BF /* Icon.png in Resources */,
-				7B9CAA8516E245F900F376BC /* clock@2x.png in Resources */,
-				7BAFD96B17E7BB7800C148BF /* Icon@2x.png in Resources */,
-				7B9CAA8616E245F900F376BC /* cross.png in Resources */,
-				7B9CAA8716E245F900F376BC /* cross@2x.png in Resources */,
-				7B9CAA8816E245F900F376BC /* list.png in Resources */,
-				7B9CAA8916E245F900F376BC /* list@2x.png in Resources */,
+				7B54DA3E1B5A64B20019D711 /* LaunchScreen.xib in Resources */,
+				7B54DA3C1B5A64200019D711 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,6 +462,7 @@
 		7B9CAA7716E2459D00F376BC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MCSwipe Demo/MCSwipe Demo-Prefix.pch";
 				INFOPLIST_FILE = "MCSwipe Demo/MCSwipe Demo-Info.plist";
@@ -526,6 +475,7 @@
 		7B9CAA7816E2459D00F376BC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MCSwipe Demo/MCSwipe Demo-Prefix.pch";
 				INFOPLIST_FILE = "MCSwipe Demo/MCSwipe Demo-Info.plist";
