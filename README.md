@@ -3,9 +3,9 @@ MCSwipeTableViewCell
 
 <p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-front.png"/></p>
 
-An Effort to show how one would implement a TableViewCell like the one we can see in the very well executed [Mailbox](http://www.mailboxapp.com/) iOS app.
+An effort to show how one would implement a UITableViewCell like the one we can see in the very well executed [Mailbox](http://www.mailboxapp.com/) iOS app.
 
-##Demo
+##Preview
 ###Exit Mode
 The exit mode `MCSwipeTableViewCellModeExit` is the original behavior we can see in the Mailbox app. Swiping the cell should make it disappear. Convenient in destructive modes.
 
@@ -16,7 +16,7 @@ The switch mode `MCSwipeTableViewCellModeSwitch` is a new behavior I'm introduci
 
 <p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-switch.gif"/></p>
 
-## API Reference
+##API Reference
 Please refer to the header file [`MCSwipeTableViewCell.h`](MCSwipeTableViewCell/MCSwipeTableViewCell.h) for a complete overview of the capabilities of the class.
 
 ##Usage
@@ -81,7 +81,7 @@ Please refer to the header file [`MCSwipeTableViewCell.h`](MCSwipeTableViewCell/
 }
 ```
 
-###Delegation
+###Delegate
 
 MCSwipeTableViewCell has a set of delegate methods in order to track the user behaviors. Take a look at the header file to be aware of all the methods provided by `MCSwipeTableViewCellDelegate`.
 
