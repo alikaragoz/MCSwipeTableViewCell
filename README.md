@@ -5,21 +5,21 @@ MCSwipeTableViewCell
 
 An effort to show how one would implement a UITableViewCell like the one we can see in the very well executed [Mailbox](http://www.mailboxapp.com/) iOS app.
 
-##Preview
-###Exit Mode
+## Preview
+### Exit Mode
 The exit mode `MCSwipeTableViewCellModeExit` is the original behavior we can see in the Mailbox app. Swiping the cell should make it disappear. Convenient in destructive modes.
 
 <p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-exit.gif"/></p>
 
-###Switch Mode
+### Switch Mode
 The switch mode `MCSwipeTableViewCellModeSwitch` is a new behavior I'm introducing. The cell will bounce back after selecting a state, this allows you to keep the cell. Convenient to switch an option quickly.
 
 <p align="center"><img src="https://raw.github.com/alikaragoz/MCSwipeTableViewCell/master/github-assets/mcswipe-switch.gif"/></p>
 
-##API Reference
+## API Reference
 Please refer to the header file [`MCSwipeTableViewCell.h`](MCSwipeTableViewCell/MCSwipeTableViewCell.h) for a complete overview of the capabilities of the class.
 
-##Usage
+## Usage
 
 ```objc
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -81,7 +81,7 @@ Please refer to the header file [`MCSwipeTableViewCell.h`](MCSwipeTableViewCell/
 }
 ```
 
-###Delegate
+### Delegate
 
 MCSwipeTableViewCell has a set of delegate methods in order to track the user behaviors. Take a look at the header file to be aware of all the methods provided by `MCSwipeTableViewCellDelegate`.
 
@@ -102,7 +102,7 @@ MCSwipeTableViewCell has a set of delegate methods in order to track the user be
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage;
 ```
 
-###Cell Deletion
+### Cell Deletion
 In `MCSwipeTableViewCellModeExit` mode you may want to delete the cell with a nice fading animation, the following lines will give you an idea how to execute it:
 
 ```objc
@@ -158,7 +158,7 @@ Then handle the `UIAlertView` action:
 
 There is also an example in the demo project, I recommend to take a look at it.
 
-###Changing the trigger percentage
+### Changing the trigger percentage
 If the default trigger limits do not fit to your needs you can change them with the `firstTrigger` *(default: 25%)* and `secondTrigger` *(Default: 75%)* properties.
 
 ```objc
@@ -166,7 +166,7 @@ cell.firstTrigger = 0.1;
 cell.secondTrigger = 0.5;
 ```
 
-###Reseting cell position
+### Reseting cell position
 It is possible to put the cell back to it's position when using the `MCSwipeTableViewCellModeExit` mode with the `-swipeToOriginWithCompletion:` method:
 
 ```objc
@@ -214,10 +214,10 @@ To integrate MCSwipeTableViewCell into your Xcode project using Carthage, specif
 github "alikaragoz/MCSwipeTableViewCell" >= 2.1.4
 ```
 
-##Compatibility
+## Compatibility
 This library is not compatible with auto-layout so you will need to disable auto-layout in your xib properties.
 
-##Requirements
+## Requirements
 - iOS >= 5.0
 - ARC
 
