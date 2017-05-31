@@ -9,7 +9,7 @@
 #import "MCSwipeTableViewCell.h"
 #import "MCTableViewController.h"
 
-static NSUInteger const kMCNumItems = 7;
+static NSUInteger const kMCNumItems = 8;
 
 @interface MCTableViewController () <MCSwipeTableViewCellDelegate, UIAlertViewDelegate>
 
@@ -97,7 +97,9 @@ static NSUInteger const kMCNumItems = 7;
     [cell setDefaultColor:self.tableView.backgroundView.backgroundColor];
     
     [cell setDelegate:self];
-    
+  
+    cell.bounces = YES;
+  
     if (indexPath.row % kMCNumItems == 0) {
         [cell.textLabel setText:@"Switch Mode Cell"];
         [cell.detailTextLabel setText:@"Swipe to switch"];
@@ -207,6 +209,16 @@ static NSUInteger const kMCNumItems = 7;
                                                       cancelButtonTitle:@"No"
                                                       otherButtonTitles:@"Yes", nil];
             [alertView show];
+        }];
+    }
+  
+    else if (indexPath.row % kMCNumItems == 7) {
+        cell.bounces = NO;
+      
+        [cell.textLabel setText:@"No bounces"];
+      
+        [cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+            NSLog(@"Did swipe cell");
         }];
     }
 }

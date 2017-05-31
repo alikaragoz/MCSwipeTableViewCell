@@ -151,6 +151,9 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Boolean to enable/disable the animation of the view during the swipe.  */
 @property (nonatomic, assign, readwrite) BOOL shouldAnimateIcons;
 
+/** Boolean to enable/disable the bounce when swiping if possible. Defaults to YES  */
+@property (nonatomic, assign, readwrite) BOOL bounces;
+
 /**
  *  Configures the properties of a cell.
  *
