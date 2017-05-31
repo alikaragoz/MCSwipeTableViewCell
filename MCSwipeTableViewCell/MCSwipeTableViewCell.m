@@ -25,6 +25,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     MCSwipeTableViewCellDirectionRight
 };
 
+#define SNAPSHOT(view) [view respondsToSelector:@selector(snapshotViewAfterScreenUpdates:)] ? [view snapshotViewAfterScreenUpdates:YES] : [[UIImageView alloc] initWithImage:[self imageWithView:view]]
+
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) MCSwipeTableViewCellDirection direction;
@@ -32,7 +34,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 @property (nonatomic, assign) BOOL isExited;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-@property (nonatomic, strong) UIImageView *contentScreenshotView;
+@property (nonatomic, strong) UIView *contentScreenshotView;
 @property (nonatomic, strong) UIView *colorIndicatorView;
 @property (nonatomic, strong) UIView *slidingView;
 @property (nonatomic, strong) UIView *activeView;
@@ -158,15 +160,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     // If the content view background is transparent we get the background color.
     BOOL isContentViewBackgroundClear = !self.contentView.backgroundColor;
-    if (isContentViewBackgroundClear) {
+    BOOL hasBackgroundView = (self.selectedBackgroundView && self.isHighlighted) || (self.backgroundView && !self.isHighlighted);
+    if (isContentViewBackgroundClear && !hasBackgroundView) {
         BOOL isBackgroundClear = [self.backgroundColor isEqual:[UIColor clearColor]];
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
-    }
-    
-    UIImage *contentViewScreenshotImage = [self imageWithView:self];
-    
-    if (isContentViewBackgroundClear) {
-        self.contentView.backgroundColor = nil;
     }
     
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
@@ -178,7 +175,25 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _slidingView.contentMode = UIViewContentModeCenter;
     [_colorIndicatorView addSubview:_slidingView];
     
-    _contentScreenshotView = [[UIImageView alloc] initWithImage:contentViewScreenshotImage];
+    _contentScreenshotView = [[UIView alloc] initWithFrame:self.bounds];
+    
+    if (self.backgroundView || self.selectedBackgroundView) {
+        if (self.isHighlighted && self.selectedBackgroundView) {
+            [_contentScreenshotView addSubview:SNAPSHOT(self.selectedBackgroundView)];
+        }
+        else if (!self.isHighlighted && self.backgroundView) {
+            [_contentScreenshotView addSubview:SNAPSHOT(self.backgroundView)];
+        }
+    }
+    else {
+        [_contentScreenshotView addSubview:SNAPSHOT(self)];
+    }
+    [_contentScreenshotView addSubview:SNAPSHOT(self.contentView)];
+    
+    if (isContentViewBackgroundClear) {
+        self.contentView.backgroundColor = nil;
+    }
+    
     [self addSubview:_contentScreenshotView];
 }
 
@@ -311,9 +326,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
             [self moveWithDuration:animationDuration andDirection:_direction];
         }
         
-        else {
+        else if (cellMode == MCSwipeTableViewCellModeSwitch || cellState == MCSwipeTableViewCellModeNone) {
             [self swipeToOriginWithCompletion:^{
-                [self executeCompletionBlock];
+                [self executeCompletionBlockForState:cellState];
+            }];
+        }
+        else {
+            [self swipeToStickyPositionWithCompletion:^{
+                [self executeCompletionBlockForState:cellState];
             }];
         }
         
@@ -597,7 +617,17 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     }];
 }
 
+- (void)swipeToStickyPositionWithCompletion:(void(^)(void))completion {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    UIView *currentView = [self viewWithPercentage:self.currentPercentage];
+    [self swipeToOriginWithCompletion:completion offset:CGRectGetWidth(currentView.frame)];
+}
+
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion {
+    [self swipeToOriginWithCompletion:completion offset:0];
+}
+
+- (void)swipeToOriginWithCompletion:(void(^)(void))completion offset:(CGFloat)offset {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
     
     if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
@@ -605,19 +635,31 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             CGRect frame = _contentScreenshotView.frame;
-            frame.origin.x = 0;
+            if (self.currentPercentage >= 0) {
+                frame.origin.x = offset;
+            }
+            else {
+                frame.origin.x = -1 * offset;
+            }
             _contentScreenshotView.frame = frame;
             
             // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            if (offset == 0) {
+                _colorIndicatorView.backgroundColor = self.defaultColor;
+                _slidingView.alpha = 0;
+            }
+            else {
+                _slidingView.alpha = 1;
+            }
             
-            _slidingView.alpha = 0;
             [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
             
         } completion:^(BOOL finished) {
             
             _isExited = NO;
-            [self uninstallSwipingView];
+            if (offset == 0) {
+                [self uninstallSwipingView];
+            }
             
             if (completion) {
                 completion();
@@ -677,6 +719,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 
 - (void)executeCompletionBlock {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
+    [self executeCompletionBlockForState:state];
+}
+
+- (void)executeCompletionBlockForState:(MCSwipeTableViewCellState)state {
     MCSwipeTableViewCellMode mode = MCSwipeTableViewCellModeNone;
     MCSwipeCompletionBlock completionBlock;
     
