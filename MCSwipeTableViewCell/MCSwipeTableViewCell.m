@@ -667,10 +667,14 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 - (UIImage *)imageWithView:(UIView *)view {
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, scale);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
+    CGContextRef ref = UIGraphicsGetCurrentContext();
+    if(ref != NULL) {
+        [view.layer renderInContext:(CGContextRef _Nonnull)ref];
+        UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return image;
+    }
+    return nil;
 }
 
 #pragma mark - Completion block
