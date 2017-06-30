@@ -113,6 +113,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _dragging = NO;
     _shouldDrag = YES;
     _shouldAnimateIcons = YES;
+    _swipableViewInsets = UIEdgeInsetsZero;
+    _hideAfterSwipe = NO;
     
     _firstTrigger = kMCStop1;
     _secondTrigger = kMCStop2;
@@ -163,15 +165,13 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
     }
     
-    UIView *contentView = self.isSeparatorSwipeable ? self : self.contentView;
-    
-    UIImage *contentViewScreenshotImage = [self imageWithView:contentView];
+    UIImage *contentViewScreenshotImage = [self imageWithView:self size:CGSizeMake(self.frame.size.width - _swipableViewInsets.left - _swipableViewInsets.right, self.frame.size.height - _swipableViewInsets.top - _swipableViewInsets.bottom)];
     
     if (isContentViewBackgroundClear) {
         self.contentView.backgroundColor = nil;
     }
     
-    _colorIndicatorView = [[UIView alloc] initWithFrame:contentView.bounds];
+    _colorIndicatorView = [[UIView alloc] initWithFrame:CGRectMake(_swipableViewInsets.left, _swipableViewInsets.top, contentViewScreenshotImage.size.width, contentViewScreenshotImage.size.height)];
     _colorIndicatorView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     _colorIndicatorView.backgroundColor = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     [self addSubview:_colorIndicatorView];
@@ -676,9 +676,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 
 #pragma mark - Utilities
 
-- (UIImage *)imageWithView:(UIView *)view {
+- (UIImage *)imageWithView:(UIView *)view size:(CGSize)size {
     CGFloat scale = [[UIScreen mainScreen] scale];
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, scale);
+    UIGraphicsBeginImageContextWithOptions(size, NO, scale);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
