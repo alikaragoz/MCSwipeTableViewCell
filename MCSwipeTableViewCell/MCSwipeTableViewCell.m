@@ -602,7 +602,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 }
 
 - (void)hideSeparatorIfNeeded {
-    if (!_isSeparatorSwipeable) {
+    if (_hideAfterSwipe) {
         [_colorIndicatorView setNeedsLayout];
         [_colorIndicatorView layoutIfNeeded];
         _colorIndicatorView.frame = CGRectMake(_colorIndicatorView.frame.origin.x, _colorIndicatorView.frame.origin.y, _colorIndicatorView.frame.size.width, self.bounds.size.height);
