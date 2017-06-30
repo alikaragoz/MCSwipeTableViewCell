@@ -151,6 +151,9 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Boolean to enable/disable the animation of the view during the swipe.  */
 @property (nonatomic, assign, readwrite) BOOL shouldAnimateIcons;
 
+/** Boolean to enable/disable swiping separator with cell  */
+@property (nonatomic, assign, readwrite) BOOL isSeparatorSwipeable;
+
 /**
  *  Configures the properties of a cell.
  *
