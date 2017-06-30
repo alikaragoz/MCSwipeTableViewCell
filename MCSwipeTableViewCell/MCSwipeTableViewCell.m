@@ -163,13 +163,15 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
     }
     
-    UIImage *contentViewScreenshotImage = [self imageWithView:self.contentView];
+    UIView *contentView = self.isSeparatorSwipeable ? self : self.contentView;
+    
+    UIImage *contentViewScreenshotImage = [self imageWithView:contentView];
     
     if (isContentViewBackgroundClear) {
         self.contentView.backgroundColor = nil;
     }
     
-    _colorIndicatorView = [[UIView alloc] initWithFrame:self.contentView.bounds];
+    _colorIndicatorView = [[UIView alloc] initWithFrame:contentView.bounds];
     _colorIndicatorView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     _colorIndicatorView.backgroundColor = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     [self addSubview:_colorIndicatorView];
@@ -313,6 +315,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         
         else {
             [self swipeToOriginWithCompletion:^{
+                [self hideSeparatorIfNeeded];
                 [self executeCompletionBlock];
             }];
         }
@@ -593,8 +596,17 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         _slidingView.alpha = 0;
         [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimateIcons];
     } completion:^(BOOL finished) {
+        [self hideSeparatorIfNeeded];
         [self executeCompletionBlock];
     }];
+}
+
+- (void)hideSeparatorIfNeeded {
+    if (!_isSeparatorSwipeable) {
+        [_colorIndicatorView setNeedsLayout];
+        [_colorIndicatorView layoutIfNeeded];
+        _colorIndicatorView.frame = CGRectMake(_colorIndicatorView.frame.origin.x, _colorIndicatorView.frame.origin.y, _colorIndicatorView.frame.size.width, self.bounds.size.height);
+    }
 }
 
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion {
