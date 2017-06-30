@@ -163,13 +163,13 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
     }
     
-    UIImage *contentViewScreenshotImage = [self imageWithView:self];
+    UIImage *contentViewScreenshotImage = [self imageWithView:self.contentView];
     
     if (isContentViewBackgroundClear) {
         self.contentView.backgroundColor = nil;
     }
     
-    _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
+    _colorIndicatorView = [[UIView alloc] initWithFrame:self.contentView.bounds];
     _colorIndicatorView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     _colorIndicatorView.backgroundColor = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     [self addSubview:_colorIndicatorView];
