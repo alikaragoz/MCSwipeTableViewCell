@@ -151,6 +151,12 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Boolean to enable/disable the animation of the view during the swipe.  */
 @property (nonatomic, assign, readwrite) BOOL shouldAnimateIcons;
 
+/** Insets for swipeable view */
+@property (nonatomic, assign, readwrite) UIEdgeInsets swipableViewInsets;
+
+/** Boolean to enable/disable fully hiding cell after swipe finished */
+@property (nonatomic, assign, readwrite) BOOL hideAfterSwipe;
+
 /**
  *  Configures the properties of a cell.
  *
