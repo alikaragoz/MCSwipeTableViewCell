@@ -48,7 +48,6 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode) {
  *  @param state `MCSwipeTableViewCellState` which has been triggered.
  *  @param mode  `MCSwipeTableViewCellMode` used for for swiping.
  *
- *  @return No return value.
  */
 typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode);
 
