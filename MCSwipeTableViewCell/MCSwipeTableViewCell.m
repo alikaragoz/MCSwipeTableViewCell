@@ -589,9 +589,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     }
     
     [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction) animations:^{
-        _contentScreenshotView.frame = frame;
-        _slidingView.alpha = 0;
-        [self slideViewWithPercentage:percentage view:_activeView isDragging:self.shouldAnimateIcons];
+		self.contentScreenshotView.frame = frame;
+		self.slidingView.alpha = 0;
+		[self slideViewWithPercentage:percentage view:self.activeView isDragging:self.shouldAnimateIcons];
     } completion:^(BOOL finished) {
         [self executeCompletionBlock];
     }];
@@ -604,19 +604,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         
         [UIView animateWithDuration:_animationDuration delay:0.0 usingSpringWithDamping:_damping initialSpringVelocity:_velocity options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
-            CGRect frame = _contentScreenshotView.frame;
+			CGRect frame = self.contentScreenshotView.frame;
             frame.origin.x = 0;
-            _contentScreenshotView.frame = frame;
+			self.contentScreenshotView.frame = frame;
             
             // Clearing the indicator view
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+			self.colorIndicatorView.backgroundColor = self.defaultColor;
             
-            _slidingView.alpha = 0;
-            [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
+			self.slidingView.alpha = 0;
+			[self slideViewWithPercentage:0 view:self.activeView isDragging:NO];
             
         } completion:^(BOOL finished) {
             
-            _isExited = NO;
+			self.isExited = NO;
             [self uninstallSwipingView];
             
             if (completion) {
@@ -628,30 +628,30 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     else {
         [UIView animateWithDuration:kMCBounceDuration1 delay:0 options:(UIViewAnimationOptionCurveEaseOut) animations:^{
             
-            CGRect frame = _contentScreenshotView.frame;
+			CGRect frame = self.contentScreenshotView.frame;
             frame.origin.x = -bounceDistance;
-            _contentScreenshotView.frame = frame;
+			self.contentScreenshotView.frame = frame;
             
-            _slidingView.alpha = 0;
-            [self slideViewWithPercentage:0 view:_activeView isDragging:NO];
+			self.slidingView.alpha = 0;
+            [self slideViewWithPercentage:0 view:self.activeView isDragging:NO];
             
             // Setting back the color to the default.
-            _colorIndicatorView.backgroundColor = self.defaultColor;
+            self.colorIndicatorView.backgroundColor = self.defaultColor;
             
         } completion:^(BOOL finished1) {
             
             [UIView animateWithDuration:kMCBounceDuration2 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 
-                CGRect frame = _contentScreenshotView.frame;
+                CGRect frame = self.contentScreenshotView.frame;
                 frame.origin.x = 0;
-                _contentScreenshotView.frame = frame;
+                self.contentScreenshotView.frame = frame;
                 
                 // Clearing the indicator view
-                _colorIndicatorView.backgroundColor = [UIColor clearColor];
+                self.colorIndicatorView.backgroundColor = [UIColor clearColor];
                 
             } completion:^(BOOL finished2) {
                 
-                _isExited = NO;
+                self.isExited = NO;
                 [self uninstallSwipingView];
                 
                 if (completion) {
@@ -667,7 +667,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 - (UIImage *)imageWithView:(UIView *)view {
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, scale);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	if(context) {
+		[view.layer renderInContext:context];
+	}
     UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
