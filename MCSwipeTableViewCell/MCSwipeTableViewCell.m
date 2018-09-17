@@ -114,8 +114,10 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _shouldDrag = YES;
     _shouldAnimateIcons = YES;
     
-    _firstTrigger = kMCStop1;
-    _secondTrigger = kMCStop2;
+    _rightFirstTrigger  = kMCStop1;
+    _rightSecondTrigger = kMCStop2;
+    _leftFirstTrigger   = kMCStop1;
+    _leftSecondTrigger  = kMCStop2;
     
     _damping = kMCDamping;
     _velocity = kMCVelocity;
@@ -211,6 +213,30 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 }
 
 #pragma mark - Swipe configuration
+
+- (CGFloat)firstTrigger {
+    if (_rightFirstTrigger != _leftFirstTrigger)
+        return CGFLOAT_MAX;
+
+    return _rightFirstTrigger;
+}
+
+- (void)setFirstTrigger:(CGFloat)trigger {
+    _rightFirstTrigger = trigger;
+    _leftFirstTrigger = trigger;
+}
+
+- (CGFloat)secondTrigger {
+    if (_rightSecondTrigger != _leftSecondTrigger)
+        return CGFLOAT_MAX;
+
+    return _rightSecondTrigger;
+}
+
+- (void)setSecondTrigger:(CGFloat)trigger {
+    _rightSecondTrigger = trigger;
+    _leftSecondTrigger = trigger;
+}
 
 - (void)setSwipeGestureWithView:(UIView *)view
                           color:(UIColor *)color
@@ -407,7 +433,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= _rightSecondTrigger && _modeForState2) {
         view = _view2;
     }
     
@@ -415,7 +441,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         view = _view3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -_leftSecondTrigger && _modeForState4) {
         view = _view4;
     }
     
@@ -425,12 +451,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 - (CGFloat)alphaWithPercentage:(CGFloat)percentage {
     CGFloat alpha;
     
-    if (percentage >= 0 && percentage < _firstTrigger) {
-        alpha = percentage / _firstTrigger;
+    if (percentage >= 0 && percentage < _rightFirstTrigger) {
+        alpha = percentage / _rightFirstTrigger;
     }
     
-    else if (percentage < 0 && percentage > -_firstTrigger) {
-        alpha = fabs(percentage / _firstTrigger);
+    else if (percentage < 0 && percentage > -_leftFirstTrigger) {
+        alpha = fabs(percentage / _leftFirstTrigger);
     }
     
     else {
@@ -447,19 +473,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     color = self.defaultColor ? self.defaultColor : [UIColor clearColor];
     
-    if (percentage > _firstTrigger && _modeForState1) {
+    if (percentage > _rightFirstTrigger && _modeForState1) {
         color = _color1;
     }
     
-    if (percentage > _secondTrigger && _modeForState2) {
+    if (percentage > _rightSecondTrigger && _modeForState2) {
         color = _color2;
     }
     
-    if (percentage < -_firstTrigger && _modeForState3) {
+    if (percentage < -_leftFirstTrigger && _modeForState3) {
         color = _color3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -_leftSecondTrigger && _modeForState4) {
         color = _color4;
     }
     
@@ -471,19 +497,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     state = MCSwipeTableViewCellStateNone;
     
-    if (percentage >= _firstTrigger && _modeForState1) {
+    if (percentage >= _rightFirstTrigger && _modeForState1) {
         state = MCSwipeTableViewCellState1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= _rightSecondTrigger && _modeForState2) {
         state = MCSwipeTableViewCellState2;
     }
     
-    if (percentage <= -_firstTrigger && _modeForState3) {
+    if (percentage <= -_leftFirstTrigger && _modeForState3) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= -_leftSecondTrigger && _modeForState4) {
         state = MCSwipeTableViewCellState4;
     }
     
@@ -520,30 +546,30 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     
     if (isDragging) {
-        if (percentage >= 0 && percentage < _firstTrigger) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        if (percentage >= 0 && percentage < _rightFirstTrigger) {
+            position.x = [self offsetWithPercentage:(_rightFirstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage >= _firstTrigger) {
-            position.x = [self offsetWithPercentage:percentage - (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage >= _rightFirstTrigger) {
+            position.x = [self offsetWithPercentage:percentage - (_rightFirstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < 0 && percentage >= -_firstTrigger) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < 0 && percentage >= -_leftFirstTrigger) {
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_leftFirstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
-        else if (percentage < -_firstTrigger) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+        else if (percentage < -_leftFirstTrigger) {
+            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (_leftFirstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
     }
     
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = [self offsetWithPercentage:(_rightFirstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_leftFirstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
         else {

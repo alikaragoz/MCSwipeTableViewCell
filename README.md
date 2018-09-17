@@ -166,6 +166,15 @@ cell.firstTrigger = 0.1;
 cell.secondTrigger = 0.5;
 ```
 
+You can also change individual trigger limits as follows:
+
+``` objc
+cell.rightFirstTrigger  = 0.1;
+cell.rightSecondTrigger = 0.5;
+cell.leftFirstTrigger   = 0.35;
+cell.leftSecondTrigger  = 0.6;
+```
+
 ### Reseting cell position
 It is possible to put the cell back to it's position when using the `MCSwipeTableViewCellModeExit` mode with the `-swipeToOriginWithCompletion:` method:
 
