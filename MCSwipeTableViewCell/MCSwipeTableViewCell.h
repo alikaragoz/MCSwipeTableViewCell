@@ -128,6 +128,18 @@ typedef void (^MCSwipeCompletionBlock)(MCSwipeTableViewCell *cell, MCSwipeTableV
 /** Percentage value to trigger the 2nd state of a swipe gesture. */
 @property (nonatomic, assign, readwrite) CGFloat secondTrigger;
 
+/** Percentage value to trigger the 1st state of a right swipe gesture. */
+@property (nonatomic, assign, readwrite) CGFloat rightFirstTrigger;
+
+/** Percentage value to trigger the 2nd state of a right swipe gesture. */
+@property (nonatomic, assign, readwrite) CGFloat rightSecondTrigger;
+
+/** Percentage value to trigger the 1st state of a left swipe gesture. */
+@property (nonatomic, assign, readwrite) CGFloat leftFirstTrigger;
+
+/** Percentage value to trigger the 2nd state of a left swipe gesture. */
+@property (nonatomic, assign, readwrite) CGFloat leftSecondTrigger;
+
 
 /** 1st `MCSwipeTableViewCellMode` of the state triggered during a Left -> Right swipe. */
 @property (nonatomic, assign, readwrite) MCSwipeTableViewCellMode modeForState1;
